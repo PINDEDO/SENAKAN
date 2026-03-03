@@ -1,5 +1,7 @@
 # 📋 SenaKan
 
+<img width="1408" height="768" alt="LOGO SENAKAN" src="https://github.com/user-attachments/assets/eeb821d4-4673-494e-bf9b-a57c3449f1fd" />
+
 > Sistema de gestión de tareas tipo Kanban diseñado para el **SENA** — permite a coordinadores, instructores y aprendices organizar, asignar y hacer seguimiento de actividades formativas en tiempo real.
 
 ---
