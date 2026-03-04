@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramas de Clases – Sistema Kanban SENA</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #0f172a;
+    --card: #131d35;
+    --border: #1e3a5f;
+    --border2: #0f2744;
+    --accent: #2563eb;
+    --accent2: #38bdf8;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --orange: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Sora', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100vh; }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #0a1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 0 16px rgba(37,99,235,0.4);
+  }
+  .logo-text { font-size: 14px; font-weight: 600; color: var(--text); }
+  .logo-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .header-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.3);
+    color: var(--accent2);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* Main layout */
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border2);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-title {
+    padding: 16px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    border-bottom: 1px solid var(--border2);
+  }
+  .nav-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .nav-item:hover { background: rgba(37,99,235,0.08); border-left-color: rgba(37,99,235,0.4); }
+  .nav-item.active { background: rgba(37,99,235,0.12); border-left-color: var(--accent); }
+  .nav-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    background: rgba(37,99,235,0.2);
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .nav-item.active .nav-badge { background: var(--accent); color: white; }
+  .nav-label { font-size: 12px; color: var(--text); line-height: 1.3; }
+  .nav-item.active .nav-label { color: white; font-weight: 600; }
+
+  /* Content */
+  .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .diagram-header {
+    padding: 16px 24px 12px;
+    border-bottom: 1px solid var(--border2);
+    background: rgba(15,23,42,0.8);
+    flex-shrink: 0;
+  }
+  .diagram-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .diagram-title { font-size: 18px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .diagram-desc { font-size: 12px; color: var(--muted); line-height: 1.5; max-width: 700px; }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 20px; padding: 8px 24px;
+    background: rgba(10,15,30,0.6);
+    border-bottom: 1px solid var(--border2);
+    flex-shrink: 0; flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--muted); font-family: var(--mono); }
+  .legend-line { width: 24px; height: 2px; }
+  .legend-line.assoc { background: var(--accent2); }
+  .legend-line.depend { background: var(--orange); border-top: 2px dashed var(--orange); height: 0; }
+  .legend-line.inherit { background: var(--green); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* SVG area */
+  .svg-container {
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+
+  svg text { user-select: none; }
+
+  /* Info panel */
+  .info-panel {
+    background: var(--surface);
+    border-top: 1px solid var(--border2);
+    padding: 12px 24px;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+  .info-stat { display: flex; align-items: center; gap: 8px; }
+  .info-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+  .info-text { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .info-text span { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">⬡</div>
+      <div>
+        <div class="logo-text">Sistema Kanban SENA</div>
+        <div class="logo-sub">Diagramas de Clases UML — IEEE 830</div>
+      </div>
+    </div>
+    <div class="header-badge">v1.0 · 11 Casos de Uso</div>
+  </header>
+
+  <div class="main">
+    <nav class="sidebar">
+      <div class="sidebar-title">Casos de Uso</div>
+      <div id="navList"></div>
+    </nav>
+
+    <div class="content">
+      <div class="diagram-header">
+        <div class="diagram-id" id="diagId"></div>
+        <div class="diagram-title" id="diagTitle"></div>
+        <div class="diagram-desc" id="diagDesc"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-line assoc"></div>Asociación / Relación</div>
+        <div class="legend-item"><div class="legend-line depend"></div>Dependencia</div>
+        <div class="legend-item"><div class="legend-line inherit"></div>Herencia / Implementa</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Clase Actor/Controller</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2563eb"></div>Clase Modelo/Entidad</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Clase Servicio/Utilidad</div>
+      </div>
+      <div class="svg-container" id="svgContainer"></div>
+      <div class="info-panel" id="infoPanel"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+//  DATA: Diagrams
+// =====================================================
+
+const COLORS = {
+  model:      { header: '#1e3a5f', headerText: '#93c5fd', body: '#0f2744', border: '#2563eb' },
+  controller: { header: '#3b1515', headerText: '#fca5a5', body: '#280f0f', border: '#ef4444' },
+  service:    { header: '#14302a', headerText: '#6ee7b7', body: '#0a1f1b', border: '#10b981' },
+  view:       { header: '#2e2510', headerText: '#fcd34d', body: '#1a1505', border: '#f59e0b' },
+  interface:  { header: '#1e1a38', headerText: '#c4b5fd', body: '#130f26', border: '#7c3aed' },
+};
+
+const diagrams = [
+  {
+    id: 'RF-001',
+    title: 'Autenticación de Usuarios',
+    desc: 'Gestión del proceso de login, validación de credenciales y control de sesión activa mediante Laravel Auth con bcrypt y protección CSRF.',
+    classes: [
+      { id: 'User',         x: 60,  y: 60,  type: 'model',      name: 'User',              attrs: ['+id: int', '+name: string', '+email: string', '+password: string (bcrypt)', '+role_id: int', '+active: boolean', '+remember_token: string'], methods: ['getAuthIdentifier()', 'getAuthPassword()', 'hasRole(role): bool'] },
+      { id: 'AuthCtrl',     x: 380, y: 60,  type: 'controller', name: 'AuthController',    attrs: ['-authService: AuthService'], methods: ['showLogin(): View', 'login(req): Response', 'logout(req): Response', 'validateCredentials(): bool'] },
+      { id: 'LoginForm',    x: 700, y: 60,  type: 'view',       name: 'LoginFormRequest',  attrs: ['+email: string', '+password: string', '+remember: bool'], methods: ['rules(): array', 'authorize(): bool', 'failedAuthorization(): void'] },
+      { id: 'Session',      x: 60,  y: 330, type: 'service',    name: 'SessionManager',    attrs: ['-driver: string', '-lifetime: int', '-token: string'], methods: ['start(): void', 'regenerate(): void', 'invalidate(): void', 'token(): string'] },
+      { id: 'AuthService',  x: 380, y: 330, type: 'service',    name: 'AuthService',       attrs: ['-guard: Guard'], methods: ['attempt(credentials): bool', 'check(): bool', 'user(): User', 'logout(): void'] },
+      { id: 'Hash',         x: 700, y: 330, type: 'service',    name: 'HashService',       attrs: ['+algo: string = bcrypt', '+rounds: int = 12'], methods: ['make(value): string', 'check(value, hash): bool'] },
+    ],
+    relations: [
+      { from: 'AuthCtrl',   to: 'LoginForm',  type: 'depend',  label: '<<uses>>', side: 'top' },
+      { from: 'AuthCtrl',   to: 'AuthService',type: 'assoc',   label: 'delega a', side: 'bottom' },
+      { from: 'AuthService',to: 'User',        type: 'assoc',   label: 'busca', side: 'top' },
+      { from: 'AuthService',to: 'Session',     type: 'assoc',   label: 'gestiona', side: 'right' },
+      { from: 'AuthService',to: 'Hash',        type: 'depend',  label: '<<verifica>>', side: 'right' },
+      { from: 'User',       to: 'Session',     type: 'assoc',   label: 'genera', side: 'bottom' },
+    ]
+  },
+  {
+    id: 'RF-002',
+    title: 'Gestión de Usuarios y Roles',
+    desc: 'Administración de cuentas de usuario con asignación de roles y permisos mediante el patrón de autorización de Laravel (Gates/Policies o Spatie Permission).',
+    classes: [
+      { id: 'User',        x: 60,  y: 60,  type: 'model',      name: 'User',           attrs: ['+id: int', '+name: string', '+email: string', '+active: boolean', '+center_id: int'], methods: ['hasRole(role): bool', 'hasPermission(perm): bool', 'roles(): BelongsToMany', 'activate(): void'] },
+      { id: 'Role',        x: 380, y: 60,  type: 'model',      name: 'Role',           attrs: ['+id: int', '+name: string', '+slug: string', '+description: string'], methods: ['users(): BelongsToMany', 'permissions(): BelongsToMany', 'assignTo(user): void'] },
+      { id: 'Permission',  x: 700, y: 60,  type: 'model',      name: 'Permission',     attrs: ['+id: int', '+name: string', '+slug: string', '+module: string'], methods: ['roles(): BelongsToMany', 'users(): BelongsToMany'] },
+      { id: 'UserCtrl',    x: 60,  y: 330, type: 'controller', name: 'UserController', attrs: ['-userRepo: UserRepository'], methods: ['index(): View', 'store(req): Response', 'update(req, id): Response', 'destroy(id): Response', 'assignRole(userId, roleId): void'] },
+      { id: 'UserRepo',    x: 380, y: 330, type: 'service',    name: 'UserRepository', attrs: [''], methods: ['findAll(): Collection', 'findById(id): User', 'create(data): User', 'updateRole(user, role): bool', 'deactivate(user): bool'] },
+      { id: 'UserPolicy',  x: 700, y: 330, type: 'service',    name: 'UserPolicy',     attrs: [''], methods: ['viewAny(user): bool', 'create(user): bool', 'update(user, model): bool', 'delete(user, model): bool'] },
+    ],
+    relations: [
+      { from: 'User',       to: 'Role',        type: 'assoc',   label: 'belongsToMany', side: 'top' },
+      { from: 'Role',       to: 'Permission',  type: 'assoc',   label: 'belongsToMany', side: 'top' },
+      { from: 'UserCtrl',   to: 'UserRepo',    type: 'depend',  label: '<<usa>>', side: 'top' },
+      { from: 'UserCtrl',   to: 'UserPolicy',  type: 'depend',  label: '<<authorizes>>', side: 'right' },
+      { from: 'UserRepo',   to: 'User',        type: 'assoc',   label: 'gestiona', side: 'top' },
+      { from: 'UserPolicy', to: 'Permission',  type: 'assoc',   label: 'verifica', side: 'top' },
+    ]
+  },
+  {
+    id: 'RF-003',
+    title: 'Gestión de Proyectos',
+    desc: 'Creación y administración de proyectos como contenedores de tableros, asociados a fichas de formación SENA y con membresía de usuarios por rol.',
+    classes: [
+      { id: 'Project',     x: 300, y: 40,  type: 'model',      name: 'Project',          attrs: ['+id: int', '+name: string', '+description: text', '+ficha_id: int', '+owner_id: int', '+start_date: date', '+end_date: date', '+status: enum'], methods: ['boards(): HasMany', 'members(): BelongsToMany', 'ficha(): BelongsTo', 'owner(): BelongsTo'] },
+      { id: 'Ficha',       x: 680, y: 40,  type: 'model',      name: 'Ficha',            attrs: ['+id: int', '+numero_ficha: string', '+nombre_programa: string', '+instructor_id: int', '+fecha_inicio: date'], methods: ['projects(): HasMany', 'instructor(): BelongsTo'] },
+      { id: 'Board',       x: 300, y: 330, type: 'model',      name: 'Board',            attrs: ['+id: int', '+name: string', '+project_id: int', '+description: string'], methods: ['columns(): HasMany', 'project(): BelongsTo'] },
+      { id: 'User',        x: 680, y: 330, type: 'model',      name: 'User',             attrs: ['+id: int', '+name: string', '+role: string'], methods: ['projects(): BelongsToMany', 'ownedProjects(): HasMany'] },
+      { id: 'ProjCtrl',    x: 680, y: 190, type: 'controller', name: 'ProjectController',attrs: [''], methods: ['index(): View', 'store(req): Response', 'addMember(projId, userId): void', 'destroy(id): Response'] },
+      { id: 'ProjectMember',x: 60, y: 190, type: 'model',      name: 'ProjectMember',    attrs: ['+project_id: int', '+user_id: int', '+role: string', '+joined_at: timestamp'], methods: [] },
+    ],
+    relations: [
+      { from: 'Project',      to: 'Ficha',         type: 'assoc',   label: 'belongsTo', side: 'top' },
+      { from: 'Project',      to: 'Board',         type: 'assoc',   label: 'hasMany', side: 'bottom' },
+      { from: 'Project',      to: 'User',          type: 'assoc',   label: 'hasMany (pivot)', side: 'right' },
+      { from: 'Project',      to: 'ProjectMember', type: 'assoc',   label: 'pivot table', side: 'left' },
+      { from: 'User',         to: 'ProjectMember', type: 'assoc',   label: 'tiene', side: 'bottom' },
+      { from: 'ProjCtrl',     to: 'Project',       type: 'depend',  label: '<<gestiona>>', side: 'top' },
+      { from: 'Ficha',        to: 'User',          type: 'assoc',   label: 'instructor', side: 'right' },
+    ]
+  },
+  {
+    id: 'RF-004',
+    title: 'Gestión de Tableros Kanban',
+    desc: 'Creación y configuración de tableros con columnas personalizadas, reordenables y coloreadas para representar el flujo de trabajo.',
+    classes: [
+      { id: 'Board',      x: 60,  y: 60,  type: 'model',      name: 'Board',           attrs: ['+id: int', '+name: string', '+project_id: int', '+description: string', '+created_by: int', '+created_at: timestamp'], methods: ['columns(): HasMany', 'project(): BelongsTo', 'tasks(): HasManyThrough', 'defaultColumns(): void'] },
+      { id: 'Column',     x: 400, y: 60,  type: 'model',      name: 'Column',          attrs: ['+id: int', '+name: string', '+board_id: int', '+order: int', '+color: string', '+wip_limit: int'], methods: ['tasks(): HasMany', 'board(): BelongsTo', 'reorder(newOrder): void', 'isAtLimit(): bool'] },
+      { id: 'BoardCtrl',  x: 60,  y: 340, type: 'controller', name: 'BoardController', attrs: [''], methods: ['show(boardId): View', 'store(req): Response', 'addColumn(boardId, data): Response', 'reorderColumns(boardId, order[]): void', 'destroy(id): Response'] },
+      { id: 'ColCtrl',    x: 400, y: 340, type: 'controller', name: 'ColumnController',attrs: [''], methods: ['store(boardId, req): Response', 'update(id, req): Response', 'reorder(req): Response', 'destroy(id): Response'] },
+      { id: 'Project',    x: 730, y: 60,  type: 'model',      name: 'Project',         attrs: ['+id: int', '+name: string'], methods: ['boards(): HasMany'] },
+      { id: 'Task',       x: 730, y: 340, type: 'model',      name: 'Task',            attrs: ['+id: int', '+title: string', '+column_id: int'], methods: ['column(): BelongsTo'] },
+    ],
+    relations: [
+      { from: 'Board',    to: 'Column',   type: 'assoc',  label: 'hasMany', side: 'top' },
+      { from: 'Board',    to: 'Project',  type: 'assoc',  label: 'belongsTo', side: 'top' },
+      { from: 'Column',   to: 'Task',     type: 'assoc',  label: 'hasMany', side: 'right' },
+      { from: 'BoardCtrl',to: 'Board',    type: 'depend', label: '<<controla>>', side: 'top' },
+      { from: 'ColCtrl',  to: 'Column',   type: 'depend', label: '<<controla>>', side: 'top' },
+      { from: 'BoardCtrl',to: 'ColCtrl',  type: 'depend', label: '<<delega>>', side: 'bottom' },
+    ]
+  },
+  {
+    id: 'RF-005',
+    title: 'Gestión de Tareas / Tickets',
+    desc: 'Ciclo de vida completo de una tarea con título, descripción, asignación, prioridad, etiquetas, fecha límite e historial de cambios de estado.',
+    classes: [
+      { id: 'Task',        x: 60,  y: 60,  type: 'model',      name: 'Task',            attrs: ['+id: int', '+title: string', '+description: text', '+column_id: int', '+assigned_to: int', '+priority: enum(alta,media,baja)', '+due_date: date', '+created_by: int'], methods: ['column(): BelongsTo', 'assignee(): BelongsTo', 'comments(): HasMany', 'history(): HasMany', 'labels(): BelongsToMany', 'isOverdue(): bool'] },
+      { id: 'TaskHistory', x: 400, y: 60,  type: 'model',      name: 'TaskHistory',     attrs: ['+id: int', '+task_id: int', '+user_id: int', '+from_column: string', '+to_column: string', '+changed_at: timestamp', '+notes: string'], methods: ['task(): BelongsTo', 'user(): BelongsTo'] },
+      { id: 'Label',       x: 730, y: 60,  type: 'model',      name: 'Label',           attrs: ['+id: int', '+name: string', '+color: string', '+board_id: int'], methods: ['tasks(): BelongsToMany'] },
+      { id: 'TaskCtrl',    x: 60,  y: 360, type: 'controller', name: 'TaskController',  attrs: [''], methods: ['store(req): Response', 'show(id): Response', 'update(req, id): Response', 'destroy(id): Response', 'move(id, columnId): Response'] },
+      { id: 'TaskRequest', x: 400, y: 360, type: 'interface',  name: 'StoreTaskRequest',attrs: ['+title: required|max:255', '+description: nullable', '+assigned_to: exists:users', '+priority: in:alta,media,baja', '+due_date: date|after:today'], methods: ['rules(): array', 'authorize(): bool'] },
+      { id: 'User',        x: 730, y: 360, type: 'model',      name: 'User',            attrs: ['+id: int', '+name: string', '+email: string'], methods: ['assignedTasks(): HasMany'] },
+    ],
+    relations: [
+      { from: 'Task',       to: 'TaskHistory', type: 'assoc',  label: 'hasMany', side: 'top' },
+      { from: 'Task',       to: 'Label',       type: 'assoc',  label: 'belongsToMany', side: 'top' },
+      { from: 'Task',       to: 'User',        type: 'assoc',  label: 'assignedTo', side: 'right' },
+      { from: 'TaskCtrl',   to: 'Task',        type: 'depend', label: '<<gestiona>>', side: 'top' },
+      { from: 'TaskCtrl',   to: 'TaskRequest', type: 'depend', label: '<<valida>>', side: 'top' },
+      { from: 'TaskHistory',to: 'User',        type: 'assoc',  label: 'changedBy', side: 'right' },
+    ]
+  },
+  {
+    id: 'RF-006',
+    title: 'Drag & Drop de Tareas',
+    desc: 'Movimiento de tareas entre columnas mediante arrastrar y soltar con SortableJS, actualización asíncrona vía AJAX y registro automático en el historial.',
+    classes: [
+      { id: 'SortableJS',  x: 60,  y: 60,  type: 'service',    name: 'SortableJS',       attrs: ['+el: HTMLElement', '+animation: int', '+group: string'], methods: ['onEnd(event): void', 'serialize(): array', 'destroy(): void'] },
+      { id: 'DragHandler', x: 400, y: 60,  type: 'view',       name: 'DragDropHandler',  attrs: ['-boardId: int', '-csrfToken: string'], methods: ['init(columns): void', 'onDrop(taskId, newColId, oldColId): void', 'sendAjax(data): Promise', 'updateUI(response): void', 'rollback(oldState): void'] },
+      { id: 'TaskMoveReq', x: 730, y: 60,  type: 'interface',  name: 'TaskMoveRequest',  attrs: ['+task_id: int', '+column_id: int', '+order: int'], methods: ['rules(): array'] },
+      { id: 'TaskCtrl',    x: 60,  y: 360, type: 'controller', name: 'TaskController',   attrs: [''], methods: ['move(req): JsonResponse'] },
+      { id: 'Task',        x: 400, y: 360, type: 'model',      name: 'Task',             attrs: ['+id: int', '+column_id: int', '+order: int'], methods: ['updateColumn(colId): void', 'reorder(newOrder): void'] },
+      { id: 'TaskHistory', x: 730, y: 360, type: 'model',      name: 'TaskHistory',      attrs: ['+task_id: int', '+from_column: string', '+to_column: string', '+user_id: int'], methods: ['record(task, fromCol, toCol): void'] },
+    ],
+    relations: [
+      { from: 'SortableJS',  to: 'DragHandler', type: 'inherit', label: '<<instancia>>', side: 'top' },
+      { from: 'DragHandler', to: 'TaskMoveReq', type: 'depend',  label: 'construye payload', side: 'top' },
+      { from: 'DragHandler', to: 'TaskCtrl',    type: 'assoc',   label: 'POST /tasks/{id}/move', side: 'left' },
+      { from: 'TaskCtrl',    to: 'Task',        type: 'assoc',   label: 'actualiza', side: 'top' },
+      { from: 'TaskCtrl',    to: 'TaskHistory', type: 'assoc',   label: 'registra', side: 'top' },
+      { from: 'TaskMoveReq', to: 'Task',        type: 'depend',  label: 'valida contra', side: 'right' },
+    ]
+  },
+  {
+    id: 'RF-007',
+    title: 'Sistema de Comentarios',
+    desc: 'Módulo de discusión por tarea que permite a los miembros del proyecto agregar, editar y eliminar comentarios con registro de autoría y timestamp.',
+    classes: [
+      { id: 'Comment',     x: 300, y: 40,  type: 'model',      name: 'Comment',          attrs: ['+id: int', '+task_id: int', '+user_id: int', '+body: text', '+edited: boolean', '+created_at: timestamp', '+updated_at: timestamp'], methods: ['task(): BelongsTo', 'author(): BelongsTo', 'isOwner(user): bool', 'getExcerpt(): string'] },
+      { id: 'Task',        x: 680, y: 40,  type: 'model',      name: 'Task',             attrs: ['+id: int', '+title: string', '+column_id: int'], methods: ['comments(): HasMany', 'latestComment(): HasOne'] },
+      { id: 'User',        x: 680, y: 300, type: 'model',      name: 'User',             attrs: ['+id: int', '+name: string', '+avatar: string'], methods: ['comments(): HasMany'] },
+      { id: 'CommentCtrl', x: 60,  y: 170, type: 'controller', name: 'CommentController',attrs: [''], methods: ['store(req, taskId): Response', 'update(req, id): Response', 'destroy(id): Response', 'index(taskId): JsonResponse'] },
+      { id: 'CommentReq',  x: 300, y: 300, type: 'interface',  name: 'CommentRequest',   attrs: ['+body: required|min:2|max:2000'], methods: ['rules(): array', 'authorize(): bool'] },
+      { id: 'CommentPolicy',x: 60, y: 350, type: 'service',    name: 'CommentPolicy',    attrs: [''], methods: ['update(user, comment): bool', 'delete(user, comment): bool'] },
+    ],
+    relations: [
+      { from: 'Comment',      to: 'Task',          type: 'assoc',  label: 'belongsTo', side: 'top' },
+      { from: 'Comment',      to: 'User',          type: 'assoc',  label: 'belongsTo (author)', side: 'right' },
+      { from: 'CommentCtrl',  to: 'Comment',       type: 'depend', label: '<<gestiona>>', side: 'top' },
+      { from: 'CommentCtrl',  to: 'CommentReq',    type: 'depend', label: '<<valida>>', side: 'right' },
+      { from: 'CommentCtrl',  to: 'CommentPolicy', type: 'depend', label: '<<autoriza>>', side: 'bottom' },
+      { from: 'Task',         to: 'User',          type: 'assoc',  label: 'miembro', side: 'right' },
+    ]
+  },
+  {
+    id: 'RF-008',
+    title: 'Notificaciones Internas',
+    desc: 'Sistema de alertas en plataforma mediante el canal database de Laravel para informar asignaciones, cambios de estado y fechas límite próximas.',
+    classes: [
+      { id: 'Notification', x: 60,  y: 60,  type: 'model',      name: 'DatabaseNotification', attrs: ['+id: uuid', '+type: string', '+notifiable_id: int', '+notifiable_type: string', '+data: json', '+read_at: timestamp', '+created_at: timestamp'], methods: ['markAsRead(): void', 'isUnread(): bool', 'getData(): array'] },
+      { id: 'NotifService', x: 400, y: 60,  type: 'service',    name: 'NotificationService',  attrs: [''], methods: ['notifyAssignment(task, user): void', 'notifyStatusChange(task, fromCol, toCol): void', 'notifyDueSoon(task): void', 'notifyComment(comment): void'] },
+      { id: 'User',         x: 730, y: 60,  type: 'model',      name: 'User',                 attrs: ['+id: int', '+name: string'], methods: ['notifications(): MorphMany', 'unreadNotifications(): Builder', 'notify(notification): void'] },
+      { id: 'TaskAssigned', x: 60,  y: 350, type: 'interface',  name: 'TaskAssignedNotif',    attrs: ['+via: [database]', '+task: Task', '+assigner: User'], methods: ['via(notifiable): array', 'toDatabase(notifiable): array', 'toArray(notifiable): array'] },
+      { id: 'StatusChanged',x: 400, y: 350, type: 'interface',  name: 'TaskStatusChangedNotif',attrs: ['+task: Task', '+from: string', '+to: string'], methods: ['via(notifiable): array', 'toDatabase(notifiable): array'] },
+      { id: 'NotifCtrl',    x: 730, y: 350, type: 'controller', name: 'NotificationController',attrs: [''], methods: ['index(): JsonResponse', 'markRead(id): Response', 'markAllRead(): Response', 'count(): int'] },
+    ],
+    relations: [
+      { from: 'NotifService', to: 'TaskAssigned',  type: 'depend',  label: '<<crea>>', side: 'bottom' },
+      { from: 'NotifService', to: 'StatusChanged', type: 'depend',  label: '<<crea>>', side: 'bottom' },
+      { from: 'NotifService', to: 'User',          type: 'assoc',   label: 'notify()', side: 'top' },
+      { from: 'User',         to: 'Notification',  type: 'assoc',   label: 'hasMany (morph)', side: 'left' },
+      { from: 'NotifCtrl',    to: 'Notification',  type: 'depend',  label: '<<lee>>', side: 'top' },
+      { from: 'TaskAssigned', to: 'Notification',  type: 'inherit', label: 'extiende', side: 'top' },
+    ]
+  },
+  {
+    id: 'RF-009',
+    title: 'Filtros y Búsqueda',
+    desc: 'Búsqueda y filtrado avanzado de tareas en tiempo real vía AJAX por múltiples criterios: usuario, prioridad, etiqueta, estado y texto libre.',
+    classes: [
+      { id: 'TaskFilter',  x: 60,  y: 60,  type: 'service',    name: 'TaskFilterService',attrs: ['-query: Builder'], methods: ['byUser(userId): self', 'byPriority(p): self', 'byLabel(labelId): self', 'byColumn(colId): self', 'byDateRange(from, to): self', 'search(text): self', 'get(): Collection'] },
+      { id: 'Task',        x: 400, y: 60,  type: 'model',      name: 'Task',             attrs: ['+id: int', '+title: string', '+priority: string', '+assigned_to: int', '+column_id: int', '+due_date: date'], methods: ['scopeFiltered(query, filters): Builder'] },
+      { id: 'SearchReq',   x: 730, y: 60,  type: 'interface',  name: 'SearchRequest',    attrs: ['+q: string|nullable', '+user_id: int|nullable', '+priority: string|nullable', '+label_id: int|nullable', '+column_id: int|nullable'], methods: ['rules(): array', 'filters(): array'] },
+      { id: 'SearchCtrl',  x: 60,  y: 360, type: 'controller', name: 'SearchController', attrs: [''], methods: ['search(req): JsonResponse', 'buildFilters(req): array'] },
+      { id: 'AjaxSearch',  x: 400, y: 360, type: 'view',       name: 'AjaxSearchHandler',attrs: ['+debounce: 300ms', '+url: string'], methods: ['onInput(event): void', 'buildQuery(): URLSearchParams', 'fetch(): Promise', 'renderResults(data): void', 'clearFilters(): void'] },
+      { id: 'TaskResource',x: 730, y: 360, type: 'service',    name: 'TaskResource',     attrs: [''], methods: ['toArray(request): array', 'collection(tasks): array'] },
+    ],
+    relations: [
+      { from: 'SearchCtrl',  to: 'SearchReq',    type: 'depend',  label: '<<recibe>>', side: 'top' },
+      { from: 'SearchCtrl',  to: 'TaskFilter',   type: 'depend',  label: '<<usa>>', side: 'top' },
+      { from: 'TaskFilter',  to: 'Task',         type: 'assoc',   label: 'consulta', side: 'top' },
+      { from: 'SearchCtrl',  to: 'TaskResource', type: 'depend',  label: '<<transforma>>', side: 'right' },
+      { from: 'AjaxSearch',  to: 'SearchCtrl',   type: 'assoc',   label: 'GET /search', side: 'left' },
+      { from: 'AjaxSearch',  to: 'SearchReq',    type: 'depend',  label: 'construye', side: 'top' },
+    ]
+  },
+  {
+    id: 'RF-010',
+    title: 'Reportes y Métricas',
+    desc: 'Generación de reportes de productividad con gráficas (Chart.js) y exportación a PDF mediante Laravel DomPDF, filtrados por tablero, usuario y ficha.',
+    classes: [
+      { id: 'ReportCtrl',  x: 60,  y: 60,  type: 'controller', name: 'ReportController',  attrs: [''], methods: ['dashboard(): View', 'tasksByStatus(boardId): JsonResponse', 'workloadByUser(projId): JsonResponse', 'overdueTasks(): JsonResponse', 'exportPDF(reportId): Response'] },
+      { id: 'ReportSvc',   x: 400, y: 60,  type: 'service',    name: 'ReportService',     attrs: [''], methods: ['getTasksByStatus(boardId): array', 'getUserWorkload(projId): array', 'getOverdueTasks(): Collection', 'getProgressByFicha(fichaId): array', 'getCompletedInRange(from, to): array'] },
+      { id: 'PDFExporter', x: 730, y: 60,  type: 'service',    name: 'PDFExporter',       attrs: ['+template: string', '+options: array'], methods: ['generate(data, view): PDF', 'download(filename): Response', 'stream(): Response'] },
+      { id: 'Task',        x: 60,  y: 360, type: 'model',      name: 'Task',              attrs: ['+id: int', '+priority: string', '+column_id: int', '+assigned_to: int', '+due_date: date', '+created_at: timestamp'], methods: ['scopeOverdue(query): Builder', 'scopeCompleted(query): Builder', 'scopeInRange(query, from, to): Builder'] },
+      { id: 'Ficha',       x: 400, y: 360, type: 'model',      name: 'Ficha',             attrs: ['+id: int', '+numero_ficha: string', '+nombre_programa: string'], methods: ['projects(): HasMany', 'getProgressSummary(): array'] },
+      { id: 'ChartData',   x: 730, y: 360, type: 'view',       name: 'ChartDataAdapter',  attrs: ['+type: string', '+labels: array', '+datasets: array'], methods: ['toBarChart(): array', 'toPieChart(): array', 'toLineChart(): array'] },
+    ],
+    relations: [
+      { from: 'ReportCtrl',  to: 'ReportSvc',   type: 'depend',  label: '<<usa>>', side: 'top' },
+      { from: 'ReportCtrl',  to: 'PDFExporter', type: 'depend',  label: '<<exporta>>', side: 'top' },
+      { from: 'ReportSvc',   to: 'Task',        type: 'assoc',   label: 'consulta', side: 'left' },
+      { from: 'ReportSvc',   to: 'Ficha',       type: 'assoc',   label: 'agrega', side: 'top' },
+      { from: 'ReportCtrl',  to: 'ChartData',   type: 'depend',  label: '<<adapta>>', side: 'right' },
+      { from: 'ChartData',   to: 'Task',        type: 'depend',  label: 'procesa datos', side: 'right' },
+    ]
+  },
+  {
+    id: 'RF-011',
+    title: 'Asociación con Fichas SENA',
+    desc: 'Vinculación de proyectos, tableros y tareas con las fichas de formación del SENA, permitiendo seguimiento académico y reportes institucionales por ficha.',
+    classes: [
+      { id: 'Ficha',       x: 300, y: 40,  type: 'model',      name: 'Ficha',            attrs: ['+id: int', '+numero_ficha: string', '+nombre_programa: string', '+instructor_id: int', '+fecha_inicio: date', '+fecha_fin: date', '+estado: enum'], methods: ['projects(): HasMany', 'instructor(): BelongsTo', 'getActiveLearners(): Collection', 'getProgressSummary(): array'] },
+      { id: 'Project',     x: 680, y: 40,  type: 'model',      name: 'Project',          attrs: ['+id: int', '+name: string', '+ficha_id: int', '+owner_id: int'], methods: ['ficha(): BelongsTo', 'boards(): HasMany', 'tasks(): HasManyThrough'] },
+      { id: 'User',        x: 60,  y: 290, type: 'model',      name: 'User (Instructor)',attrs: ['+id: int', '+name: string', '+role: instructor'], methods: ['fichas(): HasMany', 'assignedProjects(): HasMany'] },
+      { id: 'FichaCtrl',   x: 300, y: 290, type: 'controller', name: 'FichaController',  attrs: [''], methods: ['index(): View', 'store(req): Response', 'show(id): View', 'update(req, id): Response', 'assignProject(fichaId, projId): void'] },
+      { id: 'Board',       x: 680, y: 290, type: 'model',      name: 'Board',            attrs: ['+id: int', '+name: string', '+project_id: int'], methods: ['project(): BelongsTo'] },
+      { id: 'FichaReport', x: 180, y: 500, type: 'service',    name: 'FichaReportService',attrs: [''], methods: ['getProgressByFicha(id): array', 'getInstructorWorkload(instId): array', 'getFichaMetrics(id): array'] },
+    ],
+    relations: [
+      { from: 'Ficha',       to: 'Project',      type: 'assoc',  label: 'hasMany', side: 'top' },
+      { from: 'Ficha',       to: 'User',         type: 'assoc',  label: 'instructor', side: 'left' },
+      { from: 'Project',     to: 'Board',        type: 'assoc',  label: 'hasMany', side: 'right' },
+      { from: 'FichaCtrl',   to: 'Ficha',        type: 'depend', label: '<<gestiona>>', side: 'top' },
+      { from: 'FichaCtrl',   to: 'FichaReport',  type: 'depend', label: '<<reportes>>', side: 'bottom' },
+      { from: 'FichaReport', to: 'Ficha',        type: 'assoc',  label: 'consulta', side: 'left' },
+      { from: 'User',        to: 'FichaCtrl',    type: 'depend', label: '<<usa>>', side: 'right' },
+    ]
+  },
+];
+
+// =====================================================
+//  RENDERER
+// =====================================================
+
+const CLASS_W = 200;
+const HEADER_H = 36;
+const ATTR_H = 18;
+const METHOD_H = 18;
+const SEP_H = 6;
+const PAD = 8;
+
+function classHeight(cls) {
+  const attrs = cls.attrs.filter(a => a.trim());
+  const methods = cls.methods.filter(m => m.trim());
+  return HEADER_H + (attrs.length * ATTR_H) + SEP_H + (methods.length * METHOD_H) + PAD * 2 + (attrs.length ? 4 : 0);
+}
+
+function classCenter(cls) {
+  const h = classHeight(cls);
+  return { cx: cls.x + CLASS_W / 2, cy: cls.y + h / 2 };
+}
+
+function classBorderPoint(cls, tx, ty) {
+  const h = classHeight(cls);
+  const cx = cls.x + CLASS_W / 2;
+  const cy = cls.y + h / 2;
+  const dx = tx - cx, dy = ty - cy;
+  const absDx = Math.abs(dx), absDy = Math.abs(dy);
+  const halfW = CLASS_W / 2, halfH = h / 2;
+  if (absDx === 0 && absDy === 0) return { x: cx, y: cy };
+  if (absDx * halfH > absDy * halfW) {
+    const sign = dx > 0 ? 1 : -1;
+    return { x: cx + sign * halfW, y: cy + dy * (halfW / absDx) };
+  } else {
+    const sign = dy > 0 ? 1 : -1;
+    return { x: cx + dx * (halfH / absDy), y: cy + sign * halfH };
+  }
+}
+
+function renderDiagram(diagram) {
+  // find bounds
+  let maxX = 0, maxY = 0;
+  diagram.classes.forEach(cls => {
+    const h = classHeight(cls);
+    maxX = Math.max(maxX, cls.x + CLASS_W + 40);
+    maxY = Math.max(maxY, cls.y + h + 60);
+  });
+
+  const svgW = Math.max(maxX, 900);
+  const svgH = Math.max(maxY, 520);
+
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" style="min-width:${svgW}px">`;
+  svg += `<defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,1 L6,3 L0,5 Z" fill="none" stroke="#10b981" stroke-width="1"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>`;
+
+  // Draw relations first (under classes)
+  diagram.relations.forEach(rel => {
+    const fromCls = diagram.classes.find(c => c.id === rel.from);
+    const toCls   = diagram.classes.find(c => c.id === rel.to);
+    if (!fromCls || !toCls) return;
+
+    const fc = classCenter(fromCls);
+    const tc = classCenter(toCls);
+    const fp = classBorderPoint(fromCls, tc.cx, tc.cy);
+    const tp = classBorderPoint(toCls, fc.cx, fc.cy);
+
+    let color, dash, marker;
+    if (rel.type === 'assoc')    { color = '#38bdf8'; dash = ''; marker = 'url(#arrow-blue)'; }
+    if (rel.type === 'depend')   { color = '#f59e0b'; dash = '6,4'; marker = 'url(#arrow-orange)'; }
+    if (rel.type === 'inherit')  { color = '#10b981'; dash = ''; marker = 'url(#arrow-green)'; }
+
+    const midX = (fp.x + tp.x) / 2;
+    const midY = (fp.y + tp.y) / 2;
+
+    svg += `<line x1="${fp.x}" y1="${fp.y}" x2="${tp.x}" y2="${tp.y}"
+      stroke="${color}" stroke-width="1.5" stroke-dasharray="${dash}"
+      marker-end="${marker}" opacity="0.7"/>`;
+
+    if (rel.label) {
+      svg += `<rect x="${midX - 46}" y="${midY - 9}" width="92" height="16" rx="3"
+        fill="#0a0f1e" opacity="0.85"/>`;
+      svg += `<text x="${midX}" y="${midY + 4}" text-anchor="middle"
+        font-family="JetBrains Mono, monospace" font-size="9" fill="${color}" opacity="0.9">${rel.label}</text>`;
+    }
+  });
+
+  // Draw classes
+  diagram.classes.forEach(cls => {
+    const h = classHeight(cls);
+    const c = COLORS[cls.type] || COLORS.model;
+    const attrs   = cls.attrs.filter(a => a.trim());
+    const methods = cls.methods.filter(m => m.trim());
+
+    // Shadow/glow
+    svg += `<rect x="${cls.x+4}" y="${cls.y+4}" width="${CLASS_W}" height="${h}" rx="6" fill="${c.border}" opacity="0.2"/>`;
+    // Body
+    svg += `<rect x="${cls.x}" y="${cls.y}" width="${CLASS_W}" height="${h}" rx="6"
+      fill="${c.body}" stroke="${c.border}" stroke-width="1.5"/>`;
+    // Header
+    svg += `<rect x="${cls.x}" y="${cls.y}" width="${CLASS_W}" height="${HEADER_H}" rx="6"
+      fill="${c.header}"/>`;
+    svg += `<rect x="${cls.x}" y="${cls.y + HEADER_H - 6}" width="${CLASS_W}" height="6" fill="${c.header}"/>`;
+
+    // Type stereotype
+    let stereo = '';
+    if (cls.type === 'controller') stereo = '«controller»';
+    if (cls.type === 'service')    stereo = '«service»';
+    if (cls.type === 'view')       stereo = '«view»';
+    if (cls.type === 'interface')  stereo = '«interface»';
+    if (cls.type === 'model')      stereo = '«model»';
+
+    if (stereo) {
+      svg += `<text x="${cls.x + CLASS_W/2}" y="${cls.y + 13}" text-anchor="middle"
+        font-family="JetBrains Mono, monospace" font-size="8.5" fill="${c.headerText}" opacity="0.7">${stereo}</text>`;
+    }
+    svg += `<text x="${cls.x + CLASS_W/2}" y="${cls.y + 26}" text-anchor="middle"
+      font-family="Sora, sans-serif" font-size="11" font-weight="700" fill="${c.headerText}">${cls.name}</text>`;
+
+    // Attributes section
+    let y = cls.y + HEADER_H + PAD;
+    if (attrs.length > 0) {
+      attrs.forEach(attr => {
+        const displayAttr = attr.length > 28 ? attr.substring(0, 26) + '…' : attr;
+        svg += `<text x="${cls.x + PAD}" y="${y + 12}" font-family="JetBrains Mono, monospace"
+          font-size="8.5" fill="#94a3b8">${displayAttr}</text>`;
+        y += ATTR_H;
+      });
+    }
+
+    // Divider
+    if (methods.length > 0) {
+      svg += `<line x1="${cls.x + 6}" y1="${y + SEP_H/2 - 2}" x2="${cls.x + CLASS_W - 6}" y2="${y + SEP_H/2 - 2}"
+        stroke="${c.border}" stroke-width="0.8" opacity="0.5"/>`;
+      y += SEP_H;
+
+      methods.forEach(method => {
+        const displayMethod = method.length > 28 ? method.substring(0, 26) + '…' : method;
+        svg += `<text x="${cls.x + PAD}" y="${y + 12}" font-family="JetBrains Mono, monospace"
+          font-size="8.5" fill="#7dd3fc" font-style="italic">${displayMethod}</text>`;
+        y += METHOD_H;
+      });
+    }
+
+    // Tooltip title (full text on SVG title)
+    svg += `<title>${cls.name}\n${attrs.join('\n')}\n---\n${methods.join('\n')}</title>`;
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+// =====================================================
+//  UI
+// =====================================================
+
+let current = 0;
+
+function buildNav() {
+  const nav = document.getElementById('navList');
+  diagrams.forEach((d, i) => {
+    const el = document.createElement('div');
+    el.className = 'nav-item' + (i === 0 ? ' active' : '');
+    el.innerHTML = `<span class="nav-badge">${d.id}</span><span class="nav-label">${d.title}</span>`;
+    el.addEventListener('click', () => selectDiagram(i));
+    nav.appendChild(el);
+  });
+}
+
+function selectDiagram(i) {
+  current = i;
+  document.querySelectorAll('.nav-item').forEach((el, j) => {
+    el.classList.toggle('active', j === i);
+  });
+  renderCurrent();
+}
+
+function renderCurrent() {
+  const d = diagrams[current];
+  document.getElementById('diagId').textContent = d.id + ' / ' + (current + 1) + ' de ' + diagrams.length;
+  document.getElementById('diagTitle').textContent = d.title;
+  document.getElementById('diagDesc').textContent = d.desc;
+
+  const svg = renderDiagram(d);
+  document.getElementById('svgContainer').innerHTML = svg;
+
+  // Info panel
+  const clsByType = {};
+  d.classes.forEach(c => { clsByType[c.type] = (clsByType[c.type] || 0) + 1; });
+  const panel = document.getElementById('infoPanel');
+  panel.innerHTML = [
+    `<div class="info-stat"><div class="info-dot"></div><div class="info-text">Clases: <span>${d.classes.length}</span></div></div>`,
+    `<div class="info-stat"><div class="info-dot" style="background:#ef4444"></div><div class="info-text">Relaciones: <span>${d.relations.length}</span></div></div>`,
+    clsByType.model    ? `<div class="info-stat"><div class="info-dot" style="background:#2563eb"></div><div class="info-text">Modelos: <span>${clsByType.model}</span></div></div>` : '',
+    clsByType.controller ? `<div class="info-stat"><div class="info-dot" style="background:#ef4444"></div><div class="info-text">Controllers: <span>${clsByType.controller}</span></div></div>` : '',
+    clsByType.service  ? `<div class="info-stat"><div class="info-dot" style="background:#10b981"></div><div class="info-text">Servicios: <span>${clsByType.service}</span></div></div>` : '',
+    clsByType.view     ? `<div class="info-stat"><div class="info-dot" style="background:#f59e0b"></div><div class="info-text">Views/JS: <span>${clsByType.view}</span></div></div>` : '',
+    clsByType.interface ? `<div class="info-stat"><div class="info-dot" style="background:#7c3aed"></div><div class="info-text">Interfaces: <span>${clsByType.interface}</span></div></div>` : '',
+  ].join('');
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') selectDiagram((current + 1) % diagrams.length);
+  if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  selectDiagram((current - 1 + diagrams.length) % diagrams.length);
+});
+
+buildNav();
+renderCurrent();
+</script>
+</body>
+</html>
