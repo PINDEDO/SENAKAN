@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Project;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class ProjectController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $projects = Project::with('creator')->withCount('tasks')->latest()->get();
+        return view('projects.index', compact('projects'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|unique:projects,code|max:50',
+            'description' => 'nullable|string',
+            'color' => 'nullable|string|max:7',
+        ]);
+
+        $validated['user_id'] = Auth::id();
+        Project::create($validated);
+
+        return redirect()->back()->with('success', 'Proyecto creado exitosamente.');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Project $project)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|unique:projects,code,' . $project->id . '|max:50',
+            'description' => 'nullable|string',
+            'color' => 'nullable|string|max:7',
+        ]);
+
+        $project->update($validated);
+
+        return redirect()->back()->with('success', 'Proyecto actualizado exitosamente.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Project $project)
+    {
+        $project->delete();
+        return redirect()->back()->with('success', 'Proyecto eliminado.');
+    }
+}

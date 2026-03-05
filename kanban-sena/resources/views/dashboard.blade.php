@@ -16,29 +16,27 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-xs font-bold text-sena-gray400 uppercase tracking-widest">Total Tareas</p>
-                    <h3 class="text-3xl font-bold text-sena-gray900 mt-1">{{ $metrics['total_tasks'] ?? 0 }}</h3>
+                    <h3 class="text-3xl font-bold text-sena-gray900 mt-1">{{ $metrics['total_tasks'] }}</h3>
                 </div>
                 <div class="p-2 bg-sena-navyLight rounded-lg text-sena-navy">
                     <i class="bi bi-list-task text-xl"></i>
                 </div>
             </div>
-            <p class="text-[11px] text-green-600 mt-4 flex items-center font-medium">
-                <i class="bi bi-arrow-up-short text-lg"></i> +3 esta semana
-            </p>
+            <p class="text-[11px] text-sena-gray400 mt-4">Gestión institucional activa</p>
         </div>
 
-        <!-- En Progreso -->
+        <!-- Proyectos -->
         <div class="bg-white rounded-lg shadow-card p-5 border-l-4 border-blue-500">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-xs font-bold text-sena-gray400 uppercase tracking-widest">En Progreso</p>
-                    <h3 class="text-3xl font-bold text-sena-gray900 mt-1">{{ $metrics['pending_tasks'] ?? 0 }}</h3>
+                    <p class="text-xs font-bold text-sena-gray400 uppercase tracking-widest">Proyectos</p>
+                    <h3 class="text-3xl font-bold text-sena-gray900 mt-1">{{ $metrics['total_projects'] }}</h3>
                 </div>
                 <div class="p-2 bg-blue-50 rounded-lg text-blue-500">
-                    <i class="bi bi-hourglass-split text-xl"></i>
+                    <i class="bi bi-folder2 text-xl"></i>
                 </div>
             </div>
-            <p class="text-[11px] text-sena-gray400 mt-4">Actualizado hace 5 min</p>
+            <p class="text-[11px] text-sena-gray400 mt-4">Centros de formación</p>
         </div>
 
         <!-- Vencidas -->
@@ -46,14 +44,14 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-xs font-bold text-sena-gray400 uppercase tracking-widest">Vencidas</p>
-                    <h3 class="text-3xl font-bold text-red-600 mt-1">{{ $metrics['overdue_tasks'] ?? 0 }}</h3>
+                    <h3 class="text-3xl font-bold text-red-600 mt-1">{{ $metrics['overdue_tasks'] }}</h3>
                 </div>
                 <div class="p-2 bg-red-50 rounded-lg text-red-500">
                     <i class="bi bi-exclamation-triangle text-xl"></i>
                 </div>
             </div>
             <p class="text-[11px] text-red-400 mt-4 font-medium flex items-center">
-                <i class="bi bi-alarm mr-1"></i> Acción prioritaria
+                <i class="bi bi-alarm mr-1"></i> Requiere atención
             </p>
         </div>
 
@@ -62,14 +60,14 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-xs font-bold text-sena-gray400 uppercase tracking-widest">Completadas</p>
-                    <h3 class="text-3xl font-bold text-sena-green mt-1">{{ $metrics['completed_tasks'] ?? 0 }}</h3>
+                    <h3 class="text-3xl font-bold text-sena-green mt-1">{{ $metrics['completed_tasks'] }}</h3>
                 </div>
                 <div class="p-2 bg-sena-greenLight rounded-lg text-sena-green">
                     <i class="bi bi-check2-circle text-xl"></i>
                 </div>
             </div>
             <p class="text-[11px] text-sena-green mt-4 font-medium flex items-center">
-                <i class="bi bi-patch-check mr-1"></i> 85% de cumplimiento
+                <i class="bi bi-patch-check mr-1"></i> Cumplimiento real
             </p>
         </div>
     </div>
@@ -79,35 +77,37 @@
         <!-- Mis Tareas Pendientes -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-lg shadow-card overflow-hidden h-full flex flex-col">
-                <div class="px-6 py-4 border-b border-sena-gray100 flex justify-between items-center bg-white sticky top-0 z-10">
-                    <h3 class="font-bold text-sena-gray900">Mis Tareas Pendientes</h3>
-                    <span class="bg-sena-navy text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter">12 Pendientes</span>
-                </div>
                 <div class="flex-1 overflow-y-auto custom-scrollbar bg-white">
-                    @forelse($recent_tasks ?? [] as $task)
+                    @forelse($recent_tasks as $task)
                         <div class="p-4 border-b border-sena-gray50 last:border-0 hover:bg-sena-gray50 transition-colors cursor-pointer group">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-center space-x-3">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-200"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full {{ $task->status === 'done' ? 'bg-sena-green' : ($task->priority === 'high' ? 'bg-red-500' : 'bg-sena-navy') }} shadow-sm"></span>
                                     <h4 class="text-sm font-semibold text-sena-gray700 group-hover:text-sena-navy transition-colors">
                                         {{ $task->title }}
                                     </h4>
                                 </div>
-                                <span class="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded uppercase">Vence Hoy</span>
+                                @if($task->due_date && $task->status !== 'done')
+                                    <span class="text-[10px] font-bold {{ \Carbon\Carbon::parse($task->due_date)->isPast() ? 'text-red-500 bg-red-50' : 'text-sena-gray400 bg-sena-gray50' }} px-2 py-0.5 rounded uppercase">
+                                        {{ \Carbon\Carbon::parse($task->due_date)->format('d M') }}
+                                    </span>
+                                @endif
                             </div>
                             <div class="flex items-center justify-between ml-5.5">
                                 <div class="flex items-center space-x-4">
                                     <div class="flex items-center text-xs text-sena-gray400">
                                         <i class="bi bi-folder2-open mr-1.5 text-xs"></i>
-                                        <span>Proyect: Sistema Alertas</span>
+                                        <span>{{ $task->project->name }}</span>
                                     </div>
                                     <div class="flex items-center text-xs text-sena-gray400">
                                         <i class="bi bi-columns-gap mr-1.5 text-xs"></i>
-                                        <span class="font-medium">En Progreso</span>
+                                        <span class="font-medium">{{ ucfirst($task->status) }}</span>
                                     </div>
                                 </div>
                                 <div class="flex -space-x-2">
-                                    <img src="https://ui-avatars.com/api/?name=User&background=003770&color=fff" class="w-6 h-6 rounded-full border-2 border-white">
+                                    @if($task->assignee)
+                                        <img src="{{ $task->assignee->avatar_url }}" class="w-6 h-6 rounded-full border-2 border-white" title="{{ $task->assignee->name }}">
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -117,8 +117,7 @@
                                 <i class="bi bi-emoji-smile text-4xl text-sena-gray200"></i>
                             </div>
                             <h4 class="text-sena-gray700 font-bold text-lg">¡Todo al día!</h4>
-                            <p class="text-sm text-sena-gray400 max-w-xs mx-auto mt-2">No tienes tareas urgentes asignadas en este momento.</p>
-                            <button class="mt-8 text-sena-navy font-bold text-sm hover:underline">Ver todas mis tareas</button>
+                            <p class="text-sm text-sena-gray400 max-w-xs mx-auto mt-2">No hay actividad reciente para mostrar.</p>
                         </div>
                     @endforelse
                 </div>
@@ -132,60 +131,35 @@
                     <h3 class="font-bold text-sena-gray900">Proyectos Activos</h3>
                 </div>
                 <div class="p-6 space-y-8">
-                    <div class="group cursor-pointer">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h4 class="text-sm font-bold text-sena-gray900 group-hover:text-sena-green transition-colors">Plataforma Educativa</h4>
-                                <p class="text-[10px] uppercase font-bold text-sena-gray400 tracking-widest mt-0.5">Ficha: #287465</p>
+                    @forelse($active_projects as $project)
+                        <div class="group cursor-pointer" onclick="window.location.href='{{ route('board.index') }}?project_id={{ $project->id }}'">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 class="text-sm font-bold text-sena-gray900 group-hover:text-sena-green transition-colors">{{ $project->name }}</h4>
+                                    <p class="text-[10px] uppercase font-bold text-sena-gray400 tracking-widest mt-0.5">Ficha: {{ $project->code }}</p>
+                                </div>
+                                @php
+                                    $percentage = $project->tasks_count > 0 ? round(($project->completed_tasks_count / $project->tasks_count) * 100) : 0;
+                                @endphp
+                                <span class="text-xs font-bold text-sena-green bg-sena-greenLight px-2 py-0.5 rounded">{{ $percentage }}%</span>
                             </div>
-                            <span class="text-xs font-bold text-sena-green bg-sena-greenLight px-2 py-0.5 rounded">65%</span>
-                        </div>
-                        <div class="w-full bg-sena-gray100 rounded-full h-2 overflow-hidden">
-                            <div class="bg-gradient-to-r from-sena-green to-green-400 h-full rounded-full transition-all duration-1000 ease-out shadow-sm" style="width: 65%"></div>
-                        </div>
-                        <div class="flex justify-between mt-2">
-                            <span class="text-[10px] text-sena-gray400 font-medium">24 de 36 completadas</span>
-                            <span class="text-[10px] text-sena-navy font-bold group-hover:underline">Detalles →</span>
-                        </div>
-                    </div>
-
-                    <div class="group cursor-pointer">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h4 class="text-sm font-bold text-sena-gray900 group-hover:text-sena-green transition-colors">App de Bienestar</h4>
-                                <p class="text-[10px] uppercase font-bold text-sena-gray400 tracking-widest mt-0.5">Ficha: #287466</p>
+                            <div class="w-full bg-sena-gray100 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-sena-green to-green-400 h-full rounded-full transition-all duration-1000 ease-out shadow-sm" style="width: {{ $percentage }}%"></div>
                             </div>
-                            <span class="text-xs font-bold text-sena-green bg-sena-greenLight px-2 py-0.5 rounded">20%</span>
-                        </div>
-                        <div class="w-full bg-sena-gray100 rounded-full h-2 overflow-hidden">
-                            <div class="bg-gradient-to-r from-sena-green to-green-400 h-full rounded-full transition-all duration-1000 ease-out shadow-sm" style="width: 20%"></div>
-                        </div>
-                        <div class="flex justify-between mt-2">
-                            <span class="text-[10px] text-sena-gray400 font-medium">5 de 25 completadas</span>
-                            <span class="text-[10px] text-sena-navy font-bold group-hover:underline">Detalles →</span>
-                        </div>
-                    </div>
-
-                    <div class="group cursor-pointer">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h4 class="text-sm font-bold text-sena-gray900 group-hover:text-sena-green transition-colors">Sistema Seguimiento</h4>
-                                <p class="text-[10px] uppercase font-bold text-sena-gray400 tracking-widest mt-0.5">Ficha: #287467</p>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-[10px] text-sena-gray400 font-medium">{{ $project->completed_tasks_count }} de {{ $project->tasks_count }} completadas</span>
+                                <span class="text-[10px] text-sena-navy font-bold group-hover:underline">Detalles →</span>
                             </div>
-                            <span class="text-xs font-bold text-sena-green bg-sena-greenLight px-2 py-0.5 rounded">90%</span>
                         </div>
-                        <div class="w-full bg-sena-gray100 rounded-full h-2 overflow-hidden">
-                            <div class="bg-gradient-to-r from-sena-green to-green-400 h-full rounded-full transition-all duration-1000 ease-out shadow-sm" style="width: 90%"></div>
+                    @empty
+                        <div class="py-10 text-center">
+                            <p class="text-xs text-sena-gray400">No hay proyectos activos.</p>
                         </div>
-                        <div class="flex justify-between mt-2">
-                            <span class="text-[10px] text-sena-gray400 font-medium">18 de 20 completadas</span>
-                            <span class="text-[10px] text-sena-navy font-bold group-hover:underline">Detalles →</span>
-                        </div>
-                    </div>
+                    @endforelse
 
-                    <button class="w-full bg-sena-gray50 text-sena-navy text-xs font-bold py-3 rounded-lg hover:bg-sena-navyLight transition-colors mt-4">
+                    <a href="{{ route('projects.index') }}" class="block w-full text-center bg-sena-gray50 text-sena-navy text-xs font-bold py-3 rounded-lg hover:bg-sena-navyLight transition-colors mt-4">
                         Ver todos los proyectos institucionales
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

@@ -117,10 +117,3 @@
         </div>
     </div>
 </x-guest-layout>
-        <div class="card-footer bg-light border-0 py-3 text-center">
-            <p class="small text-muted mb-0" style="font-size: 0.75rem;">
-                Acceso exclusivo para personal autorizado del SENA
-            </p>
-        </div>
-    </div>
-</x-guest-layout>

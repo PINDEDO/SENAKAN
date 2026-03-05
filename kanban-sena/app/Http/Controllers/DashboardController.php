@@ -5,21 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Task;
+use App\Models\Project;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        // Métricas placeholder para el MVP
         $metrics = [
-            'total_tasks' => 0,
-            'completed_tasks' => 0,
-            'overdue_tasks' => 0,
+            'total_tasks' => Task::count(),
+            'completed_tasks' => Task::where('status', 'done')->count(),
+            'overdue_tasks' => Task::where('status', '!=', 'done')
+            ->where('due_date', '<', now()->toDateString())
+            ->count(),
             'total_users' => User::count(),
+            'total_projects' => Project::count(),
         ];
 
-        return view('dashboard', compact('metrics'));
+        $recent_tasks = Task::with(['project', 'assignee'])
+            ->latest('updated_at')
+            ->take(5)
+            ->get();
+
+        $active_projects = Project::withCount(['tasks', 'tasks as completed_tasks_count' => function ($q) {
+            $q->where('status', 'done');
+        }])->latest()->take(3)->get();
+
+        return view('dashboard', compact('metrics', 'recent_tasks', 'active_projects'));
     }
 }

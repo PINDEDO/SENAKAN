@@ -39,7 +39,11 @@
             <x-sidebar-link :href="route('board.index')" :active="request()->routeIs('board.index')" icon="columns-gap">
                 Tablero Kanban
             </x-sidebar-link>
-            
+
+            <x-sidebar-link :href="route('projects.index')" :active="request()->routeIs('projects.index')" icon="folder2">
+                Proyectos
+            </x-sidebar-link>
+           
             <x-sidebar-link :href="route('users.index')" :active="request()->routeIs('users.index')" icon="people">
                 Usuarios
             </x-sidebar-link>
