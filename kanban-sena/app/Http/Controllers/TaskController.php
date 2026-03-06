@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Task;
@@ -37,7 +39,7 @@ class TaskController extends Controller
         ]);
 
         $task = Task::findOrFail($request->task_id);
-        
+
         $task->update([
             'status' => $request->status,
             'order' => $request->order
