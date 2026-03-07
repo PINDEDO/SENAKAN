@@ -14,7 +14,7 @@
                 @endif
             </div>
             @if($currentProject)
-            <button onclick="document.getElementById('modal-task-create').classList.remove('hidden')" class="bg-sena-green text-white px-4 py-2 rounded-md font-bold text-sm flex items-center hover:bg-sena-greenHover transition-all shadow-sm">
+            <button onclick="openModal()" class="bg-sena-green text-white px-4 py-2 rounded-md font-bold text-sm flex items-center hover:bg-sena-greenHover transition-all shadow-sm">
                 <i class="bi bi-plus-lg mr-2"></i> Nueva Tarea
             </button>
             @endif
@@ -55,34 +55,36 @@
                     </div>
                     <div id="column-{{ $status }}" data-status="{{ $status }}" class="flex-1 p-3 rounded-b-lg space-y-3 overflow-y-auto kanban-column {{ $status === 'pending' ? 'bg-sena-gray50/50' : ($status === 'progress' ? 'bg-blue-50/20' : 'bg-sena-greenLight/10') }}">
                         @foreach($tasks[$status] as $task)
-                            <div data-id="{{ $task->id }}" class="bg-white p-4 rounded-lg shadow-card border border-transparent hover:border-sena-green transition-all cursor-grab active:cursor-grabbing group {{ $status === 'done' ? 'opacity-70 line-through text-sena-gray400' : '' }}">
-                                <div class="flex justify-between items-start mb-2">
-                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase 
-                                        {{ $task->priority === 'high' ? 'bg-red-50 text-red-600' : ($task->priority === 'medium' ? 'bg-yellow-50 text-yellow-600' : 'bg-sena-greenLight text-sena-green') }}">
+                            <div class="task-card group bg-white p-4 rounded-lg shadow-sm border border-sena-gray100 cursor-grab active:cursor-grabbing hover:border-sena-green/30 hover:shadow-md transition-all duration-200"
+                                 data-id="{{ $task->id }}">
+                                <div class="flex justify-between items-start mb-3">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider
+                                        {{ $task->priority === 'high' ? 'bg-red-50 text-red-600' : ($task->priority === 'medium' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600') }}">
                                         {{ $task->priority }}
                                     </span>
+                                    <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onclick="editTask({{ json_encode($task) }})" class="p-1 hover:bg-sena-gray50 rounded text-sena-gray400 hover:text-sena-navy">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <i class="bi bi-grip-vertical text-sena-gray200"></i>
+                                    </div>
                                 </div>
-                                <h4 class="text-sm font-semibold text-sena-gray900 mb-2">{{ $task->title }}</h4>
+                                <h4 class="text-sm font-bold text-sena-gray900 mb-2 leading-tight">{{ $task->title }}</h4>
                                 @if($task->description)
-                                    <p class="text-xs text-sena-gray400 line-clamp-2 mb-4">{{ $task->description }}</p>
+                                    <p class="text-xs text-sena-gray400 line-clamp-2 mb-3">{{ $task->description }}</p>
                                 @endif
-                                <div class="flex justify-between items-center">
+                                <div class="flex items-center justify-between pt-3 border-t border-sena-gray50">
                                     <div class="flex -space-x-2">
                                         @if($task->assignee)
-                                            <img src="{{ $task->assignee->avatar_url }}" class="w-6 h-6 rounded-full border-2 border-white" title="{{ $task->assignee->name }}">
+                                            <img src="{{ $task->assignee->avatar_url }}" alt="avatar" class="w-6 h-6 rounded-full border-2 border-white" title="{{ $task->assignee->name }}">
                                         @else
-                                            <div class="w-6 h-6 rounded-full bg-sena-gray100 border-2 border-white flex items-center justify-center" title="Sin asignar">
-                                                <i class="bi bi-person text-[10px] text-sena-gray400"></i>
-                                            </div>
+                                            <div class="w-6 h-6 rounded-full bg-sena-gray100 border-2 border-white flex items-center justify-center text-[10px] text-sena-gray400">?</div>
                                         @endif
                                     </div>
-                                    @if($task->due_date && $status !== 'done')
-                                        <div class="flex items-center text-[10px] font-bold {{ \Carbon\Carbon::parse($task->due_date)->isPast() ? 'text-red-500' : 'text-sena-gray400' }}">
-                                            <i class="bi bi-calendar-event mr-1"></i> {{ \Carbon\Carbon::parse($task->due_date)->format('d M') }}
-                                        </div>
-                                    @endif
-                                    @if($status === 'done')
-                                        <i class="bi bi-check-circle-fill text-sena-green"></i>
+                                    @if($task->due_date)
+                                        <span class="text-[10px] font-bold text-sena-gray400 flex items-center">
+                                            <i class="bi bi-calendar3 mr-1"></i> {{ $task->due_date->format('d M') }}
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -93,105 +95,160 @@
         </div>
     @endif
 
-    <!-- Modal Create Task -->
-    @if($currentProject)
-    <div id="modal-task-create" class="fixed inset-0 bg-sena-navy/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden">
-            <div class="px-6 py-4 border-b border-sena-gray100 bg-sena-gray50 flex justify-between items-center">
-                <h3 class="font-bold text-sena-navy">Nueva Tarea</h3>
-                <button onclick="document.getElementById('modal-task-create').classList.add('hidden')" class="text-sena-gray400 hover:text-sena-gray900">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            <form action="{{ route('tasks.store') }}" method="POST" class="p-6 space-y-4">
-                @csrf
-                <input type="hidden" name="project_id" value="{{ $currentProject->id }}">
-                <div>
-                    <label class="block text-xs font-bold text-sena-gray400 uppercase mb-1">Título</label>
-                    <input type="text" name="title" required class="w-full border-sena-gray200 rounded-md text-sm focus:border-sena-green outline-none p-2 transition-all">
+    <!-- Modal: Nueva / Editar Tarea -->
+    <div id="taskModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-sena-navy/60 backdrop-blur-sm"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md relative animate-in fade-in zoom-in duration-200">
+                <div class="px-6 py-4 border-b border-sena-gray100 flex justify-between items-center">
+                    <h3 id="modalTitle" class="font-bold text-sena-navy">Nueva Tarea</h3>
+                    <button onclick="closeModal()" class="text-sena-gray400 hover:text-sena-gray600">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-sena-gray400 uppercase mb-1">Descripción</label>
-                    <textarea name="description" rows="3" class="w-full border-sena-gray200 rounded-md text-sm focus:border-sena-green outline-none p-2 transition-all"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
+                <form id="taskForm" method="POST" action="{{ route('tasks.store') }}" class="p-6 space-y-4">
+                    @csrf
+                    <input type="hidden" name="_method" id="formMethod" value="POST">
+                    <input type="hidden" name="project_id" value="{{ $currentProject?->id }}">
+                    
                     <div>
-                        <label class="block text-xs font-bold text-sena-gray400 uppercase mb-1">Prioridad</label>
-                        <select name="priority" class="w-full border-sena-gray200 rounded-md text-sm focus:border-sena-green outline-none p-2 transition-all">
-                            <option value="low">Baja</option>
-                            <option value="medium" selected>Media</option>
-                            <option value="high">Alta</option>
+                        <label class="block text-xs font-bold text-sena-gray700 uppercase mb-1">Título</label>
+                        <input type="text" name="title" id="taskTitle" required class="w-full border-sena-gray200 rounded-md focus:border-sena-green focus:ring-sena-greenLight text-sm" placeholder="Nombre de la tarea">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-sena-gray700 uppercase mb-1">Descripción</label>
+                        <textarea name="description" id="taskDescription" class="w-full border-sena-gray200 rounded-md focus:border-sena-green focus:ring-sena-greenLight text-sm" rows="3" placeholder="Detalles de la actividad"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-sena-gray700 uppercase mb-1">Prioridad</label>
+                            <select name="priority" id="taskPriority" class="w-full border-sena-gray200 rounded-md focus:border-sena-green focus:ring-sena-greenLight text-sm">
+                                <option value="low">Baja</option>
+                                <option value="medium" selected>Media</option>
+                                <option value="high">Alta</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-sena-gray700 uppercase mb-1">Vencimiento</label>
+                            <input type="date" name="due_date" id="taskDueDate" class="w-full border-sena-gray200 rounded-md focus:border-sena-green focus:ring-sena-greenLight text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-sena-gray700 uppercase mb-1">Asignar a</label>
+                        <select name="assigned_to" id="taskAssignedTo" class="w-full border-sena-gray200 rounded-md focus:border-sena-green focus:ring-sena-greenLight text-sm">
+                            <option value="">Sin asignar</option>
+                            @foreach(\App\Models\User::all() as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-sena-gray400 uppercase mb-1">Vencimiento</label>
-                        <input type="date" name="due_date" class="w-full border-sena-gray200 rounded-md text-sm focus:border-sena-green outline-none p-2 transition-all">
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-sena-green text-white font-bold py-2 rounded-md hover:bg-sena-greenHover transition-all shadow-md">
+                            Guardar Tarea
+                        </button>
                     </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-sena-gray400 uppercase mb-1">Asignar a</label>
-                    <select name="assigned_to" class="w-full border-sena-gray200 rounded-md text-sm focus:border-sena-green outline-none p-2 transition-all">
-                        <option value="">Sin asignar</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->role }})</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="document.getElementById('modal-task-create').classList.add('hidden')" class="px-4 py-2 text-sm font-bold text-sena-gray400 hover:text-sena-gray700">Cancelar</button>
-                    <button type="submit" class="bg-sena-green text-white px-6 py-2 rounded-md font-bold text-sm hover:bg-sena-greenHover shadow-md">Crear Tarea</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-    @endif
 
     <!-- Scripts for Drag and Drop -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
+        function openModal() {
+            document.getElementById('modalTitle').textContent = 'Nueva Tarea';
+            document.getElementById('taskForm').action = "{{ route('tasks.store') }}";
+            document.getElementById('formMethod').value = "POST";
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDescription').value = '';
+            document.getElementById('taskPriority').value = 'medium';
+            document.getElementById('taskDueDate').value = '';
+            document.getElementById('taskAssignedTo').value = '';
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        function editTask(task) {
+            document.getElementById('modalTitle').textContent = 'Editar Tarea';
+            document.getElementById('taskForm').action = `/tasks/${task.id}`;
+            document.getElementById('formMethod').value = "PUT";
+            document.getElementById('taskTitle').value = task.title;
+            document.getElementById('taskDescription').value = task.description || '';
+            document.getElementById('taskPriority').value = task.priority;
+            document.getElementById('taskDueDate').value = task.due_date ? task.due_date.split('T')[0] : '';
+            document.getElementById('taskAssignedTo').value = task.assigned_to || '';
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('taskModal').classList.add('hidden');
+        }
+
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            const title = document.getElementById('taskTitle').value;
+            if (!title) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo Requerido',
+                    text: 'Por favor, asigne un título a la tarea antes de continuar.',
+                    confirmButtonColor: '#39A900'
+                });
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const columns = ['column-pending', 'column-progress', 'column-done'];
             
-            columns.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
+            columns.forEach(columnId => {
+                const el = document.getElementById(columnId);
+                if (el) {
+                    new Sortable(el, {
+                        group: 'tasks',
+                        animation: 150,
+                        ghostClass: 'opacity-20',
+                        chosenClass: 'scale-[1.02]',
+                        dragClass: 'shadow-2xl',
+                        onStart: function (evt) {
+                            evt.item.classList.add('rotate-1');
+                        },
+                        onEnd: function (evt) {
+                            evt.item.classList.remove('rotate-1');
+                            const taskId = evt.item.getAttribute('data-id');
+                            const newStatus = evt.to.getAttribute('data-status');
+                            const order = Array.from(evt.to.children).indexOf(evt.item);
 
-                new Sortable(el, {
-                    group: 'kanban',
-                    animation: 150,
-                    ghostClass: 'bg-sena-greenLight',
-                    chosenClass: 'scale-[1.02]',
-                    dragClass: 'shadow-2xl',
-                    onEnd: function (evt) {
-                        const taskId = evt.item.dataset.id;
-                        const toStatus = evt.to.dataset.status;
-                        const newOrder = evt.newIndex;
+                            // Cambiar color de la card dinámicamente según el destino
+                            const card = evt.item;
+                            card.classList.remove('border-sena-gray100', 'border-blue-200', 'border-sena-green/30');
+                            if (newStatus === 'progress') card.classList.add('border-blue-200');
+                            else if (newStatus === 'done') card.classList.add('border-sena-green/30');
+                            else card.classList.add('border-sena-gray100');
 
-                        fetch('{{ route('tasks.updateOrder') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                task_id: taskId,
-                                status: toStatus,
-                                order: newOrder
+                            fetch("{{ route('tasks.updateOrder') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    task_id: taskId,
+                                    status: newStatus,
+                                    order: order
+                                })
                             })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                console.log('Posición actualizada');
-                                // Opcional: Recargar contador de columna
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('No se pudo guardar la posición. Recarga la página.');
-                        });
-                    },
-                });
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log('Orden actualizado');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('No se pudo guardar la posición. Recarga la página.');
+                            });
+                        }
+                    });
+                }
             });
         });
     </script>

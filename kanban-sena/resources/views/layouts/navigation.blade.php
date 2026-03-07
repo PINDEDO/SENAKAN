@@ -57,7 +57,11 @@
             <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Personal</p>
         </div>
 
-        <x-sidebar-link href="#" icon="card-checklist">
+            <x-sidebar-link :href="route('calendar.index')" :active="request()->routeIs('calendar.index')" icon="calendar3">
+                Calendario
+            </x-sidebar-link>
+
+            <x-sidebar-link :href="route('tasks.index')" :active="request()->routeIs('tasks.index')" icon="card-checklist">
             Mis Tareas
         </x-sidebar-link>
 
@@ -68,14 +72,14 @@
 
     <!-- Logout -->
     <div class="p-4 border-t border-white/5 service-footer">
-        <form method="POST" action="{{ route('logout') }}">
+        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
             @csrf
-            <button type="submit" class="w-full flex items-center space-x-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-md transition-all group">
-                <svg class="w-5 h-5 text-red-400 group-hover:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                <span class="text-sm font-medium">Cerrar Sesión</span>
-            </button>
         </form>
+        <button type="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="w-full flex items-center space-x-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/10 rounded-md transition-all group">
+            <svg class="w-5 h-5 text-red-400 group-hover:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span class="text-sm font-medium">Cerrar Sesión</span>
+        </button>
     </div>
 </aside>

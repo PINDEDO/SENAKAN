@@ -10,16 +10,32 @@ class BoardController extends Controller
 {
     public function index(Request $request)
     {
-        $projects = Project::latest()->get();
-        $projectId = $request->get('project_id');
+        $user = auth()->user();
 
+        if ($user->isAdmin() || $user->isCoordinador()) {
+            $projects = Project::latest()->get();
+        }
+        else {
+            // Officials only see projects they are involved in (via created or assigned tasks)
+            $projects = Project::whereHas('tasks', function ($q) use ($user) {
+                $q->where('assigned_to', $user->id)->orWhere('created_by', $user->id);
+            })->latest()->get();
+        }
+
+        $projectId = $request->get('project_id');
         if (!$projectId && $projects->isNotEmpty()) {
             $projectId = $projects->first()->id;
         }
 
-        $currentProject = $projectId ?Project::with(['tasks' => function ($q) {
+        $currentProject = $projectId ?Project::with(['tasks' => function ($q) use ($user) {
             $q->with('assignee')->orderBy('order');
-        }])->find($projectId) : null;
+            if (!$user->isAdmin() && !$user->isCoordinador()) {
+                $q->where(function ($sub) use ($user) {
+                            $sub->where('assigned_to', $user->id)->orWhere('created_by', $user->id);
+                        }
+                        );
+                    }
+                }])->find($projectId) : null;
 
         $tasks = [
             'pending' => $currentProject ? $currentProject->tasks->where('status', 'pending') : collect(),
@@ -27,7 +43,12 @@ class BoardController extends Controller
             'done' => $currentProject ? $currentProject->tasks->where('status', 'done') : collect(),
         ];
 
-        $users = User::where('active', true)->get();
+        if ($user->isAdmin() || $user->isCoordinador()) {
+            $users = User::where('active', true)->get();
+        }
+        else {
+            $users = collect([$user]);
+        }
 
         return view('board', compact('projects', 'currentProject', 'tasks', 'users'));
     }

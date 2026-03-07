@@ -65,15 +65,81 @@
 
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Page Heading (Topbar placeholder for now) -->
-                <header class="h-16 bg-white border-b border-sena-gray100 flex items-center px-8 shrink-0">
-                    @isset($header)
-                        {{ $header }}
-                    @else
-                        <h2 class="text-xl font-bold text-sena-gray900">
-                             {{ config('app.name') }}
-                        </h2>
-                    @endisset
+                <header class="h-16 bg-white border-b border-sena-gray100 flex items-center justify-between px-8 shrink-0">
+                    <div>
+                        @isset($header)
+                            {{ $header }}
+                        @else
+                            <h2 class="text-xl font-bold text-sena-gray900">
+                                 {{ config('app.name') }}
+                            </h2>
+                        @endisset
+                    </div>
+
+                    <!-- Digital Clock -->
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right hidden sm:block">
+                            <div id="live-clock" class="text-sm font-bold text-sena-navy tracking-tight">00:00:00</div>
+                            <div id="live-date" class="text-[10px] text-sena-gray400 font-medium uppercase">{{ now()->format('d M, Y') }}</div>
+                        </div>
+                        <div class="h-8 w-px bg-sena-gray100 mx-2"></div>
+                    </div>
                 </header>
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    function updateClock() {
+                        const now = new Date();
+                        const hours = String(now.getHours()).padStart(2, '0');
+                        const minutes = String(now.getMinutes()).padStart(2, '0');
+                        const seconds = String(now.getSeconds()).padStart(2, '0');
+                        
+                        const clockElement = document.getElementById('live-clock');
+                        if (clockElement) {
+                            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+                        }
+                    }
+                    setInterval(updateClock, 1000);
+                    updateClock();
+
+                    // SweetAlert Universal Notifications
+                    document.addEventListener('DOMContentLoaded', function() {
+                        @if(session('success'))
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: "{{ session('success') }}",
+                                timer: 3000,
+                                showConfirmButton: false,
+                                background: '#FFFFFF',
+                                color: '#1A2533',
+                                iconColor: '#39A900'
+                            });
+                        @endif
+
+                        @if(session('error'))
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: "{{ session('error') }}",
+                                background: '#FFFFFF',
+                                color: '#1A2533',
+                                iconColor: '#DC2626'
+                            });
+                        @endif
+
+                        @if($errors->any())
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Atención',
+                                html: '<ul class="text-left text-sm">@foreach($errors->all() as $error)<li><i class="bi bi-exclamation-circle mr-1"></i> {{ $error }}</li>@endforeach</ul>',
+                                background: '#FFFFFF',
+                                color: '#1A2533',
+                                iconColor: '#F59E0B'
+                            });
+                        @endif
+                    });
+                </script>
 
                 <!-- Page Content -->
                 <main class="flex-1 overflow-y-auto p-8">

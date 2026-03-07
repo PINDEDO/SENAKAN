@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->role === 'aprendiz';
     }
 
+    public function isFuncionario(): bool
+    {
+        return $this->role === 'funcionario';
+    }
+
     public function hasAnyRole(array $roles): bool
     {
         return in_array($this->role, $roles);

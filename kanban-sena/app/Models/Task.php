@@ -18,6 +18,10 @@ class Task extends Model
         'created_by',
     ];
 
+    protected $casts = [
+        'due_date' => 'date',
+    ];
+
     public function project()
     {
         return $this->belongsTo(Project::class);
