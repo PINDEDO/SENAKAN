@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -26,18 +27,32 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email' => ['required', 'string', 'email'],
+        $rules = [
+            'email'    => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
-            $secretKey = env('RECAPTCHA_SECRET_KEY');
-            $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$value}");
-            $responseKeys = json_decode($response, true);
-            if (!$responseKeys["success"]) {
-                $fail('La verificación de reCAPTCHA ha fallado. Por favor, inténtalo de nuevo.');
-            }
-        }],
         ];
+
+        // Only enforce reCAPTCHA when keys are configured
+        if (config('services.recaptcha.secret')) {
+            $rules['g-recaptcha-response'] = [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $secret = config('services.recaptcha.secret');
+
+                    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                        'secret'   => $secret,
+                        'response' => $value,
+                        'remoteip' => $this->ip(),
+                    ]);
+
+                    if (! ($response->json('success') ?? false)) {
+                        $fail('La verificación de reCAPTCHA ha fallado. Por favor, inténtalo de nuevo.');
+                    }
+                },
+            ];
+        }
+
+        return $rules;
     }
 
     /**

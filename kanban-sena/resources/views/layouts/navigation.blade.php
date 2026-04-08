@@ -57,6 +57,10 @@
             <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Personal</p>
         </div>
 
+            <x-sidebar-link :href="route('chat.index')" :active="request()->routeIs('chat.*')" icon="chat-dots">
+                Mensajes
+            </x-sidebar-link>
+
             <x-sidebar-link :href="route('calendar.index')" :active="request()->routeIs('calendar.index')" icon="calendar3">
                 Calendario
             </x-sidebar-link>

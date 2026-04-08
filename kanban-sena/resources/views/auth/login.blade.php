@@ -121,10 +121,12 @@
                     </div>
 
                     <!-- reCAPTCHA Widget -->
+                    @if(config('services.recaptcha.site_key'))
                     <div class="flex justify-center">
-                        <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
                     </div>
                     <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2 text-center" />
+                    @endif
 
                     <!-- Submit Button -->
                     <div class="pt-2">
@@ -135,7 +137,9 @@
                     </div>
                 </form>
 
+                @if(config('services.recaptcha.site_key'))
                 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                @endif
 
                 <!-- Footer -->
                 <div class="mt-16 pt-8 border-t border-sena-gray100 text-center">

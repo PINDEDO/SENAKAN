@@ -37,6 +37,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/tasks/{task}', [TaskController::class , 'update'])->name('tasks.update');
     Route::post('/tasks/update-order', [TaskController::class , 'updateOrder'])->name('tasks.updateOrder');
 
+    // Chat / Direct Messaging
+    Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{user}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+
     // Módulos de Visualización
     Route::get('/calendar', [CalendarController::class , 'index'])->name('calendar.index');
     Route::get('/tasks-list', [TaskListController::class , 'index'])->name('tasks.index');

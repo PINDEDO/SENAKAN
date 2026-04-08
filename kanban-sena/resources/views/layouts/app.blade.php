@@ -58,6 +58,26 @@
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
             body { font-family: 'Inter', sans-serif; }
         </style>
+
+        <!-- Alpine.js -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+        <!-- Pusher & Laravel Echo CDN for Reverb -->
+        <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
+        <script>
+            window.Pusher = Pusher;
+
+            window.Echo = new Echo({
+                broadcaster: 'reverb',
+                key: "{{ config('broadcasting.connections.reverb.key') }}",
+                wsHost: "{{ config('broadcasting.connections.reverb.options.host') }}",
+                wsPort: {{ config('broadcasting.connections.reverb.options.port') ?? 8080 }},
+                wssPort: {{ config('broadcasting.connections.reverb.options.port') ?? 8080 }},
+                forceTLS: {{ config('broadcasting.connections.reverb.options.scheme') === 'https' ? 'true' : 'false' }},
+                enabledTransports: ['ws', 'wss'],
+            });
+        </script>
     </head>
     <body class="bg-sena-gray50 text-sena-gray900 antialiased">
         <div class="min-h-screen flex">
