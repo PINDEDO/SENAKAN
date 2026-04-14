@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+/**
+ * Contraseña de todos los usuarios demo (solo desarrollo): "password"
+ */
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,7 +23,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 1,
                 'name' => 'Admin SENA',
                 'email' => 'admin@sena.edu.co',
-                'password' => '$2y$12$q/HIjxtnPhfHNFYh7ZL1DeC0E0oV8OkhGnPaNQNzfOgPoKZfCHoFW',
+                'password' => Hash::make('password'),
                 'role' => 'admin',
                 'center_id' => null,
                 'avatar' => null,
@@ -32,7 +37,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 3,
                 'name' => 'secretaria',
                 'email' => 'secretaria@sena.edu.co',
-                'password' => '$2y$12$TmdIioIh8Jmq9WGTTaknOO.3JRSPT62bXJYFIXWAW/KnaPh3TkJDq',
+                'password' => Hash::make('password'),
                 'role' => 'funcionario',
                 'center_id' => null,
                 'avatar' => null,
@@ -46,7 +51,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 4,
                 'name' => 'cordinador',
                 'email' => 'cordinador@sena.edu.co',
-                'password' => '$2y$12$sWpafIu5ZZEzPvv0g0DNw.Nzd68rf71PYiH9KGLyUFasRuswBYNSm',
+                'password' => Hash::make('password'),
                 'role' => 'coordinador',
                 'center_id' => null,
                 'avatar' => null,
@@ -60,7 +65,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 5,
                 'name' => 'instructor',
                 'email' => 'instructor@sena.edu.co',
-                'password' => '$2y$12$kt9W30HpH5HD78IvTmSbvOXyBMzsgobFkdhGF9b10WoyG0Ymmn2yW',
+                'password' => Hash::make('password'),
                 'role' => 'instructor',
                 'center_id' => null,
                 'avatar' => null,
