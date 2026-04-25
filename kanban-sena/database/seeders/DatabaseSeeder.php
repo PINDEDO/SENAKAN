@@ -7,23 +7,47 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Contraseña de todos los usuarios demo (solo desarrollo): "password"
+ * Usuarios y datos demo (solo desarrollo).
+ *
+ * Contraseña en texto plano: {@see DatabaseSeeder::DEMO_PASSWORD_PLAIN}
  */
-
 class DatabaseSeeder extends Seeder
 {
+    /**
+     * Contraseña en texto plano para todos los usuarios insertados por este seeder.
+     */
+    public const DEMO_PASSWORD_PLAIN = 'password';
+
+    /**
+     * Vacía tablas dependientes y usuarios para volver a sembrar sin conflictos de claves.
+     */
+    protected function resetApplicationData(): void
+    {
+        DB::table('sessions')->delete();
+        DB::table('password_reset_tokens')->delete();
+        DB::table('activity_logs')->delete();
+        DB::table('messages')->delete();
+        DB::table('tasks')->delete();
+        DB::table('projects')->delete();
+        DB::table('users')->delete();
+    }
+
     /**
      * Seed the application's database with data from the SQL dump.
      */
     public function run(): void
     {
+        $this->resetApplicationData();
+
+        $passwordHash = Hash::make(self::DEMO_PASSWORD_PLAIN);
+
         // Users
         DB::table('users')->insert([
             [
                 'id' => 1,
                 'name' => 'Admin SENA',
                 'email' => 'admin@sena.edu.co',
-                'password' => Hash::make('password'),
+                'password' => $passwordHash,
                 'role' => 'admin',
                 'center_id' => null,
                 'avatar' => null,
@@ -37,7 +61,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 3,
                 'name' => 'secretaria',
                 'email' => 'secretaria@sena.edu.co',
-                'password' => Hash::make('password'),
+                'password' => $passwordHash,
                 'role' => 'funcionario',
                 'center_id' => null,
                 'avatar' => null,
@@ -51,7 +75,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 4,
                 'name' => 'cordinador',
                 'email' => 'cordinador@sena.edu.co',
-                'password' => Hash::make('password'),
+                'password' => $passwordHash,
                 'role' => 'coordinador',
                 'center_id' => null,
                 'avatar' => null,
@@ -65,7 +89,7 @@ class DatabaseSeeder extends Seeder
                 'id' => 5,
                 'name' => 'instructor',
                 'email' => 'instructor@sena.edu.co',
-                'password' => Hash::make('password'),
+                'password' => $passwordHash,
                 'role' => 'instructor',
                 'center_id' => null,
                 'avatar' => null,
