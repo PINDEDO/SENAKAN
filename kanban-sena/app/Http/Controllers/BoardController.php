@@ -12,30 +12,23 @@ class BoardController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->isAdmin() || $user->isCoordinador()) {
-            $projects = Project::latest()->get();
-        }
-        else {
-            // Officials only see projects they are involved in (via created or assigned tasks)
-            $projects = Project::whereHas('tasks', function ($q) use ($user) {
-                $q->where('assigned_to', $user->id)->orWhere('created_by', $user->id);
-            })->latest()->get();
-        }
+        $projects = Project::visibleToUser($user)->latest()->get();
 
         $projectId = $request->get('project_id');
-        if (!$projectId && $projects->isNotEmpty()) {
+        if (! $projectId && $projects->isNotEmpty()) {
             $projectId = $projects->first()->id;
         }
 
-        $currentProject = $projectId ?Project::with(['tasks' => function ($q) use ($user) {
-            $q->with('assignee')->orderBy('order');
-            if (!$user->isAdmin() && !$user->isCoordinador()) {
-                $q->where(function ($sub) use ($user) {
-                            $sub->where('assigned_to', $user->id)->orWhere('created_by', $user->id);
-                        }
-                        );
-                    }
-                }])->find($projectId) : null;
+        $currentProject = $projectId
+            ? Project::visibleToUser($user)->with(['tasks' => function ($q) use ($user) {
+                $q->with('assignee')->orderBy('order');
+                if (! $user->isAdmin() && ! $user->isCoordinador()) {
+                    $q->where(function ($sub) use ($user) {
+                        $sub->where('assigned_to', $user->id)->orWhere('created_by', $user->id);
+                    });
+                }
+            }])->find($projectId)
+            : null;
 
         $tasks = [
             'pending' => $currentProject ? $currentProject->tasks->where('status', 'pending') : collect(),
@@ -45,8 +38,7 @@ class BoardController extends Controller
 
         if ($user->isAdmin() || $user->isCoordinador()) {
             $users = User::where('active', true)->get();
-        }
-        else {
+        } else {
             $users = collect([$user]);
         }
 

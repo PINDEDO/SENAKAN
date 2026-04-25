@@ -7,84 +7,16 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Tailwind Play CDN -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            sena: {
-                                green: '#39A900',
-                                greenHover: '#2D8800',
-                                greenLight: '#EDF7E6',
-                                navy: '#003770',
-                                navyLight: '#E0E9F5',
-                                white: '#FFFFFF',
-                                gray50: '#F4F6F8',
-                                gray100: '#E8ECEF',
-                                gray200: '#D1D8DF',
-                                gray400: '#8E9BAA',
-                                gray700: '#3D4F60',
-                                gray900: '#1A2533',
-                            },
-                        },
-                        fontFamily: {
-                            sans: ['Inter', 'Arial', 'sans-serif'],
-                        },
-                        borderRadius: {
-                            sm: '4px',
-                            md: '8px',
-                            lg: '12px',
-                            xl: '16px',
-                        },
-                        boxShadow: {
-                            card: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)',
-                            sidebar: '4px 0 24px rgba(0,55,112,0.10)',
-                        },
-                        spacing: {
-                            sidebar: '256px',
-                            sidebarCollapsed: '64px',
-                        }
-                    }
-                }
-            }
-        </script>
+        @php($kanbanFlash = ['success' => session('success'), 'error' => session('error'), 'errors' => $errors->any() ? $errors->all() : []])
+        <script type="application/json" id="kanban-flash">@json($kanbanFlash)</script>
 
-        <!-- Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-            body { font-family: 'Inter', sans-serif; }
-        </style>
-
-        <!-- Alpine.js -->
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
-
-        <!-- Pusher & Laravel Echo CDN for Reverb -->
-        <script src="https://js.pusher.com/8.0/pusher.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
-        <script>
-            window.Pusher = Pusher;
-
-            window.Echo = new Echo({
-                broadcaster: 'reverb',
-                key: "{{ config('broadcasting.connections.reverb.key') }}",
-                wsHost: "{{ config('broadcasting.connections.reverb.options.host') }}",
-                wsPort: {{ config('broadcasting.connections.reverb.options.port') ?? 8080 }},
-                wssPort: {{ config('broadcasting.connections.reverb.options.port') ?? 8080 }},
-                forceTLS: {{ config('broadcasting.connections.reverb.options.scheme') === 'https' ? 'true' : 'false' }},
-                enabledTransports: ['ws', 'wss'],
-            });
-        </script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-sena-gray50 text-sena-gray900 antialiased">
         <div class="min-h-screen flex">
             @include('layouts.navigation')
 
             <div class="flex-1 flex flex-col overflow-hidden">
-                <!-- Page Heading (Topbar placeholder for now) -->
                 <header class="h-16 bg-white border-b border-sena-gray100 flex items-center justify-between px-8 shrink-0">
                     <div>
                         @isset($header)
@@ -96,7 +28,6 @@
                         @endisset
                     </div>
 
-                    <!-- Digital Clock -->
                     <div class="flex items-center space-x-4">
                         <div class="text-right hidden sm:block">
                             <div id="live-clock" class="text-sm font-bold text-sena-navy tracking-tight">00:00:00</div>
@@ -106,62 +37,6 @@
                     </div>
                 </header>
 
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <script>
-                    function updateClock() {
-                        const now = new Date();
-                        const hours = String(now.getHours()).padStart(2, '0');
-                        const minutes = String(now.getMinutes()).padStart(2, '0');
-                        const seconds = String(now.getSeconds()).padStart(2, '0');
-                        
-                        const clockElement = document.getElementById('live-clock');
-                        if (clockElement) {
-                            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
-                        }
-                    }
-                    setInterval(updateClock, 1000);
-                    updateClock();
-
-                    // SweetAlert Universal Notifications
-                    document.addEventListener('DOMContentLoaded', function() {
-                        @if(session('success'))
-                            Swal.fire({
-                                icon: 'success',
-                                title: '¡Éxito!',
-                                text: "{{ session('success') }}",
-                                timer: 3000,
-                                showConfirmButton: false,
-                                background: '#FFFFFF',
-                                color: '#1A2533',
-                                iconColor: '#39A900'
-                            });
-                        @endif
-
-                        @if(session('error'))
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: "{{ session('error') }}",
-                                background: '#FFFFFF',
-                                color: '#1A2533',
-                                iconColor: '#DC2626'
-                            });
-                        @endif
-
-                        @if($errors->any())
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Atención',
-                                html: '<ul class="text-left text-sm">@foreach($errors->all() as $error)<li><i class="bi bi-exclamation-circle mr-1"></i> {{ $error }}</li>@endforeach</ul>',
-                                background: '#FFFFFF',
-                                color: '#1A2533',
-                                iconColor: '#F59E0B'
-                            });
-                        @endif
-                    });
-                </script>
-
-                <!-- Page Content -->
                 <main class="flex-1 overflow-y-auto p-8">
                     {{ $slot }}
                 </main>

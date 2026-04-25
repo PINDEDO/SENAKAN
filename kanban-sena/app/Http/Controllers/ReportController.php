@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Task;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function index()
+    use AuthorizesRequests;
+
+    public function index(Request $request)
     {
+        $this->authorize('viewAdministrativeReports', $request->user());
+
         $projects = Project::withCount(['tasks', 'tasks as completed_tasks_count' => function ($q) {
             $q->where('status', 'done');
         }])->get();

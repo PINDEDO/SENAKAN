@@ -31,25 +31,37 @@
             Dashboard
         </x-sidebar-link>
 
+        <div class="pt-4 pb-2 px-2">
+            <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Gestión</p>
+        </div>
+
+        <x-sidebar-link :href="route('board.index')" :active="request()->routeIs('board.index')" icon="columns-gap">
+            Tablero Kanban
+        </x-sidebar-link>
+
+        <x-sidebar-link :href="route('projects.index')" :active="request()->routeIs('projects.index')" icon="folder2">
+            Proyectos
+        </x-sidebar-link>
+
         @if(auth()->user()->isAdmin() || auth()->user()->isCoordinador())
             <div class="pt-4 pb-2 px-2">
-                <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Gestión</p>
+                <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Administración</p>
             </div>
-            
-            <x-sidebar-link :href="route('board.index')" :active="request()->routeIs('board.index')" icon="columns-gap">
-                Tablero Kanban
+
+            <x-sidebar-link :href="route('admin.metrics')" :active="request()->routeIs('admin.metrics')" icon="clipboard-data">
+                Métricas
             </x-sidebar-link>
 
-            <x-sidebar-link :href="route('projects.index')" :active="request()->routeIs('projects.index')" icon="folder2">
-                Proyectos
-            </x-sidebar-link>
-           
             <x-sidebar-link :href="route('users.index')" :active="request()->routeIs('users.index')" icon="people">
                 Usuarios
             </x-sidebar-link>
-            
+
             <x-sidebar-link :href="route('reports.index')" :active="request()->routeIs('reports.index')" icon="graph-up">
                 Reportes
+            </x-sidebar-link>
+
+            <x-sidebar-link :href="route('admin.activity')" :active="request()->routeIs('admin.activity')" icon="journal-text">
+                Auditoría
             </x-sidebar-link>
         @endif
 

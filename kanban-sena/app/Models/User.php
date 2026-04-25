@@ -65,11 +65,6 @@ class User extends Authenticatable
         return $this->role === 'instructor';
     }
 
-    public function isAprendiz(): bool
-    {
-        return $this->role === 'aprendiz';
-    }
-
     public function isFuncionario(): bool
     {
         return $this->role === 'funcionario';
@@ -86,10 +81,10 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+            return asset('storage/'.$this->avatar);
         }
 
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=1F4E79&color=fff';
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=1F4E79&color=fff';
     }
 
     public function projects()
@@ -99,11 +94,11 @@ class User extends Authenticatable
 
     public function assignedTasks()
     {
-        return $this->hasMany(Task::class , 'assigned_to');
+        return $this->hasMany(Task::class, 'assigned_to');
     }
 
     public function createdTasks()
     {
-        return $this->hasMany(Task::class , 'created_by');
+        return $this->hasMany(Task::class, 'created_by');
     }
 }

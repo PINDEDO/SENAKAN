@@ -6,6 +6,12 @@
         "build": "vite build",
         "dev": "vite"
     },
+    "dependencies": {
+        "bootstrap-icons": "^1.11.3",
+        "laravel-echo": "^1.17.1",
+        "pusher-js": "^8.4.0",
+        "sweetalert2": "^11.14.5"
+    },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/vite": "^4.0.0",

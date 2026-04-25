@@ -3,21 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::latest()->get();
+
         return view('users.index', compact('users'));
     }
 
     public function store(Request $request)
     {
-        $this->authorize('create', [User::class , $request->role]);
+        $this->authorize('create', [User::class, $request->role]);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -40,7 +44,7 @@ class UserController extends Controller
 
         $rules = [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'role' => 'required|in:admin,coordinador,instructor,funcionario',
         ];
 
@@ -53,8 +57,7 @@ class UserController extends Controller
 
         if ($request->filled('password')) {
             $validated['password'] = bcrypt($validated['password']);
-        }
-        else {
+        } else {
             unset($validated['password']);
         }
 

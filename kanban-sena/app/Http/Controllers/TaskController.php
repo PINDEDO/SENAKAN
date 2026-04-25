@@ -2,34 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use App\Models\ActivityLog;
+use App\Models\Project;
+use App\Models\Task;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TaskController extends Controller
 {
     use AuthorizesRequests;
+
     public function store(Request $request)
     {
-        Log::info('Intentando crear tarea:', $request->all());
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'project_id' => 'required|exists:projects,id',
+            'priority' => 'required|in:low,medium,high',
+            'due_date' => 'nullable|date',
+            'assigned_to' => 'nullable|exists:users,id',
+        ]);
 
-        try {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'project_id' => 'required|exists:projects,id',
-                'priority' => 'required|in:low,medium,high',
-                'due_date' => 'nullable|date',
-                'assigned_to' => 'nullable|exists:users,id',
-            ]);
-        }
-        catch (\Exception $e) {
-            Log::error('Validación de tarea fallida:', ['error' => $e->getMessage()]);
-            return redirect()->back()->withErrors(['error' => 'Error de validación: ' . $e->getMessage()])->withInput();
-        }
+        $project = Project::findOrFail($validated['project_id']);
+        $this->authorize('addTask', $project);
 
         $validated['created_by'] = Auth::id();
         $validated['status'] = 'pending';
@@ -43,7 +39,7 @@ class TaskController extends Controller
             'user_id' => Auth::id(),
             'task_id' => $task->id,
             'action' => 'created',
-            'description' => "Creó la tarea: {$task->title}"
+            'description' => "Creó la tarea: {$task->title}",
         ]);
 
         return redirect()->back()->with('success', 'Tarea creada exitosamente.');
@@ -51,6 +47,8 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
+        $this->authorize('update', $task);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -65,7 +63,7 @@ class TaskController extends Controller
             'user_id' => Auth::id(),
             'task_id' => $task->id,
             'action' => 'updated',
-            'description' => "Actualizó la información de la tarea: {$task->title}"
+            'description' => "Actualizó la información de la tarea: {$task->title}",
         ]);
 
         return redirect()->back()->with('success', 'Tarea actualizada exitosamente.');
@@ -80,11 +78,13 @@ class TaskController extends Controller
         ]);
 
         $task = Task::findOrFail($request->task_id);
+        $this->authorize('update', $task);
+
         $oldStatus = $task->status;
 
         $task->update([
             'status' => $request->status,
-            'order' => $request->order
+            'order' => $request->order,
         ]);
 
         if ($oldStatus !== $request->status) {
@@ -92,7 +92,7 @@ class TaskController extends Controller
                 'user_id' => Auth::id(),
                 'task_id' => $task->id,
                 'action' => 'status_change',
-                'description' => "Cambió el estado de '{$oldStatus}' a '{$request->status}' para la tarea: {$task->title}"
+                'description' => "Cambió el estado de '{$oldStatus}' a '{$request->status}' para la tarea: {$task->title}",
             ]);
         }
 

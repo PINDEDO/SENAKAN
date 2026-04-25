@@ -3,17 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $projects = Project::with('creator')->withCount('tasks')->latest()->get();
+        $this->authorize('viewAny', Project::class);
+
+        $projects = Project::visibleToUser(Auth::user())
+            ->with('creator')
+            ->withCount('tasks')
+            ->latest()
+            ->get();
+
         return view('projects.index', compact('projects'));
     }
 
@@ -22,6 +32,8 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Project::class);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|unique:projects,code|max:50',
@@ -40,9 +52,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $this->authorize('update', $project);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:projects,code,' . $project->id . '|max:50',
+            'code' => 'required|string|unique:projects,code,'.$project->id.'|max:50',
             'description' => 'nullable|string',
             'color' => 'nullable|string|max:7',
         ]);
@@ -57,7 +71,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $this->authorize('delete', $project);
+
         $project->delete();
+
         return redirect()->back()->with('success', 'Proyecto eliminado.');
     }
 }

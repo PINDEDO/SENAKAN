@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -13,6 +12,14 @@ class UserPolicy
     public function viewAny(User $user): bool
     {
         return $user->isAdmin() || $user->isCoordinador();
+    }
+
+    /**
+     * Informes institucionales (defensa en profundidad además del middleware por rol).
+     */
+    public function viewAdministrativeReports(User $actor, User $subject): bool
+    {
+        return $actor->id === $subject->id && ($actor->isAdmin() || $actor->isCoordinador());
     }
 
     /**
@@ -47,7 +54,8 @@ class UserPolicy
             if ($model->isAdmin()) {
                 return false;
             }
-            // Coordinator can edit Officials and other Coordinators? 
+
+            // Coordinator can edit Officials and other Coordinators?
             // User said: "coordinadores no podran gestionar al cordinador original"
             // Interpreting as: Coordinators cannot edit other Coordinators of same level or higher?
             // Usually simpler: Coordinators can edit anyone except Admins.
@@ -76,6 +84,7 @@ class UserPolicy
             if ($model->isAdmin()) {
                 return false;
             }
+
             return true;
         }
 
@@ -96,6 +105,7 @@ class UserPolicy
             if ($model->isFuncionario() || $model->isInstructor()) {
                 return false;
             }
+
             return true;
         }
 

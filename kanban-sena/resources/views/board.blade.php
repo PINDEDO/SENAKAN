@@ -137,7 +137,7 @@
                         <label class="block text-xs font-bold text-sena-gray700 uppercase mb-1">Asignar a</label>
                         <select name="assigned_to" id="taskAssignedTo" class="w-full border-sena-gray200 rounded-md focus:border-sena-green focus:ring-sena-greenLight text-sm">
                             <option value="">Sin asignar</option>
-                            @foreach(\App\Models\User::all() as $user)
+                            @foreach($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                         </select>

@@ -7,46 +7,10 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Tailwind Play CDN -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            sena: {
-                                green: '#39A900',
-                                greenHover: '#2D8800',
-                                greenLight: '#EDF7E6',
-                                navy: '#003770',
-                                navyLight: '#E0E9F5',
-                                white: '#FFFFFF',
-                                gray50: '#F4F6F8',
-                                gray100: '#E8ECEF',
-                                gray200: '#D1D8DF',
-                                gray400: '#8E9BAA',
-                                gray700: '#3D4F60',
-                                gray900: '#1A2533',
-                            },
-                        },
-                        fontFamily: {
-                            sans: ['Inter', 'Arial', 'sans-serif'],
-                        },
-                        borderRadius: {
-                            sm: '4px',
-                            md: '8px',
-                            lg: '12px',
-                            xl: '16px',
-                        },
-                    }
-                }
-            }
-        </script>
+        @php($kanbanFlash = ['success' => session('success'), 'error' => session('error'), 'errors' => $errors->any() ? $errors->all() : []])
+        <script type="application/json" id="kanban-flash">@json($kanbanFlash)</script>
 
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-            body { font-family: 'Inter', sans-serif; }
-        </style>
+        @vite(['resources/css/app.css', 'resources/js/guest.js'])
     </head>
     <body class="bg-sena-gray50 text-sena-gray900 antialiased">
         {{ $slot }}

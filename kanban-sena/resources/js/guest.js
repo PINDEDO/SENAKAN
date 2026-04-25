@@ -1,16 +1,10 @@
-import './bootstrap';
+import '../css/app.css';
 
-import Alpine from 'alpinejs';
 import Swal from 'sweetalert2';
-import { startClock } from './clock';
 import { mountFlashNotifications } from './flash';
 
 window.Swal = Swal;
-window.Alpine = Alpine;
-
-Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
-    startClock();
     mountFlashNotifications();
 });
