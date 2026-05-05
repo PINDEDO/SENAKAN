@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-bold text-xl text-sena-gray900">Calendario de Actividades</h2>
-            <div class="flex items-center space-x-4">
+        <div class="flex w-full min-w-0 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+            <h2 class="min-w-0 text-xl font-bold leading-snug text-sena-gray900 lg:flex-1">Calendario de Actividades</h2>
+            <div class="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3 sm:space-x-0">
                 <!-- Navigation -->
                 <div class="flex items-center space-x-2 bg-sena-gray50 p-1 rounded-lg border border-sena-gray100">
                     @php

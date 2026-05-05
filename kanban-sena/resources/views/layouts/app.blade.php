@@ -13,12 +13,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-sena-gray50 text-sena-gray900 antialiased">
-        <div class="min-h-screen flex">
+        <div class="app-layout-shell">
             @include('layouts.navigation')
 
-            <div class="flex-1 flex flex-col overflow-hidden">
-                <header class="h-16 bg-white border-b border-sena-gray100 flex items-center justify-between px-8 shrink-0">
-                    <div>
+            <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                <header class="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-sena-gray100 bg-white px-4 sm:px-8">
+                    <div class="min-w-0 flex-1">
                         @isset($header)
                             {{ $header }}
                         @else
@@ -28,7 +28,7 @@
                         @endisset
                     </div>
 
-                    <div class="flex items-center space-x-4">
+                    <div class="flex shrink-0 items-center space-x-4">
                         <div class="text-right hidden sm:block">
                             <div id="live-clock" class="text-sm font-bold text-sena-navy tracking-tight">00:00:00</div>
                             <div id="live-date" class="text-[10px] text-sena-gray400 font-medium uppercase">{{ now()->format('d M, Y') }}</div>

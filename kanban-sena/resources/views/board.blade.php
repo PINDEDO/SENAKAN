@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <h2 class="font-bold text-xl text-sena-gray900">Tablero Kanban</h2>
+        <div class="flex w-full min-w-0 flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+            <div class="flex min-w-0 flex-1 flex-wrap items-center gap-3">
+                <h2 class="shrink-0 text-xl font-bold text-sena-gray900">Tablero Kanban</h2>
                 @if($projects->count() > 0)
-                <select onchange="window.location.href='?project_id=' + this.value" class="border-sena-gray200 rounded-md text-sm py-1.5 focus:border-sena-green outline-none bg-white shadow-sm border">
+                <select onchange="window.location.href='?project_id=' + this.value" class="min-w-0 max-w-full flex-1 rounded-md border border-sena-gray200 bg-white py-1.5 text-sm shadow-sm outline-none focus:border-sena-green sm:max-w-md sm:flex-initial">
                     @foreach($projects as $project)
                         <option value="{{ $project->id }}" {{ $currentProject && $currentProject->id == $project->id ? 'selected' : '' }}>
                             {{ $project->name }} ({{ $project->code }})
@@ -14,7 +14,7 @@
                 @endif
             </div>
             @if($currentProject)
-            <button onclick="openModal()" class="bg-sena-green text-white px-4 py-2 rounded-md font-bold text-sm flex items-center hover:bg-sena-greenHover transition-all shadow-sm">
+            <button type="button" onclick="openModal()" class="flex shrink-0 items-center whitespace-nowrap rounded-md bg-sena-green px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-sena-greenHover">
                 <i class="bi bi-plus-lg mr-2"></i> Nueva Tarea
             </button>
             @endif
@@ -49,7 +49,7 @@
                             @endif
                             {{ $label }}
                         </h3>
-                        <span class="text-[10px] font-bold bg-white px-2 py-0.5 rounded-full shadow-sm {{ $status === 'pending' ? 'text-sena-gray400' : ($status === 'progress' ? 'text-blue-500' : 'text-sena-green') }}">
+                        <span class="kanban-pill bg-white shadow-sm ring-1 ring-black/5 {{ $status === 'pending' ? 'text-sena-gray600' : ($status === 'progress' ? 'text-blue-700' : 'text-emerald-700') }}">
                             {{ $tasks[$status]->count() }}
                         </span>
                     </div>
@@ -58,10 +58,14 @@
                             <div class="task-card group bg-white p-4 rounded-lg shadow-sm border border-sena-gray100 cursor-grab active:cursor-grabbing hover:border-sena-green/30 hover:shadow-md transition-all duration-200"
                                  data-id="{{ $task->id }}">
                                 <div class="flex justify-between items-start mb-3">
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider
-                                        {{ $task->priority === 'high' ? 'bg-red-50 text-red-600' : ($task->priority === 'medium' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600') }}">
-                                        {{ $task->priority }}
-                                    </span>
+                                    @php
+                                        $prio = match ($task->priority) {
+                                            'high' => 'bg-red-50 text-red-800 ring-1 ring-red-200/80',
+                                            'medium' => 'bg-orange-50 text-orange-800 ring-1 ring-orange-200/80',
+                                            default => 'bg-blue-50 text-blue-800 ring-1 ring-blue-200/80',
+                                        };
+                                    @endphp
+                                    <span class="kanban-pill {{ $prio }}">{{ $task->priority }}</span>
                                     <div class="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button onclick="editTask({{ json_encode($task) }})" class="p-1 hover:bg-sena-gray50 rounded text-sena-gray400 hover:text-sena-navy">
                                             <i class="bi bi-pencil-square"></i>

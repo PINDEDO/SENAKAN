@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-bold text-xl text-sena-gray900">Gestión de Usuarios</h2>
-            <button onclick="openUserModal()" class="bg-sena-navy text-white px-4 py-2 rounded-md font-bold text-sm flex items-center hover:bg-sena-navyLight transition-all">
+        <div class="flex w-full min-w-0 flex-wrap items-center gap-3">
+            <h2 class="min-w-0 flex-1 text-xl font-bold leading-snug text-sena-gray900">Gestión de Usuarios</h2>
+            <button type="button" onclick="openUserModal()" class="flex shrink-0 items-center whitespace-nowrap rounded-md bg-sena-navy px-4 py-2 text-sm font-bold text-white transition-all hover:bg-sena-navyLight">
                 <i class="bi bi-person-plus mr-2"></i> Nuevo Usuario
             </button>
         </div>
@@ -24,8 +24,8 @@
                 </thead>
                 <tbody class="divide-y divide-sena-gray50">
                     @foreach($users as $user)
-                        <tr class="hover:bg-sena-gray50/50 transition-colors group">
-                            <td class="px-6 py-4">
+                        <tr class="odd:bg-white even:bg-sena-gray50/70 hover:bg-sena-navyLight/25 transition-colors group">
+                            <td class="px-6 py-4 align-middle">
                                 <div class="flex items-center space-x-3">
                                     <div class="relative">
                                         <div class="w-10 h-10 rounded-full bg-sena-navy text-white flex items-center justify-center font-bold">
@@ -41,15 +41,17 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                                    {{ $user->role === 'admin' ? 'bg-red-50 text-red-600' : '' }}
-                                    {{ $user->role === 'coordinador' ? 'bg-sena-navyLight text-sena-navy' : '' }}
-                                    {{ $user->role === 'instructor' ? 'bg-sena-greenLight text-sena-green' : '' }}
-                                    {{ $user->role === 'funcionario' ? 'bg-blue-50 text-blue-600' : '' }}
-                                ">
-                                    {{ ucfirst($user->role) }}
-                                </span>
+                            <td class="px-6 py-4 text-center align-middle">
+                                @php
+                                    $rolePill = match ($user->role) {
+                                        'admin' => 'bg-red-50 text-red-800 ring-1 ring-red-200/80',
+                                        'coordinador' => 'bg-sena-navyLight text-sena-navy ring-1 ring-sena-navy/15',
+                                        'instructor' => 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/80',
+                                        'funcionario' => 'bg-blue-50 text-blue-800 ring-1 ring-blue-200/80',
+                                        default => 'bg-sena-gray100 text-sena-gray700 ring-1 ring-sena-gray-200/80',
+                                    };
+                                @endphp
+                                <span class="kanban-pill {{ $rolePill }}">{{ ucfirst($user->role) }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center">

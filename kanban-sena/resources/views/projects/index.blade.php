@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-bold text-xl text-sena-gray900">Proyectos de Formación</h2>
+        <div class="flex w-full min-w-0 flex-wrap items-center gap-3">
+            <h2 class="min-w-0 flex-1 text-xl font-bold leading-snug text-sena-gray900">Proyectos de Formación</h2>
             @if(auth()->user()->isAdmin() || auth()->user()->isCoordinador())
-            <button onclick="document.getElementById('modal-create').classList.remove('hidden')" class="bg-sena-navy text-white px-4 py-2 rounded-md font-bold text-sm flex items-center hover:bg-sena-navyLight transition-all">
+            <button type="button" onclick="document.getElementById('modal-create').classList.remove('hidden')" class="flex shrink-0 items-center whitespace-nowrap rounded-md bg-sena-navy px-4 py-2 text-sm font-bold text-white transition-all hover:bg-sena-navyLight">
                 <i class="bi bi-folder-plus mr-2"></i> Nuevo Proyecto
             </button>
             @endif
@@ -25,7 +25,7 @@
                             <span class="text-[10px] font-bold text-sena-gray400 uppercase tracking-widest">Ficha: {{ $project->code }}</span>
                             <h3 class="text-lg font-bold text-sena-gray900 mt-1">{{ $project->name }}</h3>
                         </div>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase {{ $project->status === 'active' ? 'bg-sena-greenLight text-sena-green' : 'bg-sena-gray100 text-sena-gray400' }}">
+                        <span class="kanban-pill {{ $project->status === 'active' ? 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/80' : 'bg-sena-gray100 text-sena-gray600 ring-1 ring-sena-gray-200/80' }}">
                             {{ $project->status }}
                         </span>
                     </div>

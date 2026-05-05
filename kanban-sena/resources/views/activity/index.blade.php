@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h2 class="font-bold text-xl text-sena-gray900">Auditoría de actividad</h2>
-            <p class="text-xs text-sena-gray400">Registro de acciones sobre tareas</p>
+        <div class="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <h2 class="min-w-0 text-xl font-bold text-sena-gray900">Auditoría de actividad</h2>
+            <p class="shrink-0 text-xs text-sena-gray400 sm:text-right">Registro de acciones sobre tareas</p>
         </div>
     </x-slot>
 
@@ -42,36 +42,43 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-card overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
+        <div class="relative overflow-x-auto">
+            <table class="w-full min-w-[960px] table-fixed border-collapse text-sm">
+                <colgroup>
+                    <col class="w-[148px]" />
+                    <col class="w-[200px]" />
+                    <col class="w-[176px]" />
+                    <col class="w-[260px]" />
+                    <col />
+                </colgroup>
                 <thead>
-                    <tr class="bg-sena-gray50 border-b border-sena-gray100 text-left text-[10px] font-bold uppercase text-sena-gray400 tracking-wider">
-                        <th class="px-4 py-3">Fecha</th>
-                        <th class="px-4 py-3">Usuario</th>
-                        <th class="px-4 py-3">Acción</th>
-                        <th class="px-4 py-3">Tarea / Proyecto</th>
-                        <th class="px-4 py-3">Descripción</th>
+                    <tr class="border-b-2 border-sena-gray200 shadow-sm">
+                        <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800 whitespace-nowrap">Fecha</th>
+                        <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800 whitespace-nowrap">Usuario</th>
+                        <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800 whitespace-nowrap">Acción</th>
+                        <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800">Tarea / Proyecto</th>
+                        <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800">Descripción</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-sena-gray100">
                     @forelse($logs as $log)
-                        <tr class="hover:bg-sena-gray50/80">
-                            <td class="px-4 py-3 whitespace-nowrap text-sena-gray600">{{ $log->created_at->format('d/m/Y H:i') }}</td>
-                            <td class="px-4 py-3 font-medium text-sena-gray900">{{ $log->user?->name ?? '—' }}</td>
-                            <td class="px-4 py-3">
-                                <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-sena-navyLight text-sena-navy">{{ $log->action }}</span>
+                        <tr class="odd:bg-white even:bg-sena-gray50/80 hover:bg-sena-navyLight/25 transition-colors">
+                            <td class="px-5 py-3.5 align-middle whitespace-nowrap tabular-nums text-sena-gray700 border-r border-sena-gray100/80">{{ $log->created_at->format('d/m/Y H:i') }}</td>
+                            <td class="px-5 py-3.5 align-middle font-medium text-sena-gray900 border-r border-sena-gray100/80">{{ $log->user?->name ?? '—' }}</td>
+                            <td class="px-5 py-3.5 align-middle border-r border-sena-gray100/80">
+                                <span class="kanban-pill bg-sena-navyLight text-sena-navy ring-1 ring-sena-navy/10">{{ $log->action }}</span>
                             </td>
-                            <td class="px-4 py-3 text-sena-gray700">
+                            <td class="px-5 py-3.5 align-middle text-sena-gray700 border-r border-sena-gray100/80">
                                 @if($log->task)
-                                    <span class="font-medium">{{ $log->task->title }}</span>
+                                    <span class="font-medium block leading-snug">{{ $log->task->title }}</span>
                                     @if($log->task->project)
-                                        <span class="block text-[10px] text-sena-gray400 mt-0.5">{{ $log->task->project->name }}</span>
+                                        <span class="block text-[11px] text-sena-gray500 mt-1">{{ $log->task->project->name }}</span>
                                     @endif
                                 @else
                                     <span class="text-sena-gray400">—</span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-sena-gray600 max-w-md">{{ $log->description }}</td>
+                            <td class="px-5 py-3.5 align-middle text-sena-gray600 leading-relaxed break-words">{{ $log->description }}</td>
                         </tr>
                     @empty
                         <tr>

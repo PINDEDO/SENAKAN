@@ -5,3 +5,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Shell principal: siempre una pantalla de alto (100dvh cuando el navegador lo permite). */
+@layer components {
+    .app-layout-shell {
+        @apply flex min-w-0 overflow-hidden;
+        min-height: 100vh;
+        height: 100vh;
+        max-height: 100vh;
+    }
+
+    @supports (height: 100dvh) {
+        .app-layout-shell {
+            min-height: 100dvh;
+            height: 100dvh;
+            max-height: 100dvh;
+        }
+    }
+
+    /* Scroll del menú lateral sin barra visible (sigue siendo desplazable con rueda/teclado). */
+    .sidebar-nav-scroll {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .sidebar-nav-scroll::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    /* Pastillas de estado/prioridad: centrado estable en tablas (evita texto “corrido” en Windows). */
+    .kanban-pill {
+        @apply inline-flex items-center justify-center whitespace-nowrap px-2.5 py-1 min-h-[1.625rem] text-xs font-semibold uppercase tracking-wide rounded-full leading-none align-middle;
+    }
+
+    /* Etiquetas legibles en español (anula uppercase del pill cuando uses normal-case en el mismo elemento). */
+    .kanban-pill.normal-case {
+        text-transform: none;
+        letter-spacing: normal;
+    }
+}

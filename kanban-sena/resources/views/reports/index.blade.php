@@ -52,8 +52,8 @@
                         <span class="text-[10px] uppercase font-bold text-sena-gray400 mt-3">En Proceso</span>
                      </div>
                      <div class="flex flex-col items-center">
-                        <div class="w-20 h-20 rounded-full border-[8px] border-red-400 border-b-transparent flex items-center justify-center shadow-inner">
-                             <span class="text-sm font-bold text-red-400">{{ $task_distribution['pending'] }}%</span>
+                        <div class="w-20 h-20 rounded-full border-[8px] border-amber-500 border-b-transparent flex items-center justify-center shadow-inner">
+                             <span class="text-sm font-bold text-amber-700">{{ $task_distribution['pending'] }}%</span>
                         </div>
                         <span class="text-[10px] uppercase font-bold text-sena-gray400 mt-3">Pendientes</span>
                      </div>
@@ -66,32 +66,49 @@
             <div class="px-6 py-4 border-b border-sena-gray100 bg-sena-gray50/30">
                 <h3 class="font-bold text-sena-gray900">Historial de Actividad Reciente</h3>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
+            <div class="relative overflow-x-auto">
+                <table class="w-full min-w-[720px] table-fixed border-collapse text-left text-sm">
+                    <colgroup>
+                        <col class="w-[148px]" />
+                        <col class="w-[200px]" />
+                        <col />
+                        <col class="w-[180px]" />
+                    </colgroup>
                     <thead>
-                        <tr class="text-[10px] uppercase font-bold text-sena-gray400 tracking-widest border-b border-sena-gray100">
-                           <th class="px-6 py-4">Última Actualización</th>
-                           <th class="px-6 py-4">Usuario Responsable</th>
-                           <th class="px-6 py-4">Tarea / Proyecto</th>
-                           <th class="px-6 py-4">Estado Actual</th>
+                        <tr class="border-b-2 border-sena-gray200 shadow-sm">
+                           <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800 whitespace-nowrap">Última actualización</th>
+                           <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800 whitespace-nowrap">Usuario responsable</th>
+                           <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800">Tarea / proyecto</th>
+                           <th scope="col" class="sticky top-0 z-20 bg-sena-gray100 px-5 py-4 text-left text-xs font-bold uppercase tracking-wide text-sena-gray800 whitespace-nowrap">Estado actual</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-sena-gray50">
+                    <tbody class="divide-y divide-sena-gray100">
                         @forelse($recent_activities as $activity)
-                        <tr class="hover:bg-sena-gray50/50 transition-colors">
-                            <td class="px-6 py-4 text-xs font-medium text-sena-gray400">{{ $activity->updated_at->format('d/m/Y H:i') }}</td>
-                            <td class="px-6 py-4">
+                        @php
+                            $statusPill = match ($activity->status) {
+                                'done' => 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/80',
+                                'progress' => 'bg-blue-50 text-blue-800 ring-1 ring-blue-200/80',
+                                'pending' => 'bg-amber-50 text-amber-900 ring-1 ring-amber-200/90',
+                                default => 'bg-sena-gray100 text-sena-gray700 ring-1 ring-sena-gray-200/80',
+                            };
+                            $statusLabel = match ($activity->status) {
+                                'done' => 'Completada',
+                                'progress' => 'En proceso',
+                                'pending' => 'Pendiente',
+                                default => strtoupper($activity->status),
+                            };
+                        @endphp
+                        <tr class="odd:bg-white even:bg-sena-gray50/70 hover:bg-sena-navyLight/25 transition-colors">
+                            <td class="px-5 py-4 align-middle whitespace-nowrap tabular-nums text-xs font-medium text-sena-gray600 border-r border-sena-gray100/80">{{ $activity->updated_at->format('d/m/Y H:i') }}</td>
+                            <td class="px-5 py-4 align-middle border-r border-sena-gray100/80">
                                 <span class="font-bold text-sena-navy">{{ $activity->creator->name }}</span>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-xs font-bold text-sena-gray900">{{ $activity->title }}</div>
-                                <div class="text-[10px] text-sena-gray400">{{ $activity->project->name }}</div>
+                            <td class="px-5 py-4 align-middle border-r border-sena-gray100/80">
+                                <div class="text-xs font-bold text-sena-gray900 leading-snug">{{ $activity->title }}</div>
+                                <div class="text-[11px] text-sena-gray500 mt-1">{{ $activity->project->name }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase
-                                    {{ $activity->status === 'done' ? 'bg-sena-greenLight text-sena-green' : ($activity->status === 'progress' ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-600') }}">
-                                    {{ $activity->status }}
-                                </span>
+                            <td class="px-5 py-4 align-middle">
+                                <span class="kanban-pill normal-case tracking-normal font-semibold {{ $statusPill }}">{{ $statusLabel }}</span>
                             </td>
                         </tr>
                         @empty
@@ -111,12 +128,12 @@
             <h4 class="text-sm font-bold text-sena-navy uppercase">Exportar Datos</h4>
             <p class="text-xs text-sena-gray400">Genera un documento oficial con el estado actual de los proyectos.</p>
         </div>
-        <button class="bg-sena-navy text-white px-6 py-2 rounded-md font-bold text-sm hover:bg-sena-navyLight transition-all flex items-center shadow-md">
+        <a href="{{ route('reports.export.pdf') }}" class="bg-sena-navy text-white px-6 py-2 rounded-md font-bold text-sm hover:opacity-90 transition-all inline-flex items-center shadow-md">
             <i class="bi bi-file-earmark-pdf mr-2"></i> PDF Institucional
-        </button>
-        <button class="bg-sena-green text-white px-6 py-2 rounded-md font-bold text-sm hover:bg-sena-greenHover transition-all flex items-center shadow-md">
+        </a>
+        <a href="{{ route('reports.export.excel') }}" class="bg-sena-green text-white px-6 py-2 rounded-md font-bold text-sm hover:bg-sena-greenHover transition-all inline-flex items-center shadow-md">
             <i class="bi bi-file-earmark-spreadsheet mr-2"></i> Excel (XLSX)
-        </button>
+        </a>
     </div>
 
     <style>

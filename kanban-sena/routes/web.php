@@ -53,6 +53,8 @@ Route::middleware(['auth', 'role:admin,coordinador'])->prefix('admin')->group(fu
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
+    Route::get('/reports/export/excel', [ReportController::class, 'exportExcel'])->name('reports.export.excel');
     Route::get('/activity', [ActivityLogController::class, 'index'])->name('admin.activity');
 });
 
