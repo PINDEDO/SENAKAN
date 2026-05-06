@@ -1,0 +1,7 @@
+﻿ID,Requisito,Estado,Evidencia en Código,Brecha vs SRS,Acción Prioritaria
+RNF-001,Disponibilidad,✅,config/app.php", ".env", XAMPP local",Cumple horario institucional (local),Documentar SLA en docs/DEPLOY.md
+RNF-002,Seguridad,✅,"CSRF, "bcrypt", Policies, Validation Requests, Middleware "role,Cumple estándares Laravel,Añadir rate limiting en producción
+RNF-003,Rendimiento,⚠️,"Eloquent, migraciones","Riesgo N+1 no auditado, paginación parcial",Añadir ->with() y paginate() en consultas críticas
+RNF-004,Usabilidad/UI,⚠️,tailwind.config.js", "resources/views/layouts/,Fuente Inter vs Work Sans. Colores parciales.,Aplicar guía visual SENA (ver Prompt Paso 3)
+RNF-005,Mantenibilidad,⚠️,tests/Feature/", "composer.json" (Pint, PHPUnit)","Sin patrón Repository, PHPDoc escaso","Añadir PHPDoc, considerar Services/Actions"
+RNF-006,Escalabilidad,⚠️,users.center_id", MVC",center_id" subutilizado, monolito preparado",Añadir center_id a projects/tasks si se requiere multi-sede

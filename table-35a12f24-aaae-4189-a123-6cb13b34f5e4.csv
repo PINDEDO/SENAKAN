@@ -1,0 +1,12 @@
+﻿ID,Requisito,Estado,Evidencia en Código,Brecha vs SRS,Acción Prioritaria
+RF-001,Autenticación,✅,routes/auth.php", "app/Http/Controllers/Auth/*", "bootstrap/app.php (middleware),Sesiones vs JWT (válido por restricción XAMPP),Ninguna
+RF-002,Gestión Usuarios/Roles,⚠️,app/Http/Controllers/Admin/UserController.php", "app/Policies/UserPolicy.php", "routes/web.php (/admin),ENUM: funcionario en lugar de aprendiz. Sin Spatie Permission.,Añadir aprendiz al ENUM o renombrar funcionario
+RF-003,Gestión de Proyectos,✅,app/Models/Project.php", "routes/web.php", "*_projects*.php migración,projects.code" almacena ficha, sin tabla "fichas formal,Documentar code como sustituto o crear entidad fichas
+RF-004,Tableros/Columnas,❌,resources/views/board.blade.php", "BoardController.php,Columnas hardcodeadas (3). Tabla columns eliminada en migración *_drop_unused*,Restaurar CRUD de columnas o ajustar SRS a flujo fijo
+RF-005,Tareas/Tickets,⚠️,TaskController.php", "Task.php", migración "tasks,Faltan: comments", "attachments", "tags", descripción enriquecida",Crear tablas/modelos faltantes
+RF-006,Drag & Drop,⚠️,board.blade.php" (SortableJS CDN), "TaskController::updateOrder,Funcional pero acoplado a 3 estados estáticos,Refactorizar a columnas dinámicas o actualizar SRS
+RF-007,Comentarios,❌,"No existe tabla, modelo ni vista",Requisito SRS sin implementación,Crear comments table + UI en modal de tarea
+RF-008,Notificaciones Internas,⚠️,resources/js/echo.js", "routes/channels.php", "messages table (chat),"Chat funciona, pero no notificaciones DB/Email de tareas",Implementar Laravel\Notifications canal database
+RF-009,Filtros y Búsqueda,⚠️,BoardController", vistas Blade","Filtros básicos, sin AJAX en tiempo real ni por etiquetas",Implementar Alpine.js + Fetch o HTMX para filtros dinámicos
+RF-010,Reportes y Métricas,✅,ReportController.php", DomPDF, Maatwebsite Excel, "tests/Feature/Report*,"Exportación funcional, falta Chart.js para gráficas",Integrar Chart.js o mantener PDF/Excel como MVP
+RF-011,Asociación Fichas SENA,⚠️,projects.code", seeders","Asociación implícita, no relacional formal",Normalizar o documentar en docs/ARQUITECTURA.md

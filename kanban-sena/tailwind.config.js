@@ -7,19 +7,28 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './resources/**/*.js',
     ],
 
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'Arial', ...defaultTheme.fontFamily.sans],
+                sans: ['"Work Sans"', 'system-ui', '-apple-system', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 sena: {
+                    /* Manual / identidad SENA 2024 */
                     green: '#39A900',
-                    greenHover: '#2D8800',
+                    darkgreen: '#007832',
+                    navy: '#00304D',
+                    violet: '#71277A',
+                    sky: '#50E5F9',
+                    yellow: '#FDC300',
+                    graybg: '#F6F6F6',
+                    colbg: '#F3F4F6',
+                    /* Compatibilidad vistas existentes */
+                    greenHover: '#007832',
                     greenLight: '#EDF7E6',
-                    navy: '#003770',
                     navyLight: '#E0E9F5',
                     white: '#FFFFFF',
                     gray50: '#F4F6F8',
@@ -34,11 +43,12 @@ export default {
                 sm: '4px',
                 md: '8px',
                 lg: '12px',
-                xl: '16px',
+                xl: '0.75rem',
             },
             boxShadow: {
-                card: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)',
-                sidebar: '4px 0 24px rgba(0,55,112,0.10)',
+                card: '0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)',
+                drag: '0 4px 12px rgba(57, 169, 0, 0.25)',
+                sidebar: '4px 0 24px rgba(0, 48, 77, 0.12)',
             },
             spacing: {
                 sidebar: '256px',

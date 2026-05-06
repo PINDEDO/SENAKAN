@@ -8,7 +8,7 @@
                 <circle cx="50" cy="35" r="15"/>
                 <path d="M25 80C25 66.1929 36.1929 55 50 55C63.8071 55 75 66.1929 75 80V85H25V80Z"/>
             </svg>
-            <span class="text-lg font-bold tracking-tight">KanbanSENA</span>
+            <span class="text-lg font-bold tracking-tight text-white">SenaKan</span>
         </div>
     </div>
 

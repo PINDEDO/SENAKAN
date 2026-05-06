@@ -1,10 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
 
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        @apply antialiased;
+    }
+
+    body {
+        @apply font-sans text-sena-gray900 leading-relaxed;
+        font-feature-settings: 'kern' 1;
+    }
+}
 
 /* Shell principal: siempre una pantalla de alto (100dvh cuando el navegador lo permite). */
 @layer components {
@@ -44,5 +55,19 @@
     .kanban-pill.normal-case {
         text-transform: none;
         letter-spacing: normal;
+    }
+
+    /* SortableJS — identidad SENA (feedback drag) */
+    .sortable-ghost {
+        @apply opacity-50 border-2 border-dashed border-sena-green bg-sena-greenLight;
+    }
+
+    .sortable-chosen {
+        box-shadow: 0 4px 12px rgba(57, 169, 0, 0.25);
+        @apply ring-2 ring-sena-green ring-offset-2;
+    }
+
+    .sortable-drag {
+        @apply shadow-drag rotate-1;
     }
 }
