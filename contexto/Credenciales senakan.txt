@@ -1,0 +1,26 @@
+
+admin@sena.demo / SenaAdmin2026!
+funcionario@sena.demo / SenaFunc2026!
+coordinador@sena.demo / SenaCoord2026!
+instructor@sena.demo / SenaInst2026!
+
+cd c:\Users\SENA\Desktop\SENAKAN\kanban-sena
+php artisan serve --host=127.0.0.1 --port=8000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Miguel Ángel Pineda López">
+<meta name="description" content="Presentación SenaKan - Sistema de Gestión Kanban para la Coordinación SENA">
+<title>SenaKan · Presentación del Proyecto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sena-green:    #39A900;
+    --sena-darkgreen:#007832;
+    --sena-navy:     #00304D;
+    --sena-violet:   #71277A;
+    --sena-sky:      #50E5F9;
+    --sena-yellow:   #FDC300;
+    --sena-graybg:   #F6F6F6;
+    --sena-graytxt:  #4B5563;
+    --sena-graydim:  #9CA3AF;
+    --sena-border:   #E5E7EB;
+    --sena-white:    #FFFFFF;
+    --sena-danger:   #DC2626;
+    --font-sans: 'Work Sans', 'Calibri', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --slide-w: 1280px;
+    --slide-h: 720px;
+  }
+
+  *{box-sizing: border-box; margin: 0; padding: 0;}
+  html, body{height:100%; width:100%;}
+  body{
+    font-family: var(--font-sans);
+    background: linear-gradient(135deg, #0a1a2b 0%, #00304D 60%, #003c5e 100%);
+    color: var(--sena-navy);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  /* ====== STAGE & SLIDES ====== */
+  .stage{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 80px 80px;
+  }
+  .deck{
+    position: relative;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    max-width: 100%;
+    max-height: 100%;
+    transform-origin: center center;
+  }
+  .slide{
+    position: absolute;
+    inset: 0;
+    background: var(--sena-white);
+    border-radius: 14px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45), 0 4px 12px rgba(0,0,0,0.2);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(40px);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+    display: flex;
+    flex-direction: column;
+  }
+  .slide.active{
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s;
+  }
+  .slide.prev{ transform: translateX(-40px); }
+
+  /* ====== HEADER ====== */
+  .header{
+    height: 56px;
+    background: var(--sena-navy);
+    color: var(--sena-white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+    flex-shrink: 0;
+    border-bottom: 4px solid var(--sena-green);
+  }
+  .header-title{
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+    text-transform: none;
+  }
+  .header-brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.6px;
+  }
+  .brand-mark{
+    width: 28px;
+    height: 28px;
+    background: var(--sena-green);
+    color: var(--sena-white);
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ====== CONTENT AREA ====== */
+  .content{
+    flex: 1;
+    padding: 36px 56px 32px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .slide-num{
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sena-green);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  h1.slide-title{
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--sena-navy);
+    margin-bottom: 18px;
+    line-height: 1.15;
+    position: relative;
+  }
+  h1.slide-title::after{
+    content: '';
+    display: block;
+    width: 64px;
+    height: 4px;
+    background: var(--sena-green);
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  h2.section-title{
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--sena-navy);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  h3.subsection{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sena-darkgreen);
+    margin: 14px 0 8px;
+  }
+  p, li{
+    font-size: 15px;
+    color: var(--sena-graytxt);
+    line-height: 1.55;
+  }
+  p + p{ margin-top: 8px; }
+  strong{ color: var(--sena-navy); font-weight: 700; }
+
+  /* ====== COVER ====== */
+  .cover{
+    background:
+      radial-gradient(ellipse at 85% 15%, rgba(57,169,0,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 15% 85%, rgba(0,48,77,0.10) 0%, transparent 55%),
+      linear-gradient(135deg, #ffffff 0%, #f5faf2 100%);
+    padding: 60px 72px;
+    justify-content: space-between;
+    border-top: 6px solid var(--sena-green);
+  }
+  .cover-top{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .cover-logo{
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px 8px 8px;
+    background: var(--sena-white);
+    border-radius: 10px;
+    border: 1px solid var(--sena-border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .cover-logo .brand-mark{
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+  .cover-logo-text{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sena-navy);
+    line-height: 1.2;
+  }
+  .cover-logo-text small{
+    display: block;
+    font-size: 11px;
+    color: var(--sena-graytxt);
+    font-weight: 500;
+    letter-spacing: 0.4px;
+  }
+  .cover-eyebrow{
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--sena-green);
+    text-transform: uppercase;
+  }
+  .cover-main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cover-project{
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--sena-darkgreen);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .cover-title{
+    font-size: 60px;
+    font-weight: 800;
+    color: var(--sena-navy);
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .cover-title span{ color: var(--sena-green); }
+  .cover-sub{
+    font-size: 18px;
+    color: var(--sena-graytxt);
+    font-weight: 500;
+    max-width: 760px;
+    line-height: 1.4;
+  }
+  .cover-rule{
+    width: 96px;
+    height: 6px;
+    background: var(--sena-green);
+    border-radius: 6px;
+    margin: 22px 0;
+  }
+  .cover-meta{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px 32px;
+    border-top: 1px solid var(--sena-border);
+    padding-top: 22px;
+  }
+  .cover-meta-item .label{
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sena-green);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .cover-meta-item .value{
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--sena-navy);
+  }
+
+  /* ====== INDEX (TABLE OF CONTENTS) ====== */
+  .toc{
+    padding: 56px 72px 48px;
+    background:
+      linear-gradient(135deg, #ffffff 0%, #f6faf3 100%);
+    border-top: 6px solid var(--sena-green);
+  }
+  .toc-header{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .toc-eyebrow{
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--sena-green);
+    text-transform: uppercase;
+  }
+  .toc-title{
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--sena-navy);
+    line-height: 1;
+    margin-top: 6px;
+  }
+  .toc-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 36px;
+    margin-top: 8px;
+  }
+  .toc-item{
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 16px;
+    background: var(--sena-white);
+    border: 1px solid var(--sena-border);
+    border-left: 4px solid var(--sena-green);
+    border-radius: 8px;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .toc-item:hover{
+    transform: translateX(4px);
+    box-shadow: 0 6px 14px rgba(0,48,77,0.08);
+  }
+  .toc-num{
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--sena-green);
+    min-width: 36px;
+  }
+  .toc-text{
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--sena-navy);
+  }
+
+  /* ====== TWO COLUMN LAYOUT ====== */
+  .two-col{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    flex: 1;
+    min-height: 0;
+  }
+  .col-card{
+    background: var(--sena-graybg);
+    border-radius: 10px;
+    padding: 22px 24px;
+    border-left: 4px solid var(--sena-green);
+    overflow: hidden;
+  }
+  .col-card.alt{ border-left-color: var(--sena-navy); }
+
+  /* ====== LISTS ====== */
+  ul.bullets{
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+  ul.bullets li{
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 8px;
+  }
+  ul.bullets li::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    background: var(--sena-green);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+  ul.bullets li strong{ color: var(--sena-navy); }
+
+  ol.numbered{
+    list-style: none;
+    counter-reset: item;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+  ol.numbered li{
+    counter-increment: item;
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 12px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+  }
+  ol.numbered li::before{
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36px;
+    height: 32px;
+    background: var(--sena-navy);
+    color: var(--sena-white);
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* ====== ARCHITECTURE GRID ====== */
+  .arch-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .arch-item{
+    background: var(--sena-white);
+    border: 1px solid var(--sena-border);
+    border-top: 3px solid var(--sena-green);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .arch-item .label{
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sena-green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .arch-item .value{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sena-navy);
+    line-height: 1.35;
+  }
+
+  /* ====== IMPACT BLOCKS ====== */
+  .impact-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 6px 0 14px;
+  }
+  .impact-block{
+    background: var(--sena-graybg);
+    border-radius: 8px;
+    padding: 12px 14px;
+    border-top: 3px solid var(--sena-green);
+  }
+  .impact-block:nth-child(2){ border-top-color: var(--sena-navy); }
+  .impact-block:nth-child(3){ border-top-color: var(--sena-yellow); }
+  .impact-block:nth-child(4){ border-top-color: var(--sena-violet); }
+  .impact-block h4{
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sena-navy);
+    margin-bottom: 4px;
+  }
+  .impact-block p{
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--sena-graytxt);
+  }
+
+  .benefits-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 24px;
+    margin-top: 6px;
+  }
+  .benefit{
+    font-size: 13px;
+    color: var(--sena-graytxt);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .benefit::before{
+    content: '';
+    position: absolute;
+    left: 0; top: 7px;
+    width: 8px; height: 8px;
+    background: var(--sena-green);
+    border-radius: 50%;
+  }
+  .benefit strong{ color: var(--sena-navy); }
+
+  /* ====== REFERENCES ====== */
+  .refs-list{
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0;
+  }
+  .refs-list li{
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--sena-graytxt);
+  }
+  .refs-list li::before{
+    content: '';
+    position: absolute;
+    left: 0; top: 9px;
+    width: 6px; height: 6px;
+    background: var(--sena-green);
+    border-radius: 50%;
+  }
+
+  /* ====== FOOTER (chrome) ====== */
+  .chrome{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(0, 24, 38, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 50;
+    color: var(--sena-white);
+  }
+  .chrome-left{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .chrome-mark{
+    width: 26px; height: 26px;
+    background: var(--sena-green);
+    color: var(--sena-white);
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .chrome-progress{
+    flex: 1;
+    margin: 0 24px;
+    height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 480px;
+  }
+  .chrome-bar{
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--sena-green), #6fd11f);
+    transition: width .35s ease;
+  }
+  .chrome-right{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-btn{
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--sena-white);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .nav-btn:hover{
+    background: var(--sena-green);
+    border-color: var(--sena-green);
+    transform: translateY(-1px);
+  }
+  .nav-btn:active{ transform: translateY(0); }
+  .counter{
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.9);
+    min-width: 60px;
+    text-align: center;
+  }
+  .counter strong{
+    color: var(--sena-green);
+    font-weight: 700;
+  }
+
+  /* Click zones */
+  .click-zone{
+    position: fixed;
+    top: 0;
+    bottom: 56px;
+    width: 80px;
+    cursor: pointer;
+    z-index: 10;
+    background: transparent;
+  }
+  .click-zone.left{ left: 0; }
+  .click-zone.right{ right: 0; }
+
+  /* Helper visibility on smaller heights */
+  .scroll-fade{
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sena-graydim) transparent;
+  }
+  .scroll-fade::-webkit-scrollbar{ width: 6px; }
+  .scroll-fade::-webkit-scrollbar-thumb{ background: var(--sena-graydim); border-radius: 3px; }
+
+  /* Print mode (basic A4 landscape, one slide per page) */
+  @media print{
+    @page{ size: A4 landscape; margin: 0; }
+    body{ background: white; overflow: visible; }
+    .stage{ position: static; padding: 0; }
+    .deck{ width: 100%; height: auto; }
+    .chrome, .click-zone{ display: none !important; }
+    .slide{
+      position: relative;
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      page-break-after: always;
+      box-shadow: none;
+      border-radius: 0;
+      width: 100%;
+      height: 100vh;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ZONAS DE CLIC PARA NAVEGACIÓN
+     ============================================================ -->
+<div class="click-zone left" data-nav="prev" aria-label="Diapositiva anterior"></div>
+<div class="click-zone right" data-nav="next" aria-label="Diapositiva siguiente"></div>
+
+<!-- ============================================================
+     STAGE
+     ============================================================ -->
+<main class="stage">
+  <div class="deck" id="deck">
+
+    <!-- ============================================================
+         DIAPOSITIVA 1: PORTADA
+         ============================================================ -->
+    <section class="slide cover active" data-index="1">
+      <div class="cover-top">
+        <div class="cover-logo">
+          <span class="brand-mark">SENA</span>
+          <span class="cover-logo-text">
+            SenaKan
+            <small>Sistema Kanban Institucional</small>
+          </span>
+        </div>
+        <span class="cover-eyebrow">Proyecto de Formación · 2026</span>
+      </div>
+
+      <div class="cover-main">
+        <div class="cover-project">Proyecto de grado · Tecnólogo ADSO</div>
+        <h1 class="cover-title">SenaKan<br><span>Gestión Kanban SENA</span></h1>
+        <div class="cover-rule"></div>
+        <p class="cover-sub">
+          Sistema web de gestión de tareas tipo Kanban para la coordinación interna del Servicio Nacional de Aprendizaje, basado en Laravel + MySQL y alineado al Manual de Identidad Visual SENA 2024.
+        </p>
+      </div>
+
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <span class="label">Autor</span>
+          <span class="value">Miguel Ángel Pineda López</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Programa</span>
+          <span class="value">Tecnólogo en Análisis y Desarrollo de Software</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Centro de formación</span>
+          <span class="value">SENA Caldas — Centro de Procesos Industriales y Construcción.</span>
+        </div>
+        <div class="cover-meta-item">
+          <span class="label">Ficha (ID)</span>
+          <span class="value">2758631</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 2: ÍNDICE
+         ============================================================ -->
+    <section class="slide toc" data-index="2">
+      <div class="toc-header">
+        <div>
+          <div class="toc-eyebrow">Tabla de contenido</div>
+          <h2 class="toc-title">Índice</h2>
+        </div>
+        <div class="cover-logo">
+          <span class="brand-mark">SENA</span>
+          <span class="cover-logo-text">SenaKan</span>
+        </div>
+      </div>
+
+      <div class="toc-grid">
+        <div class="toc-item"><span class="toc-num">01</span><span class="toc-text">Introducción - Abstract</span></div>
+        <div class="toc-item"><span class="toc-num">02</span><span class="toc-text">Objetivos</span></div>
+        <div class="toc-item"><span class="toc-num">03</span><span class="toc-text">Descripción</span></div>
+        <div class="toc-item"><span class="toc-num">04</span><span class="toc-text">Justificación</span></div>
+        <div class="toc-item"><span class="toc-num">05</span><span class="toc-text">Antecedentes</span></div>
+        <div class="toc-item"><span class="toc-num">06</span><span class="toc-text">Alcance</span></div>
+        <div class="toc-item"><span class="toc-num">07</span><span class="toc-text">Arquitectura y tecnología</span></div>
+        <div class="toc-item"><span class="toc-num">08</span><span class="toc-text">Impacto</span></div>
+        <div class="toc-item"><span class="toc-num">09</span><span class="toc-text">Recomendaciones adicionales</span></div>
+        <div class="toc-item"><span class="toc-num">10</span><span class="toc-text">Referencias</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 3: 01 INTRODUCCIÓN - ABSTRACT
+         ============================================================ -->
+    <section class="slide" data-index="3">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 01</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 01</span>
+        <h1 class="slide-title">Introducción</h1>
+
+        <div class="two-col">
+          <div class="col-card">
+            <h2 class="section-title">Introducción</h2>
+            <p>
+              <strong>SenaKan</strong> es una aplicación web de gestión de flujo de trabajo basada en la metodología Kanban, diseñada para digitalizar y centralizar la coordinación académica y administrativa del Servicio Nacional de Aprendizaje (SENA). El sistema reemplaza el seguimiento manual mediante hojas de cálculo y correo por tableros visuales interactivos, permitiendo crear, asignar, priorizar y monitorear tareas en tiempo real, con trazabilidad completa y reportes por ficha de formación, instructor y proyecto.
+            </p>
+          </div>
+          <div class="col-card alt">
+            <h2 class="section-title">Abstract</h2>
+            <p>
+              <strong>SenaKan</strong> is a web-based task management application built on the Kanban methodology, designed to digitize and centralize the academic and administrative coordination of the Servicio Nacional de Aprendizaje (SENA). The platform replaces manual tracking through spreadsheets and email with interactive visual boards, enabling teams to create, assign, prioritize and monitor tasks in real time, with full traceability and reports by training program, instructor and project.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 4: 02 OBJETIVOS
+         ============================================================ -->
+    <section class="slide" data-index="4">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 02</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 02</span>
+        <h1 class="slide-title">Objetivos</h1>
+
+        <h3 class="subsection">Objetivo general</h3>
+        <p>
+          Desarrollar un sistema web de gestión de tareas tipo Kanban para la coordinación interna del SENA, que permita organizar, asignar y dar seguimiento al flujo de trabajo de instructores, coordinadores y aprendices mediante tableros visuales interactivos, utilizando el framework Laravel sobre un entorno XAMPP con MySQL.
+        </p>
+
+        <h3 class="subsection">Objetivos específicos</h3>
+        <ol class="numbered">
+          <li>Diseñar e implementar un módulo de autenticación y gestión de usuarios con roles diferenciados (Administrador, Coordinador, Instructor y Aprendiz).</li>
+          <li>Construir tableros Kanban con columnas configurables, soportando creación, asignación, priorización y movimiento Drag &amp; Drop de tareas asociadas a fichas de formación SENA.</li>
+          <li>Generar reportes y métricas de avance por tablero, usuario y ficha, con notificaciones internas, exportación a PDF e interfaz responsiva alineada al Manual de Identidad Visual SENA 2024.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 5: 03 DESCRIPCIÓN
+         ============================================================ -->
+    <section class="slide" data-index="5">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 03</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 03</span>
+        <h1 class="slide-title">Descripción</h1>
+
+        <p>
+          SenaKan es una solución integral que mejora la organización, la trazabilidad y la comunicación en la coordinación académica del SENA. La plataforma centraliza la gestión de proyectos por ficha de formación, ofrece tableros visuales tipo Kanban y soporta el ciclo completo de las tareas (creación, asignación, comentarios, movimiento entre estados y cierre).
+        </p>
+
+        <h3 class="subsection">Características principales</h3>
+        <ul class="bullets">
+          <li><strong>Monitoreo en tiempo real:</strong> visualización del flujo de trabajo en tableros Kanban con Drag &amp; Drop (SortableJS + AJAX) y refresco parcial; evolución hacia WebSockets/Socket.io.</li>
+          <li><strong>Alertas estratégicas:</strong> notificaciones internas por asignación, cambio de estado, comentarios y vencimientos próximos de tareas y entregables.</li>
+          <li><strong>Información del conductor y vehículo:</strong> en SenaKan corresponde a la gestión institucional de personas y unidades de trabajo — perfil de usuario por rol (Administrador, Coordinador, Instructor, Aprendiz) y datos del proyecto/ficha vinculada.</li>
+          <li><strong>Historial de rutas:</strong> auditoría completa de tareas mediante <em>activity_logs</em>, registrando autor, acción, fecha y descripción de cada cambio realizado en el flujo.</li>
+          <li><strong>Seguridad y privacidad:</strong> protección de datos institucionales con hash bcrypt, CSRF, Policies/Gates de Laravel y cumplimiento de la Ley 1581 de 2012 (Habeas Data).</li>
+        </ul>
+
+        <h3 class="subsection">Objetivo principal del aplicativo</h3>
+        <p>
+          Centralizar y digitalizar la coordinación interna del SENA en una única plataforma visual, intuitiva y trazable, eliminando los procesos dispersos y elevando la productividad, la transparencia y la calidad del seguimiento académico-administrativo.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 6: 04 JUSTIFICACIÓN
+         ============================================================ -->
+    <section class="slide" data-index="6">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 04</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 04</span>
+        <h1 class="slide-title">Justificación</h1>
+
+        <p>
+          La coordinación interna del SENA gestiona múltiples procesos académicos y administrativos que involucran instructores, aprendices y personal coordinador. Actualmente el seguimiento se realiza de forma manual o mediante herramientas no especializadas (correo electrónico, hojas de cálculo), lo que genera pérdida de información, duplicación de esfuerzos y baja trazabilidad del trabajo.
+        </p>
+        <p>
+          La implementación de un sistema Kanban institucional se presenta como una solución innovadora y necesaria: permite visualizar el flujo, priorizar lo urgente, distribuir cargas de trabajo de manera equitativa entre instructores y proporcionar reportes confiables por ficha de formación. Adicionalmente, alinea la operación a estándares profesionales (IEEE 830/29148) y al Manual de Identidad Visual SENA 2024, fortaleciendo la cultura digital y la mejora continua dentro del centro de formación.
+        </p>
+        <p>
+          Para los aprendices del programa ADSO, el desarrollo de SenaKan constituye además una evidencia formativa integral que materializa competencias en análisis de requisitos, diseño de bases de datos, programación full-stack, despliegue y aseguramiento de calidad sobre un caso real institucional.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 7: 05 ANTECEDENTES
+         ============================================================ -->
+    <section class="slide" data-index="7">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 05</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 05</span>
+        <h1 class="slide-title">Antecedentes</h1>
+
+        <ul class="bullets">
+          <li><strong>Gestión manual previa:</strong> la coordinación SENA realizaba el seguimiento de tareas mediante correo electrónico y hojas de cálculo compartidas, sin trazabilidad ni control de versiones consistente.</li>
+          <li><strong>Adopción global del método Kanban:</strong> empresas y entidades educativas han adoptado tableros visuales (Trello, Jira, Asana) para organizar el trabajo con columnas Por Hacer, En Progreso, En Revisión y Completado.</li>
+          <li><strong>Necesidad institucional específica:</strong> el SENA requiere asociar tareas a fichas de formación, instructores y programas, característica ausente en las plataformas comerciales genéricas.</li>
+          <li><strong>Estándares de ingeniería de software:</strong> la formación ADSO exige documentación bajo IEEE 830 / 29148, con requisitos funcionales y no funcionales claramente especificados.</li>
+          <li><strong>Lineamientos visuales corporativos:</strong> el Manual de Identidad Visual SENA 2024 define paleta, tipografía y componentes obligatorios para cualquier desarrollo institucional.</li>
+          <li><strong>Marco normativo nacional:</strong> la Ley 1581 de 2012 (datos personales) y la Ley 1273 de 2009 (delitos informáticos) imponen criterios de seguridad para sistemas que gestionan información de aprendices y servidores públicos.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 8: 06 ALCANCE
+         ============================================================ -->
+    <section class="slide" data-index="8">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 06</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 06</span>
+        <h1 class="slide-title">Alcance</h1>
+
+        <ul class="bullets">
+          <li><strong>Geografía:</strong> implementación inicial en el Centro de Procesos Industriales y Construcción (SENA Regional Caldas), con arquitectura escalable a otros centros y sedes nacionales mediante segmentación por <em>center_id</em>.</li>
+          <li><strong>Usuarios objetivo:</strong> Administradores institucionales, Coordinadores académicos, Instructores y Aprendices vinculados a fichas activas del centro de formación.</li>
+          <li><strong>Monitoreo de vehículos:</strong> en SenaKan se traduce como monitoreo de <em>tableros y tareas</em>, con visualización del estado actual (Por Hacer, En Progreso, En Revisión, Completado), responsable, prioridad y fecha límite de cada actividad.</li>
+          <li><strong>Alertas automáticas:</strong> notificaciones internas en plataforma ante asignaciones nuevas, cambios de estado, comentarios y vencimientos próximos; sin integración con correo externo en la versión inicial.</li>
+          <li><strong>Gestión de rutas:</strong> equivale a la <em>gestión de flujos de trabajo</em>: definición de columnas, políticas de movimiento por rol, dependencias entre tareas y reportes de avance por ficha, instructor y proyecto.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 9: 07 ARQUITECTURA Y TECNOLOGÍA
+         ============================================================ -->
+    <section class="slide" data-index="9">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 07</span>
+      </div>
+      <div class="content scroll-fade">
+        <span class="slide-num">SECCIÓN 07</span>
+        <h1 class="slide-title">Arquitectura y tecnología</h1>
+
+        <h3 class="subsection">Componentes principales</h3>
+        <div class="arch-grid">
+          <div class="arch-item">
+            <span class="label">Frontend</span>
+            <span class="value">Blade Templates + Bootstrap 5 + SortableJS (actual). Evolución a React 18 + TypeScript + TailwindCSS.</span>
+          </div>
+          <div class="arch-item">
+            <span class="label">Backend</span>
+            <span class="value">Laravel 10/11 sobre PHP 8.1+, patrón MVC, Eloquent ORM, autenticación con Breeze/Jetstream.</span>
+          </div>
+          <div class="arch-item">
+            <span class="label">Servicios complementarios</span>
+            <span class="value">SortableJS (Drag &amp; Drop), Chart.js (gráficas de reportes), DomPDF (exportación a PDF). En la plantilla original Storm este bloque correspondía a Mapbox; en SenaKan no aplica georreferenciación.</span>
+          </div>
+          <div class="arch-item">
+            <span class="label">Base de datos</span>
+            <span class="value">MySQL / MariaDB sobre XAMPP local, con migración planificada a PostgreSQL + Redis (caché y sesiones) en red institucional.</span>
+          </div>
+        </div>
+
+        <h3 class="subsection">Característica especial</h3>
+        <p>
+          Se incorpora un algoritmo inspirado en la <strong>teoría de grafos de Dijkstra</strong> y el ordenamiento topológico, aplicado al motor de priorización del tablero Kanban: cada tarea se modela como un nodo y los estados (Por Hacer → En Progreso → En Revisión → Completado) como aristas con pesos calculados a partir de la <strong>prioridad</strong>, la <strong>fecha de vencimiento</strong> y las <strong>dependencias entre tareas</strong>. El sistema sugiere así la "ruta óptima" de avance de cada usuario y resalta cuellos de botella en el flujo.
+        </p>
+
+        <h3 class="subsection">Construcción del código</h3>
+        <p>
+          Desarrollo iterativo en seis sprints quincenales bajo control de versiones <strong>Git</strong>. Estándares <strong>PSR-12</strong> y <strong>PHPDoc</strong>, patrón <em>Repository</em>, migraciones y <em>seeders</em> Laravel para reproducibilidad del entorno, y trazabilidad obligatoria mediante la tabla <em>activity_logs</em>. Se siguen los lineamientos IEEE 830 / 29148 documentados en el SRS del proyecto.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 10: 08 IMPACTO
+         ============================================================ -->
+    <section class="slide" data-index="10">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 08</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 08</span>
+        <h1 class="slide-title">Impacto</h1>
+
+        <div class="impact-grid">
+          <div class="impact-block">
+            <h4>Social</h4>
+            <p>Fortalece la comunicación entre coordinadores, instructores y aprendices, promoviendo una cultura de trabajo colaborativo y transparente dentro del centro de formación.</p>
+          </div>
+          <div class="impact-block">
+            <h4>Económico</h4>
+            <p>Reduce costos operativos al eliminar herramientas dispersas y disminuir el tiempo dedicado a tareas administrativas manuales, optimizando recursos institucionales.</p>
+          </div>
+          <div class="impact-block">
+            <h4>Ambiental</h4>
+            <p>Minimiza el uso de papel mediante la digitalización completa de la gestión de tareas, aportando a la sostenibilidad y a las políticas verdes del SENA.</p>
+          </div>
+          <div class="impact-block">
+            <h4>Tecnológico</h4>
+            <p>Moderniza la coordinación SENA con un stack actualizado (Laravel + MySQL), preparado para escalar a arquitecturas en la nube y APIs interoperables con SofiaPlus.</p>
+          </div>
+        </div>
+
+        <h3 class="subsection">Beneficios</h3>
+        <div class="benefits-grid">
+          <div class="benefit"><strong>Para los coordinadores:</strong> visibilidad total del avance por ficha, instructor y proyecto, con reportes exportables y métricas en tiempo real.</div>
+          <div class="benefit"><strong>Para los instructores:</strong> organización clara de cargas de trabajo, recordatorios automáticos y seguimiento eficiente de las tareas asignadas a sus aprendices.</div>
+          <div class="benefit"><strong>Para los centros de formación:</strong> trazabilidad institucional, evidencias formativas centralizadas y cumplimiento normativo (IEEE 830, Ley 1581).</div>
+          <div class="benefit"><strong>Para la comunidad SENA:</strong> estándar replicable de gestión académica digital, escalable a otras regionales y alineado al Manual de Identidad Visual 2024.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 11: 09 RECOMENDACIONES ADICIONALES
+         ============================================================ -->
+    <section class="slide" data-index="11">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 09</span>
+      </div>
+      <div class="content">
+        <span class="slide-num">SECCIÓN 09</span>
+        <h1 class="slide-title">Recomendaciones adicionales</h1>
+
+        <ul class="bullets">
+          <li><strong>Mensajería interna en tiempo real:</strong> incorporar Socket.io o Laravel Echo para comentarios y notificaciones instantáneas dentro del tablero.</li>
+          <li><strong>Capacitación a usuarios:</strong> diseñar guías cortas, videos y sesiones presenciales orientadas a cada rol (Coordinador, Instructor, Aprendiz) para acelerar la adopción.</li>
+          <li><strong>Integración con SofiaPlus:</strong> consumir APIs institucionales para sincronizar fichas, programas e instructores y evitar la doble carga de datos.</li>
+          <li><strong>Optimización con Redis:</strong> cachear consultas frecuentes (tableros y métricas) y delegar las sesiones a Redis para soportar mayor concurrencia.</li>
+          <li><strong>Soporte multicanal:</strong> habilitar mesa de ayuda y formularios in-app para reportar incidencias, con seguimiento dentro del propio SenaKan.</li>
+          <li><strong>Analítica avanzada:</strong> incorporar tableros con Chart.js para indicadores tipo lead time, throughput, cumplimiento por ficha y carga de trabajo por instructor.</li>
+          <li><strong>Escalabilidad y despliegue:</strong> migrar de XAMPP local a un servidor institucional o VPS, con HTTPS, dominio propio y respaldo automático.</li>
+          <li><strong>Seguridad reforzada:</strong> activar autenticación multifactor (2FA), revisión periódica de roles y políticas de auditoría sobre la tabla <em>activity_logs</em>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         DIAPOSITIVA 12: 10 REFERENCIAS
+         ============================================================ -->
+    <section class="slide" data-index="12">
+      <div class="header">
+        <span class="header-title">Servicio Nacional de Aprendizaje</span>
+        <span class="header-brand"><span class="brand-mark">SENA</span>SenaKan · 10</span>
+      </div>
+      <div class="content scroll-fade">
+        <span class="slide-num">SECCIÓN 10</span>
+        <h1 class="slide-title">Referencias</h1>
+
+        <h3 class="subsection">Fuentes bibliográficas</h3>
+        <ul class="refs-list">
+          <li>SENA (2024). <em>Manual de Identidad Visual SENA 2024.</em> Documento institucional, Servicio Nacional de Aprendizaje. Disponible en repositorio interno SENA.</li>
+          <li>IEEE (1998). <em>IEEE 830-1998 — Recommended Practice for Software Requirements Specifications.</em> Estándar técnico, Institute of Electrical and Electronics Engineers. https://standards.ieee.org/</li>
+          <li>ISO/IEC/IEEE (2018). <em>ISO/IEC/IEEE 29148-2018 — Systems and software engineering, requirements engineering.</em> Estándar técnico, ISO/IEEE. https://www.iso.org/standard/72089.html</li>
+          <li>Anderson, D. (2010). <em>Kanban: Successful Evolutionary Change for your Technology Business.</em> Libro, Blue Hole Press. https://kanbanbooks.com/</li>
+          <li>Otwell, T. (2024). <em>Documentación oficial de Laravel 10/11.</em> Sitio oficial, Laravel LLC. https://laravel.com/docs</li>
+          <li>Bartlomiejus, R. (2024). <em>SortableJS — JavaScript drag &amp; drop library.</em> Documentación, Proyecto open source. https://sortablejs.github.io/Sortable/</li>
+          <li>Bootstrap Team (2024). <em>Bootstrap 5 documentation.</em> Documentación oficial, The Bootstrap Authors. https://getbootstrap.com/</li>
+          <li>Pineda, M. (2026). <em>Especificación de Requisitos de Software — Sistema Kanban SENA (SRS v1.0).</em> Documento interno, SENA Caldas — Centro de Procesos Industriales y Construcción.</li>
+        </ul>
+
+        <h3 class="subsection">Normativa Relacionada:</h3>
+        <ul class="refs-list">
+          <li><strong>Ley 1581 de 2012:</strong> régimen general de protección de datos personales en Colombia (Habeas Data); aplicable al tratamiento de información de aprendices y servidores SENA.</li>
+          <li><strong>Decreto 1377 de 2013:</strong> reglamenta parcialmente la Ley 1581 y define autorizaciones, políticas de tratamiento y derechos del titular.</li>
+          <li><strong>Ley 1273 de 2009:</strong> tipifica los delitos informáticos en Colombia y obliga a establecer controles de seguridad sobre los sistemas de información.</li>
+          <li><strong>Ley 1712 de 2014:</strong> ley de transparencia y derecho de acceso a la información pública nacional, aplicable a entidades públicas como el SENA.</li>
+          <li><strong>Ley 527 de 1999:</strong> reconoce el valor jurídico de los mensajes de datos, firmas y comercio electrónico, base para la trazabilidad digital del sistema.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ============================================================
+     CHROME (controles inferiores)
+     ============================================================ -->
+<footer class="chrome">
+  <div class="chrome-left">
+    <span class="chrome-mark">SENA</span>
+    <span>SenaKan · Presentación del Proyecto</span>
+  </div>
+  <div class="chrome-progress" aria-hidden="true">
+    <div class="chrome-bar" id="chromeBar"></div>
+  </div>
+  <div class="chrome-right">
+    <button class="nav-btn" data-nav="prev" aria-label="Anterior" title="Anterior (←)">‹</button>
+    <span class="counter"><strong id="counterCurrent">01</strong> / <span id="counterTotal">12</span></span>
+    <button class="nav-btn" data-nav="next" aria-label="Siguiente" title="Siguiente (→)">›</button>
+    <button class="nav-btn" data-nav="full" aria-label="Pantalla completa" title="Pantalla completa (F)">⛶</button>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  const deck   = document.getElementById('deck');
+  const bar    = document.getElementById('chromeBar');
+  const cCur   = document.getElementById('counterCurrent');
+  const cTot   = document.getElementById('counterTotal');
+
+  let current = 0;
+  cTot.textContent = String(total).padStart(2, '0');
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+
+  function show(i){
+    if(i < 0) i = 0;
+    if(i > total - 1) i = total - 1;
+    if(i === current && slides[i].classList.contains('active')) return;
+
+    slides.forEach((s, idx) => {
+      s.classList.remove('active');
+      s.classList.toggle('prev', idx < i);
+    });
+    slides[i].classList.add('active');
+    current = i;
+
+    cCur.textContent = pad(i + 1);
+    bar.style.width = (((i + 1) / total) * 100).toFixed(2) + '%';
+
+    try{
+      const url = new URL(window.location.href);
+      url.hash = '#' + (i + 1);
+      history.replaceState(null, '', url.toString());
+    }catch(e){ /* ignore */ }
+  }
+
+  function next(){ show(current + 1); }
+  function prev(){ show(current - 1); }
+  function first(){ show(0); }
+  function last(){ show(total - 1); }
+
+  function toggleFullscreen(){
+    const doc = document;
+    const el  = document.documentElement;
+    if(!doc.fullscreenElement){
+      (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
+    } else {
+      (doc.exitFullscreen || doc.webkitExitFullscreen || doc.msExitFullscreen).call(doc);
+    }
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.defaultPrevented) return;
+    switch(e.key){
+      case 'ArrowRight':
+      case 'PageDown':
+      case ' ':
+        next(); e.preventDefault(); break;
+      case 'ArrowLeft':
+      case 'PageUp':
+        prev(); e.preventDefault(); break;
+      case 'Home': first(); e.preventDefault(); break;
+      case 'End':  last();  e.preventDefault(); break;
+      case 'f':
+      case 'F':    toggleFullscreen(); e.preventDefault(); break;
+    }
+  });
+
+  document.querySelectorAll('[data-nav]').forEach(function(btn){
+    btn.addEventListener('click', function(ev){
+      const action = btn.getAttribute('data-nav');
+      if(action === 'next') next();
+      else if(action === 'prev') prev();
+      else if(action === 'full') toggleFullscreen();
+      ev.stopPropagation();
+    });
+  });
+
+  function fitDeck(){
+    const stage = document.querySelector('.stage');
+    if(!stage || !deck) return;
+    const styles = getComputedStyle(stage);
+    const padX = parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight);
+    const padY = parseFloat(styles.paddingTop)  + parseFloat(styles.paddingBottom);
+    const availW = window.innerWidth  - padX;
+    const availH = window.innerHeight - padY;
+    const baseW = 1280, baseH = 720;
+    const scale = Math.min(availW / baseW, availH / baseH, 1);
+    deck.style.transform = 'scale(' + scale.toFixed(4) + ')';
+  }
+  window.addEventListener('resize', fitDeck);
+
+  function init(){
+    let initial = 0;
+    if(window.location.hash){
+      const n = parseInt(window.location.hash.replace('#',''), 10);
+      if(!isNaN(n) && n >= 1 && n <= total) initial = n - 1;
+    }
+    show(initial);
+    fitDeck();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>

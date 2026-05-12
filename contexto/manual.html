@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KanbanSENA — Manual de Usuario</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f44;
+    --navy-mid: #152a5a;
+    --navy-light: #1e3870;
+    --green: #3db54a;
+    --green-dark: #2d9138;
+    --green-glow: rgba(61,181,74,0.12);
+    --red: #e84040;
+    --blue-accent: #2d7ef5;
+    --gold: #f5a623;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #64748b;
+    --gray-800: #1e293b;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.10);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.09);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.65; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 60px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--white); text-decoration: none; }
+  .nav-brand .dot { width: 10px; height: 10px; background: var(--green); border-radius: 50%; }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links a { color: var(--gray-400); text-decoration: none; font-size: 0.8rem; font-weight: 500; padding: 5px 12px; border-radius: 6px; transition: all 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); background: var(--navy-light); }
+  .nav-badge { background: var(--green); color: white; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.05em; }
+
+  /* ── LAYOUT ── */
+  .page-wrapper { display: flex; min-height: calc(100vh - 60px); }
+
+  /* SIDEBAR INDEX */
+  .sidebar {
+    width: 240px; flex-shrink: 0;
+    background: var(--navy);
+    position: sticky; top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    padding: 20px 0;
+  }
+  .sidebar-title {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gray-400);
+    padding: 0 20px 10px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    color: rgba(255,255,255,0.55); font-size: 0.82rem; font-weight: 500;
+    text-decoration: none; transition: all 0.2s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar-item:hover { color: var(--white); background: rgba(255,255,255,0.05); border-left-color: var(--green); }
+  .sidebar-item.active { color: var(--white); background: rgba(61,181,74,0.1); border-left-color: var(--green); }
+  .sidebar-num { font-size: 0.65rem; font-weight: 700; color: var(--green); font-family: 'JetBrains Mono', monospace; }
+  .sidebar-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 20px; }
+
+  /* MAIN CONTENT */
+  .main-content { flex: 1; padding: 40px; max-width: 900px; }
+
+  /* ── SECTIONS ── */
+  .doc-section { margin-bottom: 64px; }
+  .section-anchor { position: relative; top: -80px; display: block; visibility: hidden; }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 600; color: var(--green);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .section-title { font-size: 1.6rem; font-weight: 800; color: var(--navy); margin-bottom: 14px; padding-bottom: 12px; border-bottom: 2px solid var(--gray-200); }
+  .section-desc { color: var(--gray-600); font-size: 0.95rem; margin-bottom: 24px; }
+
+  /* HERO MINI */
+  .doc-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a6e 100%);
+    border-radius: var(--radius); padding: 36px;
+    margin-bottom: 40px;
+    position: relative; overflow: hidden;
+  }
+  .doc-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(61,181,74,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .doc-hero-tag { color: var(--green); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+  .doc-hero h1 { font-size: 2rem; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+  .doc-hero p { color: rgba(255,255,255,0.6); font-size: 0.95rem; max-width: 480px; }
+  .doc-hero-meta { margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .doc-meta-item { background: rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 8px 14px; }
+  .doc-meta-key { font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; }
+  .doc-meta-val { font-size: 0.85rem; color: var(--white); font-weight: 600; margin-top: 2px; }
+
+  /* INFO BOXES */
+  .info-box { border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; }
+  .info-box.blue { background: rgba(45,126,245,0.08); border: 1px solid rgba(45,126,245,0.2); }
+  .info-box.green { background: var(--green-glow); border: 1px solid rgba(61,181,74,0.2); }
+  .info-box.yellow { background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.2); }
+  .info-box.red { background: rgba(232,64,64,0.06); border: 1px solid rgba(232,64,64,0.2); }
+  .info-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .info-title { font-size: 0.82rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .info-text { font-size: 0.83rem; color: var(--gray-600); line-height: 1.6; }
+
+  /* SCREENSHOTS */
+  .screenshot-block { margin-bottom: 28px; }
+  .screenshot-title { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .shot-badge { padding: 2px 9px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+  .shot-badge.admin { background: rgba(232,64,64,0.12); color: var(--red); }
+  .shot-badge.instructor { background: var(--green-glow); color: var(--green-dark); }
+  .shot-badge.all { background: rgba(45,126,245,0.1); color: var(--blue-accent); }
+  .screenshot-img {
+    width: 100%; border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-md);
+    display: block;
+  }
+  .screenshot-caption { font-size: 0.78rem; color: var(--gray-400); margin-top: 8px; text-align: center; font-style: italic; }
+
+  /* STEP LIST */
+  .step-list { counter-reset: steps; list-style: none; }
+  .step-list li {
+    counter-increment: steps;
+    display: flex; gap: 14px; align-items: flex-start;
+    margin-bottom: 14px; padding: 14px 16px;
+    background: var(--white); border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+  }
+  .step-list li::before {
+    content: counter(steps);
+    background: var(--navy); color: white;
+    font-size: 0.75rem; font-weight: 700;
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-list li strong { display: block; font-size: 0.85rem; color: var(--navy); margin-bottom: 3px; }
+  .step-list li span { font-size: 0.82rem; color: var(--gray-600); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 20px; }
+  thead { background: var(--navy); color: var(--white); }
+  th { padding: 12px 16px; text-align: left; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--gray-200); vertical-align: top; color: var(--gray-800); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+  .td-code { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--blue-accent); }
+
+  /* CRUD GRID */
+  .crud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .crud-card {
+    background: var(--white); border: 1px solid var(--gray-200);
+    border-radius: var(--radius); padding: 20px;
+    transition: all 0.2s;
+  }
+  .crud-card:hover { box-shadow: var(--shadow-md); }
+  .crud-letter {
+    width: 38px; height: 38px; border-radius: var(--radius-sm);
+    font-size: 1rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .c-create { background: var(--green-glow); color: var(--green-dark); }
+  .c-read { background: rgba(45,126,245,0.1); color: var(--blue-accent); }
+  .c-update { background: rgba(245,166,35,0.1); color: var(--gold); }
+  .c-delete { background: rgba(232,64,64,0.08); color: var(--red); }
+  .crud-name { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .crud-desc { font-size: 0.8rem; color: var(--gray-600); line-height: 1.6; }
+  .crud-entities { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .crud-tag { padding: 2px 8px; background: var(--gray-100); border-radius: 20px; font-size: 0.7rem; color: var(--gray-600); font-weight: 600; }
+
+  /* REQ TABLE */
+  .req-badge { padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; }
+  .req-high { background: rgba(232,64,64,0.1); color: var(--red); }
+  .req-med { background: rgba(245,166,35,0.1); color: #c47e00; }
+  .req-low { background: var(--green-glow); color: var(--green-dark); }
+
+  /* DICT */
+  .dict-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+  .dict-item { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; }
+  .dict-term { font-size: 0.82rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .dict-def { font-size: 0.79rem; color: var(--gray-600); line-height: 1.6; }
+  .dict-type { font-size: 0.65rem; font-weight: 700; color: var(--green-dark); background: var(--green-glow); padding: 2px 7px; border-radius: 20px; display: inline-block; margin-bottom: 6px; }
+
+  /* BIBLIO */
+  .biblio-list { list-style: none; }
+  .biblio-list li { padding: 12px 16px; background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); margin-bottom: 10px; font-size: 0.84rem; display: flex; gap: 12px; align-items: flex-start; }
+  .biblio-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+  .biblio-ref { color: var(--gray-800); }
+  .biblio-ref a { color: var(--blue-accent); text-decoration: none; font-weight: 600; }
+  .biblio-ref a:hover { text-decoration: underline; }
+
+  /* CONCLUSION */
+  .conclusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .conclusion-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 22px; border-top: 3px solid var(--green); }
+  .conclusion-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .conclusion-card p { font-size: 0.83rem; color: var(--gray-600); line-height: 1.65; }
+
+  footer { background: var(--navy); color: rgba(255,255,255,0.45); text-align: center; padding: 28px; font-size: 0.8rem; }
+  footer strong { color: var(--green); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-content { padding: 20px; }
+    .crud-grid { grid-template-columns: 1fr; }
+    .conclusion-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <span class="dot"></span> KanbanSENA
+  </a>
+  <div class="nav-links">
+    <a href="arquitectura.html">🏗️ Arquitectura</a>
+    <a href="#introduccion" class="active">Manual de Usuario</a>
+  </div>
+  <span class="nav-badge">v1.0.0 · SENA 2026</span>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR INDEX -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Índice del Manual</div>
+    <a class="sidebar-item active" href="#introduccion"><span class="sidebar-num">1.</span> Introducción</a>
+    <a class="sidebar-item" href="#especificaciones"><span class="sidebar-num">2.</span> Especificaciones</a>
+    <a class="sidebar-item" href="#interfaz"><span class="sidebar-num">3.</span> Interfaz — Admin</a>
+    <a class="sidebar-item" href="#interfaz-instructor"><span class="sidebar-num">4.</span> Interfaz — Instructor</a>
+    <a class="sidebar-item" href="#crud"><span class="sidebar-num">5.</span> CRUD del Sistema</a>
+    <div class="sidebar-divider"></div>
+    <a class="sidebar-item" href="#diccionario"><span class="sidebar-num">6.</span> Diccionario de Datos</a>
+    <a class="sidebar-item" href="#requisitos"><span class="sidebar-num">7.</span> Requisitos</a>
+    <a class="sidebar-item" href="#bibliografia"><span class="sidebar-num">8.</span> Bibliografía</a>
+    <a class="sidebar-item" href="#conclusiones"><span class="sidebar-num">9.</span> Conclusiones</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HERO -->
+    <div class="doc-hero">
+      <div class="doc-hero-tag">📋 Manual de Usuario — KanbanSENA</div>
+      <h1>Manual de Usuario</h1>
+      <p>Guía completa para el uso del sistema KanbanSENA: gestión de tareas, proyectos, usuarios y reportes institucionales.</p>
+      <div class="doc-hero-meta">
+        <div class="doc-meta-item"><div class="doc-meta-key">Versión</div><div class="doc-meta-val">v1.0.0</div></div>
+        <div class="doc-meta-item"><div class="doc-meta-key">Institución</div><div class="doc-meta-val">SENA</div></div>
+        <div class="doc-meta-item"><div class="doc-meta-key">Fecha</div><div class="doc-meta-val">Abril 2026</div></div>
+        <div class="doc-meta-item"><div class="doc-meta-key">Tipo</div><div class="doc-meta-val">Software Web</div></div>
+      </div>
+    </div>
+
+    <!-- 1. INTRODUCCION -->
+    <div class="doc-section" id="introduccion">
+      <span class="section-anchor"></span>
+      <div class="section-num">01 · Introducción</div>
+      <h2 class="section-title">Introducción al Sistema</h2>
+      <p class="section-desc">KanbanSENA es un sistema de gestión de tareas institucional diseñado para el Servicio Nacional de Aprendizaje (SENA), basado en la metodología ágil Kanban.</p>
+
+      <div class="info-box green">
+        <span class="info-icon">🎯</span>
+        <div><div class="info-title">Finalidad del Software</div><div class="info-text">Automatizar el seguimiento de actividades formativas por ficha, permitiendo que instructores, coordinadores y administrativos visualicen en tiempo real el estado de las tareas dentro de cada proyecto de formación.</div></div>
+      </div>
+      <div class="info-box blue">
+        <span class="info-icon">⚙️</span>
+        <div><div class="info-title">¿Qué automatiza?</div><div class="info-text">La asignación de tareas a usuarios, el cambio de estado (Pendiente → En Proceso → Finalizado), las alertas de vencimiento, los reportes de cumplimiento por proyecto/ficha, la mensajería interna y el calendario de actividades.</div></div>
+      </div>
+      <div class="info-box yellow">
+        <span class="info-icon">🏫</span>
+        <div><div class="info-title">Contexto Institucional</div><div class="info-text">El sistema está orientado a centros de formación del SENA. Maneja el concepto de <strong>fichas</strong> (grupos de aprendices), proyectos de formación asociados a dichas fichas, y una jerarquía de roles institucionales.</div></div>
+      </div>
+    </div>
+
+    <!-- 2. ESPECIFICACIONES -->
+    <div class="doc-section" id="especificaciones">
+      <span class="section-anchor"></span>
+      <div class="section-num">02 · Especificaciones</div>
+      <h2 class="section-title">Especificaciones y Requisitos</h2>
+      <p class="section-desc">Requerimientos mínimos para acceder y usar KanbanSENA correctamente.</p>
+
+      <table>
+        <thead><tr><th>Categoría</th><th>Requisito</th><th>Detalle</th></tr></thead>
+        <tbody>
+          <tr><td>Navegador</td><td>Chrome, Firefox, Edge, Safari</td><td>Versión 2023 o superior recomendada</td></tr>
+          <tr><td>Resolución</td><td>Mínimo 1280 × 720 px</td><td>Optimizado para 1920×1080</td></tr>
+          <tr><td>Conexión</td><td>Internet estable</td><td>Mínimo 2 Mbps para carga fluida</td></tr>
+          <tr><td>Credenciales</td><td>Correo institucional @sena.edu.co</td><td>Asignadas por el administrador</td></tr>
+          <tr><td>Servidor</td><td>PHP 8.x + MySQL + Apache/Nginx</td><td>Para despliegue local o en nube</td></tr>
+          <tr><td>Dispositivo</td><td>PC, tablet o smartphone</td><td>Diseño responsive para móvil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. INTERFAZ ADMIN -->
+    <div class="doc-section" id="interfaz">
+      <span class="section-anchor"></span>
+      <div class="section-num">03 · Interfaz del Sistema</div>
+      <h2 class="section-title">Pantallas — Rol Administrador</h2>
+      <p class="section-desc">El administrador tiene acceso completo a todas las secciones del sistema, incluyendo gestión de usuarios, proyectos, tablero Kanban y reportes.</p>
+
+      <!-- LOGIN -->
+      <div class="screenshot-block">
+        <div class="screenshot-title">
+          <span class="shot-badge all">Acceso</span>
+          Pantalla de Inicio de Sesión
+        </div>
+        <img src="IMG_1.png" alt="Login KanbanSENA" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 1 — Pantalla de login con autenticación por correo institucional @sena.edu.co. Panel izquierdo con identidad del sistema, formulario a la derecha.</div>
+      </div>
+      <ul class="step-list">
+        <li><strong>Ingresar correo</strong><span>Escribir el correo institucional en el campo "Correo electrónico" (ej: admin@sena.edu.co)</span></li>
+        <li><strong>Ingresar contraseña</strong><span>Digitar la contraseña asignada. Hacer clic en el ícono 👁 para mostrarla/ocultarla.</span></li>
+        <li><strong>Recordar sesión</strong><span>Marcar la casilla "Recordar sesión" si se desea mantener la sesión activa en el dispositivo.</span></li>
+        <li><strong>Ingresar</strong><span>Presionar el botón verde <strong>Ingresar</strong>. El sistema redirige al Dashboard según el rol asignado.</span></li>
+      </ul>
+
+      <!-- DASHBOARD ADMIN -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Dashboard — Panel Principal
+        </div>
+        <img src="IMG_2.png" alt="Dashboard Admin" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 2 — Dashboard del administrador. Muestra métricas globales: total de tareas, proyectos activos, tareas vencidas y completadas, más listado reciente.</div>
+      </div>
+      <div class="info-box blue">
+        <span class="info-icon">📊</span>
+        <div><div class="info-title">Métricas en el Dashboard</div><div class="info-text">Las 4 tarjetas superiores muestran en tiempo real: <strong>Total Tareas</strong> (todas las del sistema), <strong>Proyectos</strong> activos, <strong>Vencidas</strong> (en rojo, requieren atención) y <strong>Completadas</strong> (en verde). El panel derecho muestra el avance por proyecto con barra de progreso.</div></div>
+      </div>
+
+      <!-- TABLERO KANBAN -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Tablero Kanban
+        </div>
+        <img src="IMG_3.png" alt="Tablero Kanban" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 3 — Tablero Kanban del proyecto "Inducción Ficha Nueva". Columnas: Pendiente, En Proceso, Finalizado. Cada tarjeta muestra prioridad, asignado y fecha límite.</div>
+      </div>
+      <ul class="step-list">
+        <li><strong>Seleccionar proyecto</strong><span>Usar el selector desplegable en la barra superior para cambiar entre proyectos/fichas.</span></li>
+        <li><strong>Crear tarea</strong><span>Clic en el botón verde <strong>+ Nueva Tarea</strong> para abrir el formulario de creación.</span></li>
+        <li><strong>Mover tarjeta</strong><span>Arrastrar la tarjeta de una columna a otra para actualizar su estado (drag & drop).</span></li>
+        <li><strong>Editar tarea</strong><span>Clic en el ícono ✏️ de la tarjeta para editar título, descripción, prioridad y asignado.</span></li>
+      </ul>
+
+      <!-- PROYECTOS -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Proyectos de Formación
+        </div>
+        <img src="IMG_4.png" alt="Proyectos" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 4 — Vista de proyectos. Cada proyecto muestra el número de ficha, estado ACTIVE y cantidad de tareas asociadas. Botón "Nuevo Proyecto" en la barra superior.</div>
+      </div>
+
+      <!-- USUARIOS -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Gestión de Usuarios
+        </div>
+        <img src="IMG_5.png" alt="Gestión de Usuarios" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 5 — Panel de gestión de usuarios. Tabla con usuario, rol, estado y último acceso. Botones de editar (✏️) y eliminar (🗑️) por fila. Botón "Nuevo Usuario" en la barra.</div>
+      </div>
+      <div class="info-box yellow">
+        <span class="info-icon">👥</span>
+        <div><div class="info-title">Roles disponibles</div><div class="info-text">INSTRUCTOR · COORDINADOR · FUNCIONARIO · ADMIN. Solo el administrador puede crear, editar y eliminar usuarios del sistema.</div></div>
+      </div>
+
+      <!-- REPORTES -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Informe de Gestión Institucional
+        </div>
+        <img src="IMG_6.png" alt="Reportes" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 6 — Módulo de reportes. Gráficas de cumplimiento por proyecto/ficha (barras de progreso), distribución de tareas en gráficas circulares (Completas/En Proceso/Pendientes) e historial de actividad reciente.</div>
+      </div>
+
+      <!-- MENSAJES ADMIN -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Mensajes Directos
+        </div>
+        <img src="IMG_7.png" alt="Mensajes" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 7 — Sistema de mensajería interna. Panel izquierdo de contactos, área de conversación a la derecha. El administrador puede comunicarse con cualquier usuario del sistema.</div>
+      </div>
+
+      <!-- CALENDARIO ADMIN -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Calendario de Actividades
+        </div>
+        <img src="IMG_8.png" alt="Calendario" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 8 — Vista mensual del calendario. Muestra el mes actual con el día vigente resaltado en verde. Navegación por mes con flechas ← →.</div>
+      </div>
+
+      <!-- MIS TAREAS ADMIN -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge admin">Admin</span>
+          Lista General de Tareas
+        </div>
+        <img src="IMG_9.png" alt="Mis Tareas Admin" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 9 — Vista tabular de todas las tareas. Filtros por Estado, Prioridad y Proyecto. Columnas: Tarea, Proyecto, Prioridad, Estado, Asignado y Vencimiento.</div>
+      </div>
+    </div>
+
+    <!-- 4. INTERFAZ INSTRUCTOR -->
+    <div class="doc-section" id="interfaz-instructor">
+      <span class="section-anchor"></span>
+      <div class="section-num">04 · Interfaz Instructor</div>
+      <h2 class="section-title">Pantallas — Rol Instructor</h2>
+      <p class="section-desc">El instructor tiene acceso personal al sistema: su dashboard, mensajes, calendario y sus propias tareas asignadas. No tiene acceso al panel de administración.</p>
+
+      <div class="info-box red">
+        <span class="info-icon">🔒</span>
+        <div><div class="info-title">Restricción de Acceso</div><div class="info-text">El instructor <strong>no puede</strong> crear proyectos, gestionar usuarios ni ver reportes globales. Su menú lateral solo muestra: Dashboard, Mensajes, Calendario, Mis Tareas y Configuración.</div></div>
+      </div>
+
+      <!-- DASHBOARD INSTRUCTOR -->
+      <div class="screenshot-block">
+        <div class="screenshot-title">
+          <span class="shot-badge instructor">Instructor</span>
+          Dashboard del Instructor
+        </div>
+        <img src="img_10.png" alt="Dashboard Instructor" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 10 — Dashboard del usuario instructor. Mismas métricas globales que el admin pero el menú lateral solo incluye opciones personales (sin Tablero Kanban, Proyectos, Usuarios ni Reportes).</div>
+      </div>
+
+      <!-- MENSAJES INSTRUCTOR -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge instructor">Instructor</span>
+          Mensajes — Vista Instructor
+        </div>
+        <img src="IMG_12.png" alt="Mensajes Instructor" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 12 — Mensajería directa del instructor. Puede comunicarse con Admin SENA, Secretaria y Coordinador. La conversación se muestra en el panel derecho al seleccionar un contacto.</div>
+      </div>
+
+      <!-- CALENDARIO INSTRUCTOR -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge instructor">Instructor</span>
+          Calendario de Actividades
+        </div>
+        <img src="IMG_13.png" alt="Calendario Instructor" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 13 — Calendario de actividades del instructor. Vista mensual con navegación. El día actual se resalta en verde.</div>
+      </div>
+
+      <!-- MIS TAREAS INSTRUCTOR -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge instructor">Instructor</span>
+          Mis Tareas — Solo las asignadas
+        </div>
+        <img src="IMG_14.png" alt="Mis Tareas Instructor" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 14 — El instructor solo ve las tareas que le están asignadas directamente. A diferencia del admin, no ve todas las tareas del sistema, solo las de su responsabilidad.</div>
+      </div>
+
+      <!-- PERFIL -->
+      <div class="screenshot-block" style="margin-top:28px;">
+        <div class="screenshot-title">
+          <span class="shot-badge instructor">Instructor</span>
+          Configuración de Perfil
+        </div>
+        <img src="IMG_20.png" alt="Perfil" class="screenshot-img">
+        <div class="screenshot-caption">Fig. 15 — Página de configuración de perfil. El usuario puede actualizar su nombre y cambiar su contraseña desde esta sección.</div>
+      </div>
+    </div>
+
+    <!-- 5. CRUD -->
+    <div class="doc-section" id="crud">
+      <span class="section-anchor"></span>
+      <div class="section-num">05 · CRUD</div>
+      <h2 class="section-title">Operaciones CRUD del Sistema</h2>
+      <p class="section-desc">KanbanSENA implementa las 4 operaciones fundamentales (Crear, Leer, Actualizar, Eliminar) sobre las principales entidades del sistema.</p>
+
+      <div class="crud-grid">
+        <div class="crud-card">
+          <div class="crud-letter c-create">C</div>
+          <div class="crud-name">CREATE — Crear</div>
+          <div class="crud-desc">Permite agregar nuevos registros al sistema: tareas, proyectos, usuarios. Se accede desde los botones <strong>"+ Nueva Tarea"</strong>, <strong>"Nuevo Proyecto"</strong> o <strong>"Nuevo Usuario"</strong>.</div>
+          <div class="crud-entities"><span class="crud-tag">Tareas</span><span class="crud-tag">Proyectos</span><span class="crud-tag">Usuarios</span><span class="crud-tag">Mensajes</span></div>
+        </div>
+        <div class="crud-card">
+          <div class="crud-letter c-read">R</div>
+          <div class="crud-name">READ — Leer / Consultar</div>
+          <div class="crud-desc">Visualización de datos: tablero Kanban, lista de tareas, dashboard con métricas, reportes de cumplimiento, calendario y lista de usuarios.</div>
+          <div class="crud-entities"><span class="crud-tag">Dashboard</span><span class="crud-tag">Tablero</span><span class="crud-tag">Reportes</span><span class="crud-tag">Calendario</span></div>
+        </div>
+        <div class="crud-card">
+          <div class="crud-letter c-update">U</div>
+          <div class="crud-name">UPDATE — Editar</div>
+          <div class="crud-desc">Modificar registros existentes: cambiar el estado de una tarea (arrastrando la tarjeta en el Kanban), editar datos de usuario con el ícono ✏️, o actualizar perfil personal.</div>
+          <div class="crud-entities"><span class="crud-tag">Estado tarea</span><span class="crud-tag">Usuarios</span><span class="crud-tag">Perfil</span><span class="crud-tag">Proyectos</span></div>
+        </div>
+        <div class="crud-card">
+          <div class="crud-letter c-delete">D</div>
+          <div class="crud-name">DELETE — Eliminar</div>
+          <div class="crud-desc">Eliminar registros del sistema usando el ícono 🗑️ disponible en la gestión de usuarios y tareas. Solo el administrador tiene permisos de eliminación de usuarios.</div>
+          <div class="crud-entities"><span class="crud-tag">Usuarios</span><span class="crud-tag">Tareas</span><span class="crud-tag">Proyectos</span></div>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>Módulo</th><th>Crear</th><th>Leer</th><th>Actualizar</th><th>Eliminar</th></tr></thead>
+        <tbody>
+          <tr><td>Tareas</td><td>✅ Admin/Coord.</td><td>✅ Todos</td><td>✅ Asignado</td><td>✅ Admin</td></tr>
+          <tr><td>Proyectos</td><td>✅ Admin/Coord.</td><td>✅ Todos</td><td>✅ Admin/Coord.</td><td>✅ Admin</td></tr>
+          <tr><td>Usuarios</td><td>✅ Admin</td><td>✅ Admin</td><td>✅ Admin</td><td>✅ Admin</td></tr>
+          <tr><td>Mensajes</td><td>✅ Todos</td><td>✅ Propio</td><td>❌</td><td>❌</td></tr>
+          <tr><td>Perfil</td><td>❌</td><td>✅ Propio</td><td>✅ Propio</td><td>❌</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6. DICCIONARIO -->
+    <div class="doc-section" id="diccionario">
+      <span class="section-anchor"></span>
+      <div class="section-num">06 · Diccionario de Datos</div>
+      <h2 class="section-title">Diccionario de Datos</h2>
+      <p class="section-desc">Definición de los términos y campos clave del sistema KanbanSENA.</p>
+      <div class="dict-grid">
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: users</span><div class="dict-term">role</div><div class="dict-def">Enumeración que define el nivel de acceso del usuario. Valores: admin, coordinador, instructor, funcionario.</div></div>
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: tasks</span><div class="dict-term">status</div><div class="dict-def">Estado actual de la tarea en el flujo Kanban. Valores: pending (Pendiente), progress (En Proceso), done (Finalizado).</div></div>
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: tasks</span><div class="dict-term">priority</div><div class="dict-def">Nivel de urgencia de la tarea. Valores: high (Alta, rojo), medium (Media, naranja), low (Baja, verde).</div></div>
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: projects</span><div class="dict-term">ficha</div><div class="dict-def">Número identificador de la ficha de formación del SENA a la que está asociado el proyecto (ej: 2828061).</div></div>
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: tasks</span><div class="dict-term">due_date</div><div class="dict-def">Fecha límite de la tarea. Si la fecha actual supera este valor y la tarea no está en "done", se considera vencida.</div></div>
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: projects</span><div class="dict-term">status (project)</div><div class="dict-def">Estado del proyecto. Valores: active (Activo), inactive (Inactivo), archived (Archivado).</div></div>
+        <div class="dict-item"><span class="dict-type">Concepto</span><div class="dict-term">Tablero Kanban</div><div class="dict-def">Vista principal de gestión visual dividida en columnas que representan los estados del flujo de trabajo.</div></div>
+        <div class="dict-item"><span class="dict-type">Concepto</span><div class="dict-term">Dashboard</div><div class="dict-def">Panel de control principal con métricas clave del sistema: total tareas, proyectos, vencidas y completadas.</div></div>
+        <div class="dict-item"><span class="dict-type">Concepto</span><div class="dict-term">Ficha de Formación</div><div class="dict-def">Identificador institucional del SENA que agrupa a un conjunto de aprendices bajo un programa de formación específico.</div></div>
+        <div class="dict-item"><span class="dict-type">Campo · Tabla: users</span><div class="dict-term">is_active</div><div class="dict-def">Indicador booleano del estado de la cuenta de usuario. Activo (verde) significa que puede iniciar sesión.</div></div>
+        <div class="dict-item"><span class="dict-type">Módulo</span><div class="dict-term">Mis Tareas</div><div class="dict-def">Sección personalizada donde cada usuario ve únicamente las tareas que le han sido asignadas como responsable.</div></div>
+        <div class="dict-item"><span class="dict-type">Módulo</span><div class="dict-term">Activity Log</div><div class="dict-def">Historial cronológico de cambios de estado registrados en el sistema. Visible en el módulo de Reportes.</div></div>
+      </div>
+    </div>
+
+    <!-- 7. REQUISITOS FUNCIONALES -->
+    <div class="doc-section" id="requisitos">
+      <span class="section-anchor"></span>
+      <div class="section-num">07 · Requisitos</div>
+      <h2 class="section-title">Requisitos del Sistema</h2>
+
+      <table>
+        <thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Prioridad</th></tr></thead>
+        <tbody>
+          <tr><td class="td-code">RF-01</td><td>Autenticación</td><td>El sistema debe autenticar usuarios mediante correo institucional y contraseña, asignando vistas según el rol.</td><td><span class="req-badge req-high">Alta</span></td></tr>
+          <tr><td class="td-code">RF-02</td><td>Tablero Kanban</td><td>Visualizar tareas en columnas de estado y permitir cambio de estado por arrastre (drag & drop).</td><td><span class="req-badge req-high">Alta</span></td></tr>
+          <tr><td class="td-code">RF-03</td><td>CRUD Tareas</td><td>Crear, editar, mover y eliminar tareas con título, descripción, prioridad, asignado y fecha límite.</td><td><span class="req-badge req-high">Alta</span></td></tr>
+          <tr><td class="td-code">RF-04</td><td>Gestión Proyectos</td><td>Crear y gestionar proyectos vinculados a fichas SENA, con seguimiento de progreso.</td><td><span class="req-badge req-high">Alta</span></td></tr>
+          <tr><td class="td-code">RF-05</td><td>Gestión Usuarios</td><td>Administrar usuarios con roles específicos, estado activo/inactivo y permisos diferenciados.</td><td><span class="req-badge req-high">Alta</span></td></tr>
+          <tr><td class="td-code">RF-06</td><td>Reportes</td><td>Generar informes de cumplimiento por proyecto, distribución de tareas y historial de actividad.</td><td><span class="req-badge req-med">Media</span></td></tr>
+          <tr><td class="td-code">RF-07</td><td>Mensajería</td><td>Sistema de mensajes directos entre usuarios del sistema en tiempo real.</td><td><span class="req-badge req-med">Media</span></td></tr>
+          <tr><td class="td-code">RF-08</td><td>Calendario</td><td>Vista mensual de actividades y fechas límite de tareas integrado al perfil del usuario.</td><td><span class="req-badge req-low">Baja</span></td></tr>
+          <tr><td class="td-code">RNF-01</td><td>Responsive Design</td><td>La interfaz debe adaptarse a dispositivos móviles, tablets y escritorio.</td><td><span class="req-badge req-high">Alta</span></td></tr>
+          <tr><td class="td-code">RNF-02</td><td>Seguridad</td><td>Contraseñas cifradas, autenticación de sesiones y control de acceso por rol en cada ruta.</td><td><span class="req-badge req-high">Alta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 8. BIBLIOGRAFÍA -->
+    <div class="doc-section" id="bibliografia">
+      <span class="section-anchor"></span>
+      <div class="section-num">08 · Bibliografía / Webgrafía</div>
+      <h2 class="section-title">Referencias</h2>
+      <ul class="biblio-list">
+        <li><span class="biblio-icon">📖</span><div class="biblio-ref">Anderson, D. J. (2010). <em>Kanban: Successful Evolutionary Change for Your Technology Business.</em> Blue Hole Press.</div></li>
+        <li><span class="biblio-icon">🌐</span><div class="biblio-ref">Laravel Framework. (2024). <em>Official Documentation.</em> <a href="https://laravel.com/docs" target="_blank">https://laravel.com/docs</a></div></li>
+        <li><span class="biblio-icon">🌐</span><div class="biblio-ref">SENA. (2024). <em>Portal Institucional del Servicio Nacional de Aprendizaje.</em> <a href="https://www.sena.edu.co" target="_blank">https://www.sena.edu.co</a></div></li>
+        <li><span class="biblio-icon">📖</span><div class="biblio-ref">Schwaber, K. & Sutherland, J. (2020). <em>The Scrum Guide — The Definitive Guide to Scrum.</em> Scrum.org.</div></li>
+        <li><span class="biblio-icon">🌐</span><div class="biblio-ref">MDN Web Docs. (2024). <em>HTML, CSS y JavaScript Reference.</em> <a href="https://developer.mozilla.org" target="_blank">https://developer.mozilla.org</a></div></li>
+        <li><span class="biblio-icon">🌐</span><div class="biblio-ref">MySQL. (2024). <em>MySQL 8.0 Reference Manual.</em> <a href="https://dev.mysql.com/doc" target="_blank">https://dev.mysql.com/doc</a></div></li>
+        <li><span class="biblio-icon">📖</span><div class="biblio-ref">IEEE. (2011). <em>IEEE Std 830-1998 — Recommended Practice for Software Requirements Specifications.</em> IEEE Computer Society.</div></li>
+      </ul>
+    </div>
+
+    <!-- 9. CONCLUSIONES -->
+    <div class="doc-section" id="conclusiones">
+      <span class="section-anchor"></span>
+      <div class="section-num">09 · Conclusiones</div>
+      <h2 class="section-title">Conclusiones</h2>
+      <p class="section-desc">KanbanSENA representa una solución tecnológica funcional, escalable y centrada en las necesidades reales del SENA.</p>
+      <div class="conclusion-grid">
+        <div class="conclusion-card">
+          <h4>✅ Gestión Digitalizada</h4>
+          <p>El sistema elimina el seguimiento manual de tareas en papel o correo electrónico, centralizando toda la información en una plataforma web accesible desde cualquier dispositivo.</p>
+        </div>
+        <div class="conclusion-card">
+          <h4>👥 Control por Roles</h4>
+          <p>La implementación de roles diferenciados (Admin, Coordinador, Instructor, Funcionario) garantiza que cada usuario acceda únicamente a la información y funciones pertinentes a su cargo.</p>
+        </div>
+        <div class="conclusion-card">
+          <h4>📊 Trazabilidad y Reportes</h4>
+          <p>El módulo de reportes y el historial de actividad permiten a los coordinadores y administradores hacer seguimiento real del cumplimiento por ficha y proyecto, facilitando la toma de decisiones.</p>
+        </div>
+        <div class="conclusion-card">
+          <h4>🚀 Escalabilidad</h4>
+          <p>La arquitectura Laravel + MySQL permite escalar el sistema para múltiples sedes del SENA, añadir nuevos módulos (notificaciones push, integración con el sistema SOFIA Plus) sin refactorizar la base.</p>
+        </div>
+      </div>
+      <div class="info-box green" style="margin-top:24px;">
+        <span class="info-icon">💡</span>
+        <div><div class="info-title">Trabajo Futuro</div><div class="info-text">Se recomienda implementar: notificaciones en tiempo real (WebSockets), integración con el calendario académico institucional, generación de reportes en PDF, y módulo de asistencia/evidencias de aprendices para completar el ciclo formativo dentro del sistema.</div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>KanbanSENA</strong> — Manual de Usuario · SENA 2026 · v1.0.0</p>
+  <p style="margin-top:8px;">Documento de uso interno. Sistema de Gestión de Tareas Institucional.</p>
+</footer>
+
+<script>
+  // Highlight active sidebar item on scroll
+  const sections = document.querySelectorAll('.doc-section');
+  const links = document.querySelectorAll('.sidebar-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const id = e.target.id;
+        const active = document.querySelector(`.sidebar-item[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

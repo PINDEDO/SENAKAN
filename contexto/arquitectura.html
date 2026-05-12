@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KanbanSENA — Arquitectura & Objetivos</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f44;
+    --navy-mid: #152a5a;
+    --navy-light: #1e3870;
+    --green: #3db54a;
+    --green-dark: #2d9138;
+    --green-glow: rgba(61,181,74,0.15);
+    --red: #e84040;
+    --blue-accent: #2d7ef5;
+    --gold: #f5a623;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #64748b;
+    --gray-800: #1e293b;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.15);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 1.1rem; color: var(--white); text-decoration: none;
+  }
+  .nav-brand .dot { width: 10px; height: 10px; background: var(--green); border-radius: 50%; display: inline-block; }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links a {
+    color: var(--gray-400); text-decoration: none; font-size: 0.82rem; font-weight: 500;
+    padding: 5px 12px; border-radius: 6px; transition: all 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); background: var(--navy-light); }
+  .nav-badge {
+    background: var(--green); color: white; font-size: 0.7rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; letter-spacing: 0.05em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, #1a3a6e 100%);
+    padding: 80px 2rem 90px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(61,181,74,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--green-glow); border: 1px solid rgba(61,181,74,0.3);
+    color: var(--green); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800;
+    color: var(--white); line-height: 1.15; margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--green); }
+  .hero p {
+    font-size: 1.1rem; color: rgba(255,255,255,0.65); max-width: 600px;
+    margin: 0 auto 36px; font-weight: 400;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 2rem; font-weight: 800; color: var(--green); display: block; }
+  .hero-stat .lbl { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ── SECTION ── */
+  section { padding: 70px 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 50px; }
+  .section-tag {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green);
+    margin-bottom: 12px;
+  }
+  .section-header h2 { font-size: 1.9rem; font-weight: 800; color: var(--navy); margin-bottom: 12px; }
+  .section-header p { color: var(--gray-600); font-size: 1rem; max-width: 560px; margin: 0 auto; }
+
+  /* ── OBJECTIVES ── */
+  .objectives { background: var(--white); }
+  .obj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .obj-card {
+    border: 1px solid var(--gray-200); border-radius: var(--radius);
+    padding: 28px; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .obj-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--green);
+  }
+  .obj-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--green); }
+  .obj-icon {
+    width: 46px; height: 46px; border-radius: 10px;
+    background: var(--green-glow); border: 1px solid rgba(61,181,74,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 16px;
+  }
+  .obj-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .obj-card p { font-size: 0.88rem; color: var(--gray-600); line-height: 1.65; }
+
+  /* ── ARCHITECTURE ── */
+  .architecture { background: var(--gray-50); }
+  .arch-wrapper {
+    background: var(--white); border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    overflow: hidden; box-shadow: var(--shadow-md);
+  }
+  .arch-header {
+    background: var(--navy); padding: 20px 28px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .arch-header h3 { color: var(--white); font-size: 1rem; font-weight: 700; }
+  .arch-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .arch-dot.red { background: #ff5f57; }
+  .arch-dot.yellow { background: #febc2e; }
+  .arch-dot.green { background: #28c840; }
+  .arch-layers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+  .arch-layer {
+    padding: 28px 24px; border-right: 1px solid var(--gray-200);
+    position: relative;
+  }
+  .arch-layer:last-child { border-right: none; }
+  .layer-title {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .layer-badge {
+    padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 700;
+  }
+  .badge-frontend { background: rgba(45,126,245,0.12); color: var(--blue-accent); }
+  .badge-backend { background: rgba(61,181,74,0.12); color: var(--green-dark); }
+  .badge-db { background: rgba(245,166,35,0.12); color: var(--gold); }
+  .tech-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 14px; padding: 10px 12px;
+    background: var(--gray-50); border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+  }
+  .tech-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .tech-name { font-size: 0.82rem; font-weight: 700; color: var(--navy); }
+  .tech-desc { font-size: 0.75rem; color: var(--gray-600); }
+  .arch-arrow {
+    position: absolute; right: -16px; top: 50%;
+    transform: translateY(-50%);
+    width: 32px; height: 32px; background: var(--white);
+    border: 1px solid var(--gray-200); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; z-index: 2;
+  }
+
+  /* ── ENTITIES ── */
+  .entities { background: var(--white); }
+  .ent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .ent-card {
+    border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+    padding: 20px; transition: all 0.25s;
+  }
+  .ent-card:hover { border-color: var(--green); box-shadow: var(--shadow-sm); }
+  .ent-title {
+    font-size: 0.78rem; font-weight: 700; color: var(--navy);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .ent-title::before { content: ''; display: block; width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+  .ent-fields { list-style: none; }
+  .ent-fields li {
+    font-size: 0.76rem; color: var(--gray-600);
+    padding: 3px 0; border-bottom: 1px dashed var(--gray-200);
+    font-family: 'JetBrains Mono', monospace;
+    display: flex; justify-content: space-between;
+  }
+  .ent-fields li:last-child { border-bottom: none; }
+  .field-type { color: var(--blue-accent); font-size: 0.68rem; }
+
+  /* ── ROLES ── */
+  .roles { background: var(--navy); }
+  .roles .section-header h2 { color: var(--white); }
+  .roles .section-tag { color: var(--green); }
+  .roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+  .role-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius); padding: 26px;
+    transition: all 0.25s;
+  }
+  .role-card:hover { background: rgba(255,255,255,0.09); border-color: var(--green); }
+  .role-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: 14px;
+    font-weight: 800; color: var(--white);
+  }
+  .av-admin { background: var(--red); }
+  .av-coord { background: var(--blue-accent); }
+  .av-inst { background: var(--green); }
+  .av-func { background: var(--gold); }
+  .role-name { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .role-badge {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+    margin-bottom: 14px; letter-spacing: 0.08em;
+  }
+  .rb-admin { background: rgba(232,64,64,0.2); color: #ff8080; }
+  .rb-coord { background: rgba(45,126,245,0.2); color: #7ab4ff; }
+  .rb-inst { background: rgba(61,181,74,0.2); color: #7dda8a; }
+  .rb-func { background: rgba(245,166,35,0.2); color: #ffd280; }
+  .role-perms { list-style: none; }
+  .role-perms li {
+    font-size: 0.78rem; color: rgba(255,255,255,0.55);
+    padding: 4px 0; display: flex; align-items: center; gap: 7px;
+  }
+  .role-perms li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  /* ── FLOW ── */
+  .flow { background: var(--gray-50); }
+  .flow-steps {
+    display: flex; gap: 0; align-items: stretch; flex-wrap: wrap;
+  }
+  .flow-step {
+    flex: 1; min-width: 160px;
+    background: var(--white); border: 1px solid var(--gray-200);
+    padding: 24px 20px; text-align: center; position: relative;
+    transition: all 0.25s;
+  }
+  .flow-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .flow-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute; right: -14px; top: 50%;
+    transform: translateY(-50%);
+    width: 28px; height: 28px; background: var(--green);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.8rem; z-index: 2;
+    display: flex; justify-content: center; align-items: center;
+    line-height: 28px;
+  }
+  .flow-step:hover { border-color: var(--green); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .step-num {
+    width: 32px; height: 32px; background: var(--navy);
+    border-radius: 50%; color: white; font-size: 0.8rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .step-icon { font-size: 1.4rem; margin-bottom: 10px; }
+  .step-title { font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .step-desc { font-size: 0.75rem; color: var(--gray-600); }
+
+  /* ── TECH STACK ── */
+  .techstack { background: var(--white); }
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 14px; }
+  .stack-item {
+    padding: 18px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+    text-align: center; transition: all 0.25s;
+  }
+  .stack-item:hover { border-color: var(--green); box-shadow: var(--shadow-sm); }
+  .stack-logo { font-size: 2rem; margin-bottom: 8px; }
+  .stack-name { font-size: 0.82rem; font-weight: 700; color: var(--navy); }
+  .stack-role { font-size: 0.7rem; color: var(--gray-400); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,0.45);
+    text-align: center; padding: 30px;
+    font-size: 0.8rem;
+  }
+  footer strong { color: var(--green); }
+
+  @media (max-width: 768px) {
+    .arch-layers { grid-template-columns: 1fr; }
+    .arch-layer { border-right: none; border-bottom: 1px solid var(--gray-200); }
+    .arch-arrow { display: none; }
+    .flow-steps { flex-direction: column; }
+    .flow-step:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .flow-step:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+    .flow-step:not(:last-child)::after { display: none; }
+    .hero-stats { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <span class="dot"></span> KanbanSENA
+  </a>
+  <div class="nav-links">
+    <a href="#objetivos" class="active">Objetivos</a>
+    <a href="#arquitectura">Arquitectura</a>
+    <a href="#entidades">Datos</a>
+    <a href="#roles">Roles</a>
+    <a href="#flujo">Flujo</a>
+    <a href="manual.html">📋 Manual →</a>
+  </div>
+  <span class="nav-badge">v1.0.0 · SENA 2026</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🎯 Documento Técnico — Arquitectura del Sistema</div>
+  <h1>KanbanSENA<br><span>Gestión de Tareas Institucional</span></h1>
+  <p>Sistema web para la gestión ágil de tareas y proyectos formativos dentro del SENA, basado en la metodología Kanban.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">4</span><span class="lbl">Roles de Usuario</span></div>
+    <div class="hero-stat"><span class="num">8</span><span class="lbl">Módulos</span></div>
+    <div class="hero-stat"><span class="num">3</span><span class="lbl">Capas Arquitectura</span></div>
+    <div class="hero-stat"><span class="num">100%</span><span class="lbl">Web Responsive</span></div>
+  </div>
+</div>
+
+<!-- OBJETIVOS -->
+<section class="objectives" id="objetivos">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">🎯 Propósito del Software</span>
+      <h2>Objetivos del Sistema</h2>
+      <p>KanbanSENA automatiza y centraliza la gestión de actividades formativas del SENA, eliminando el seguimiento manual en papel o correo electrónico.</p>
+    </div>
+    <div class="obj-grid">
+      <div class="obj-card">
+        <div class="obj-icon">🎯</div>
+        <h3>Objetivo General</h3>
+        <p>Desarrollar un sistema web de gestión de tareas bajo metodología Kanban, adaptado a la estructura institucional del SENA, que permita el seguimiento eficiente de actividades formativas por ficha, instructor y estado de avance.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">⚙️</div>
+        <h3>¿Qué automatiza?</h3>
+        <p>Automatiza el seguimiento de tareas por estado (Pendiente → En Proceso → Finalizado), la asignación de responsables, las alertas por vencimiento, los reportes de cumplimiento y la comunicación interna entre instructores y coordinadores.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">🏫</div>
+        <h3>¿Para qué se usa?</h3>
+        <p>Gestión de fichas de formación, seguimiento de carga de trabajo de instructores, visualización de proyectos activos por centro, reportes institucionales de cumplimiento y mensajería directa entre funcionarios.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">📊</div>
+        <h3>Objetivo Específico 1</h3>
+        <p>Implementar un tablero Kanban interactivo con columnas de estado personalizables, con capacidad de crear, editar y mover tareas entre estados de forma visual e intuitiva.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">👥</div>
+        <h3>Objetivo Específico 2</h3>
+        <p>Gestionar usuarios con roles diferenciados (Admin, Coordinador, Instructor, Funcionario), con permisos específicos para cada perfil dentro de la jerarquía institucional del SENA.</p>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">📈</div>
+        <h3>Objetivo Específico 3</h3>
+        <p>Generar reportes e informes de gestión institucional con métricas de cumplimiento por proyecto y ficha, distribución de tareas por estado y registro del historial de actividad reciente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARQUITECTURA -->
+<section class="architecture" id="arquitectura">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">🏗️ Diseño Técnico</span>
+      <h2>Arquitectura de 3 Capas</h2>
+      <p>El sistema implementa una arquitectura MVC clásica con separación clara de responsabilidades entre presentación, lógica de negocio y persistencia de datos.</p>
+    </div>
+    <div class="arch-wrapper">
+      <div class="arch-header">
+        <div class="arch-dot red"></div>
+        <div class="arch-dot yellow"></div>
+        <div class="arch-dot green"></div>
+        <h3 style="margin-left:8px;">KanbanSENA — Stack Tecnológico</h3>
+      </div>
+      <div class="arch-layers">
+        <div class="arch-layer">
+          <div class="layer-title">
+            <span class="layer-badge badge-frontend">Frontend</span>
+            Capa de Presentación
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🧩</span>
+            <div><div class="tech-name">Blade Templates</div><div class="tech-desc">Motor de plantillas de Laravel para renderizado de vistas dinámicas</div></div>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🎨</span>
+            <div><div class="tech-name">CSS Personalizado</div><div class="tech-desc">Estilos institucionales alineados con la identidad visual SENA</div></div>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">⚡</span>
+            <div><div class="tech-name">Alpine.js / JS Vanilla</div><div class="tech-desc">Interactividad del tablero Kanban, modales y actualizaciones dinámicas</div></div>
+          </div>
+          <div class="arch-arrow">→</div>
+        </div>
+        <div class="arch-layer">
+          <div class="layer-title">
+            <span class="layer-badge badge-backend">Backend</span>
+            Lógica de Negocio
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🛠️</span>
+            <div><div class="tech-name">Laravel (PHP)</div><div class="tech-desc">Framework MVC: rutas, controladores, middlewares y autenticación</div></div>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🔐</span>
+            <div><div class="tech-name">Laravel Breeze</div><div class="tech-desc">Sistema de autenticación, registro y gestión de sesiones seguras</div></div>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">📡</span>
+            <div><div class="tech-name">API RESTful</div><div class="tech-desc">Endpoints para CRUD de tareas, proyectos, usuarios y reportes</div></div>
+          </div>
+          <div class="arch-arrow">→</div>
+        </div>
+        <div class="arch-layer">
+          <div class="layer-title">
+            <span class="layer-badge badge-db">Base de Datos</span>
+            Persistencia
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🗄️</span>
+            <div><div class="tech-name">MySQL</div><div class="tech-desc">Base de datos relacional para almacenamiento de usuarios, proyectos y tareas</div></div>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🔗</span>
+            <div><div class="tech-name">Eloquent ORM</div><div class="tech-desc">Mapeo objeto-relacional de Laravel para consultas y relaciones entre entidades</div></div>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">📦</span>
+            <div><div class="tech-name">Migraciones</div><div class="tech-desc">Control de versiones del esquema de base de datos con Laravel Migrations</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTIDADES / DICCIONARIO DE DATOS -->
+<section class="entities" id="entidades">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">🗃️ Modelo de Datos</span>
+      <h2>Entidades del Sistema</h2>
+      <p>Estructura de las principales tablas de la base de datos y sus campos clave.</p>
+    </div>
+    <div class="ent-grid">
+      <div class="ent-card">
+        <div class="ent-title">Users</div>
+        <ul class="ent-fields">
+          <li>id <span class="field-type">bigint PK</span></li>
+          <li>name <span class="field-type">string</span></li>
+          <li>email <span class="field-type">string</span></li>
+          <li>password <span class="field-type">hash</span></li>
+          <li>role <span class="field-type">enum</span></li>
+          <li>is_active <span class="field-type">boolean</span></li>
+          <li>last_login <span class="field-type">timestamp</span></li>
+        </ul>
+      </div>
+      <div class="ent-card">
+        <div class="ent-title">Projects</div>
+        <ul class="ent-fields">
+          <li>id <span class="field-type">bigint PK</span></li>
+          <li>name <span class="field-type">string</span></li>
+          <li>description <span class="field-type">text</span></li>
+          <li>ficha <span class="field-type">string</span></li>
+          <li>status <span class="field-type">enum</span></li>
+          <li>created_by <span class="field-type">FK users</span></li>
+          <li>created_at <span class="field-type">timestamp</span></li>
+        </ul>
+      </div>
+      <div class="ent-card">
+        <div class="ent-title">Tasks</div>
+        <ul class="ent-fields">
+          <li>id <span class="field-type">bigint PK</span></li>
+          <li>title <span class="field-type">string</span></li>
+          <li>description <span class="field-type">text</span></li>
+          <li>project_id <span class="field-type">FK</span></li>
+          <li>assigned_to <span class="field-type">FK users</span></li>
+          <li>priority <span class="field-type">enum</span></li>
+          <li>status <span class="field-type">enum</span></li>
+          <li>due_date <span class="field-type">date</span></li>
+        </ul>
+      </div>
+      <div class="ent-card">
+        <div class="ent-title">Messages</div>
+        <ul class="ent-fields">
+          <li>id <span class="field-type">bigint PK</span></li>
+          <li>sender_id <span class="field-type">FK users</span></li>
+          <li>receiver_id <span class="field-type">FK users</span></li>
+          <li>content <span class="field-type">text</span></li>
+          <li>read_at <span class="field-type">timestamp</span></li>
+          <li>created_at <span class="field-type">timestamp</span></li>
+        </ul>
+      </div>
+      <div class="ent-card">
+        <div class="ent-title">Columns (Kanban)</div>
+        <ul class="ent-fields">
+          <li>id <span class="field-type">bigint PK</span></li>
+          <li>project_id <span class="field-type">FK</span></li>
+          <li>name <span class="field-type">string</span></li>
+          <li>order <span class="field-type">int</span></li>
+          <li>color <span class="field-type">string</span></li>
+        </ul>
+      </div>
+      <div class="ent-card">
+        <div class="ent-title">Activity Log</div>
+        <ul class="ent-fields">
+          <li>id <span class="field-type">bigint PK</span></li>
+          <li>user_id <span class="field-type">FK users</span></li>
+          <li>task_id <span class="field-type">FK tasks</span></li>
+          <li>action <span class="field-type">string</span></li>
+          <li>old_status <span class="field-type">string</span></li>
+          <li>new_status <span class="field-type">string</span></li>
+          <li>created_at <span class="field-type">timestamp</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section class="roles" id="roles">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">👥 Control de Acceso</span>
+      <h2 style="color:white;">Roles y Permisos</h2>
+    </div>
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-avatar av-admin">AS</div>
+        <div class="role-name">Administrador</div>
+        <span class="role-badge rb-admin">ADMIN</span>
+        <ul class="role-perms">
+          <li>Gestionar todos los usuarios</li>
+          <li>Crear y eliminar proyectos</li>
+          <li>Ver todos los reportes</li>
+          <li>Configurar el sistema</li>
+          <li>Acceso total al CRUD</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-avatar av-coord">CO</div>
+        <div class="role-name">Coordinador</div>
+        <span class="role-badge rb-coord">COORDINADOR</span>
+        <ul class="role-perms">
+          <li>Crear y gestionar proyectos</li>
+          <li>Asignar tareas a instructores</li>
+          <li>Ver reportes de su centro</li>
+          <li>Gestionar fichas de formación</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-avatar av-inst">IN</div>
+        <div class="role-name">Instructor</div>
+        <span class="role-badge rb-inst">INSTRUCTOR</span>
+        <ul class="role-perms">
+          <li>Ver tareas asignadas</li>
+          <li>Mover tareas en el tablero</li>
+          <li>Enviar mensajes directos</li>
+          <li>Consultar el calendario</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-avatar av-func">SE</div>
+        <div class="role-name">Funcionario</div>
+        <span class="role-badge rb-func">FUNCIONARIO</span>
+        <ul class="role-perms">
+          <li>Ver tablero asignado</li>
+          <li>Actualizar estado de tareas</li>
+          <li>Comunicación interna</li>
+          <li>Consultar calendario</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLUJO DE TRABAJO -->
+<section class="flow" id="flujo">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">🔄 Metodología</span>
+      <h2>Flujo de Trabajo Kanban</h2>
+      <p>Ciclo de vida de una tarea dentro del sistema KanbanSENA, desde su creación hasta su finalización.</p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-icon">📝</div>
+        <div class="step-title">Crear Tarea</div>
+        <div class="step-desc">Admin o Coordinador crea la tarea con título, descripción, prioridad y fecha límite</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-icon">👤</div>
+        <div class="step-title">Asignar</div>
+        <div class="step-desc">Se asigna al usuario responsable según rol: instructor o funcionario</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-icon">⏳</div>
+        <div class="step-title">Pendiente</div>
+        <div class="step-desc">La tarea aparece en la columna PENDIENTE del tablero Kanban</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-icon">🔄</div>
+        <div class="step-title">En Proceso</div>
+        <div class="step-desc">El responsable mueve la tarea a EN PROCESO cuando la inicia</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">5</div>
+        <div class="step-icon">✅</div>
+        <div class="step-title">Finalizado</div>
+        <div class="step-desc">La tarea se marca como FINALIZADO al completarse</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">6</div>
+        <div class="step-icon">📊</div>
+        <div class="step-title">Reportes</div>
+        <div class="step-desc">El sistema registra la actividad y actualiza las métricas de cumplimiento</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="techstack">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">🔧 Herramientas</span>
+      <h2>Stack Tecnológico</h2>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-item"><div class="stack-logo">🐘</div><div class="stack-name">PHP 8.x</div><div class="stack-role">Lenguaje backend</div></div>
+      <div class="stack-item"><div class="stack-logo">🛤️</div><div class="stack-name">Laravel 10</div><div class="stack-role">Framework MVC</div></div>
+      <div class="stack-item"><div class="stack-logo">🗄️</div><div class="stack-name">MySQL</div><div class="stack-role">Base de datos</div></div>
+      <div class="stack-item"><div class="stack-logo">🔷</div><div class="stack-name">Blade</div><div class="stack-role">Motor de vistas</div></div>
+      <div class="stack-item"><div class="stack-logo">🎨</div><div class="stack-name">CSS3</div><div class="stack-role">Estilos</div></div>
+      <div class="stack-item"><div class="stack-logo">⚡</div><div class="stack-name">JavaScript</div><div class="stack-role">Interactividad</div></div>
+      <div class="stack-item"><div class="stack-logo">🔐</div><div class="stack-name">Breeze Auth</div><div class="stack-role">Autenticación</div></div>
+      <div class="stack-item"><div class="stack-logo">🌐</div><div class="stack-name">Apache/Nginx</div><div class="stack-role">Servidor web</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>KanbanSENA</strong> — Sistema de Gestión de Tareas Institucional · SENA 2026 · v1.0.0 — Entorno Administrativo</p>
+  <p style="margin-top:8px;">Documento de Arquitectura y Objetivos del Sistema</p>
+</footer>
+
+</body>
+</html>

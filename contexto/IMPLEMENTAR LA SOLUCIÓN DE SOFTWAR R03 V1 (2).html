@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Guía de Aprendizaje - Documentación de Implantación de Software | GFPI-F-135</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #e2e6e9;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.45;
+            padding: 40px 20px;
+            color: #1e2a3a;
+        }
+
+        .guia-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            padding: 2rem 2rem 2.5rem 2rem;
+        }
+
+        .sena-header {
+            border-bottom: 3px solid #2c6e2f;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .sena-header h3 {
+            color: #2c6e2f;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .sena-header p {
+            font-size: 0.85rem;
+            color: #2c3e50;
+        }
+
+        .titulo-formato {
+            background: #f0f4f8;
+            padding: 0.6rem 1rem;
+            border-left: 6px solid #2c6e2f;
+            margin: 1rem 0 1.5rem 0;
+        }
+
+        .titulo-formato h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f3b2c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            border: 1px solid #bdc4cc;
+            padding: 10px 12px;
+            vertical-align: top;
+            background-color: #fff;
+        }
+
+        th {
+            background-color: #eef2f7;
+            font-weight: 600;
+            color: #1e4663;
+        }
+
+        .seccion {
+            margin: 2rem 0 1.5rem 0;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 0.5rem;
+        }
+
+        .seccion h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1f4f2d;
+            display: inline-block;
+            background: #eef3e6;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+        }
+
+        .subseccion {
+            margin: 1.5rem 0 1rem 0;
+            padding-left: 0.5rem;
+            border-left: 4px solid #7f8c8d;
+        }
+
+        .subseccion h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-actividad {
+            background: #fafcfd;
+            border: 1px solid #dce3ec;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-actividad p {
+            margin: 0.5rem 0;
+        }
+
+        .badge {
+            background-color: #2c6e2f;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .badge-ejercicio {
+            background-color: #1e4663;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+            margin-right: 8px;
+        }
+
+        .importante {
+            background: #fff8e7;
+            border-left: 6px solid #e6a017;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-radius: 12px;
+        }
+
+        .importante strong {
+            color: #c45c00;
+        }
+
+        .grid-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .info-item {
+            flex: 1 1 220px;
+            background: #f8fafc;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #e2edf2;
+        }
+
+        .info-item strong {
+            display: block;
+            color: #1e4663;
+        }
+
+        footer {
+            margin-top: 2.5rem;
+            font-size: 0.75rem;
+            text-align: center;
+            color: #5a6874;
+            border-top: 1px solid #dfe6ed;
+            padding-top: 1.5rem;
+        }
+
+        .glosario {
+            background: #f9f9fc;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+
+        .lista-ejercicios {
+            background: #eef2fa;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+        }
+
+        .ejercicio-item {
+            margin-bottom: 1.2rem;
+            padding-left: 0.5rem;
+            border-left: 3px solid #2c6e2f;
+        }
+
+        .codigo-ejemplo {
+            background: #1e2a3a;
+            color: #e2e6e9;
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 700px) {
+            .guia-container {
+                padding: 1.2rem;
+            }
+
+            th,
+            td {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+            }
+
+            .seccion h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        .firma-instructor {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #2c6e2f;
+        }
+
+        .duracion-total {
+            background: #e8f5e9;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="guia-container">
+        <div class="sena-header">
+            <div>
+                <h3>PROCESO DE GESTIÓN DE FORMACIÓN PROFESIONAL INTEGRAL</h3>
+                <p>FORMATO GUÍA DE APRENDIZAJE - GFPI-F-135 Versión 4</p>
+            </div>
+            <div>
+                <p>Código: GFPI-F-135</p>
+            </div>
+        </div>
+
+        <!-- 1. IDENTIFICACIÓN DE LA GUIA DE APRENDIZAJE -->
+        <div class="titulo-formato">
+            <h1>1. IDENTIFICACIÓN DE LA GUIA DE APRENDIZAJE</h1>
+        </div>
+        <div class="grid-info">
+            <div class="info-item"><strong>Denominación del Programa:</strong> Análisis y Desarrollo de Software</div>
+            <div class="info-item"><strong>Código del Programa:</strong> 228118</div>
+            <div class="info-item"><strong>Nombre del Proyecto:</strong> DESARROLLO DE UN SOFTWARE INTEGRADOR DE
+                TECNOLOGÍAS QUE CUMPLA CON LOS REQUERIMIENTOS DEL CLIENTE EN PROCESOS QUE SE LLEVEN A CABO EN EL SECTOR
+                PRODUCTIVO DE LA REGIÓN</div>
+            <div class="info-item"><strong>Fase del Proyecto:</strong> Evaluación / Implantación</div>
+            <div class="info-item"><strong>Actividad de Proyecto:</strong> Desarrollar las tareas de configuración y
+                puesta en marcha del software</div>
+            <div class="info-item"><strong>Competencia:</strong> 220501097 - IMPLEMENTAR LA SOLUCIÓN DE SOFTWARE DE
+                ACUERDO CON LOS REQUISITOS DE OPERACIÓN Y MODELOS DE REFERENCIA</div>
+            <div class="info-item"><strong>Resultados de Aprendizaje Alcanzar:</strong> 03. DOCUMENTAR EL PROCESO DE
+                IMPLANTACIÓN DE SOFTWARE SIGUIENDO ESTÁNDARES DE CALIDAD.</div>
+            <div class="info-item"><strong>Duración de la Guía:</strong> <span class="duracion-total">96 horas</span>
+            </div>
+        </div>
+
+        <!-- 2. PRESENTACIÓN -->
+        <div class="seccion">
+            <h2>2. PRESENTACIÓN</h2>
+        </div>
+        <p>¡Bienvenido, documentador de proyectos de software! Esta guía de aprendizaje ha sido diseñada por el
+            instructor <strong>JOSÉ GERMÁN ESTRADA CLAVIJO</strong> para que desarrolles la competencia de
+            <strong>documentar profesionalmente el proceso de implantación de software</strong>, aplicando estándares de
+            calidad, normas técnicas y buenas prácticas de la industria. Durante <strong>96 horas</strong> de formación
+            intensiva, aprenderás a elaborar manuales técnicos, de instalación y de usuario, documentar planes de
+            migración y respaldo de datos, y estructurar informes de implantación con altos estándares de calidad.
+        </p>
+        <p>La documentación de implantación es el puente entre el equipo técnico y los usuarios finales. Una
+            documentación deficiente puede generar pérdidas de tiempo, errores operativos y mala experiencia del
+            cliente. En esta guía te convertirás en un experto en crear documentos claros, completos y profesionales,
+            alineados con el proyecto formativo del SENA y las necesidades del sector productivo de la región de Caldas.
+        </p>
+        <p><strong>Propósito:</strong> Desarrollar la capacidad de documentar todas las fases del proceso de
+            implantación de software, aplicando estándares de calidad (ISO/IEC 25000, IEEE), normas ICONTEC/APA y buenas
+            prácticas de redacción técnica, para garantizar la sostenibilidad, mantenibilidad y usabilidad de las
+            soluciones de software.</p>
+
+        <!-- 3. FORMULACIÓN DE LAS ACTIVIDADES DE APRENDIZAJE -->
+        <div class="seccion">
+            <h2>3. FORMULACIÓN DE LAS ACTIVIDADES DE APRENDIZAJE</h2>
+        </div>
+
+        <!-- 3.1 Actividades de reflexión inicial (10 horas) -->
+        <div class="subseccion">
+            <h3>3.1 Actividades de reflexión inicial (10 horas)</h3>
+            <div class="card-actividad">
+                <span class="badge">Situación problémica</span>
+                <p><strong>Descripción general:</strong> El software de gestión de inventarios y pedidos para "Alimentos
+                    del Campo S.A.S." ha sido desarrollado exitosamente y superó las pruebas funcionales. Sin embargo,
+                    al momento de planificar la implantación, el equipo de desarrollo descubre que no existe
+                    documentación técnica del proceso de despliegue, no hay manuales para los usuarios, ni se ha
+                    documentado el plan de migración de datos desde el sistema antiguo (hojas de cálculo) hacia la nueva
+                    base de datos. El cliente exige que todo el proceso quede documentado siguiendo estándares de
+                    calidad, para poder capacitar a sus empleados y garantizar el soporte futuro. Sin esta
+                    documentación, el proyecto no puede ser entregado formalmente.</p>
+
+                <div class="lista-ejercicios">
+                    <p><strong>📌 Ejercicios de reflexión (10 horas):</strong></p>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 1 (2h)</span> <strong>Análisis
+                            de documentación deficiente:</strong> Investigue 3 casos reales donde una mala documentación
+                        de implantación haya causado problemas (fallos en despliegues, pérdida de datos, tiempos de
+                        inactividad prolongados). Elabore un informe de lecciones aprendidas.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 2 (2h)</span>
+                        <strong>Importancia de los estándares de calidad:</strong> ¿Qué estándares de calidad para
+                        documentación de software existen (ISO/IEC 25000, IEEE 829)? ¿Por qué es importante seguir
+                        estándares al documentar procesos de implantación? Argumente su respuesta.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 3 (2h)</span> <strong>Tipos de
+                            manuales de software:</strong> Reflexione sobre la diferencia entre manual técnico, manual
+                        de instalación y manual de usuario. ¿Qué información debe contener cada uno? ¿Qué perfiles de
+                        usuario leerán cada documento?</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 4 (2h)</span>
+                        <strong>Consecuencias de la falta de documentación:</strong> ¿Qué riesgos corre una empresa que
+                        recibe un software sin la documentación adecuada? ¿Cómo afecta la falta de documentación al
+                        mantenimiento y evolución del software?
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 5 (2h)</span> <strong>Debate en
+                            foro virtual:</strong> Participe en el foro respondiendo: "¿Qué habilidades se necesitan
+                        para redactar documentación técnica de calidad? ¿Cómo influye la comunicación escrita en el
+                        éxito de un proyecto de implantación?"</div>
+                </div>
+                <p><strong>Ambiente requerido:</strong> Aula convencional / plataforma Teams / biblioteca virtual.</p>
+                <p><strong>Estrategias didácticas activas:</strong> Aprendizaje basado en problemas (ABP), estudio de
+                    casos, debate académico, análisis documental.</p>
+                <div class="importante"><strong>¡Importante!</strong> En este momento NO se propone recolección de
+                    evidencias de evaluación (solo reflexión y análisis inicial).</div>
+            </div>
+        </div>
+
+        <!-- 3.2 Actividades de contextualización e identificación de conocimientos (12 horas) -->
+        <div class="subseccion">
+            <h3>3.2 Actividades de contextualización e identificación de conocimientos necesarios (12 horas)</h3>
+            <div class="card-actividad">
+                <div class="lista-ejercicios">
+                    <p><strong>📌 Ejercicios de contextualización (12 horas):</strong></p>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 1 (2h)</span>
+                        <strong>Autodiagnóstico de habilidades de redacción técnica:</strong> Complete un cuestionario
+                        sobre: normas de redacción técnica (ICONTEC/APA), estructura de manuales, tipos de diagramas
+                        (Gantt, flujo, arquitectura), formatos de informes, metadatos de documentos.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 2 (2h)</span> <strong>Estructura
+                            de una documentación de implantación:</strong> Construya un mapa mental que integre todos
+                        los componentes de la documentación de implantación: plan de instalación, plan de migración de
+                        datos, plan de respaldo, manual técnico, manual de instalación, manual de usuario, actas de
+                        aceptación, informe final.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 3 (2h)</span>
+                        <strong>Vocabulario técnico de documentación:</strong> Defina 25 términos clave: implantación,
+                        despliegue, migración de datos, backup, restauración, manual técnico, manual de usuario, acta de
+                        entrega, SLA, estándar de calidad, norma ICONTEC, versionado, metadatos, índice, glosario,
+                        anexos, entre otros.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 4 (2h)</span> <strong>Análisis
+                            de estándares de calidad:</strong> Investigue los estándares ISO/IEC 25000 (SQuaRE), IEEE
+                        829 (documentación de pruebas) y las normas ICONTEC para presentación de trabajos escritos.
+                        Resuma los aspectos más relevantes para la documentación de implantación.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 5 (2h)</span> <strong>Tipos de
+                            diagramas técnicos:</strong> Identifique los diagramas más utilizados en documentación de
+                        implantación: diagrama de arquitectura de despliegue, diagrama de flujo de migración de datos,
+                        diagrama de Gantt del plan de implantación, diagrama de componentes.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 6 (2h)</span> <strong>Foro de
+                            discusión:</strong> Participe en un foro respondiendo: "¿Qué herramientas digitales existen
+                        para elaborar documentación técnica profesional (Word avanzado, LaTeX, Markdown, Confluence,
+                        GitBook)? ¿Cuáles son sus ventajas?"</div>
+                </div>
+                <p><strong>Ambiente requerido:</strong> Laboratorio de informática / entorno virtual (LMS), acceso a
+                    internet.</p>
+                <p><strong>Estrategias o técnicas didácticas activas:</strong> Aprendizaje colaborativo, mapas
+                    semánticos, foros de discusión, análisis documental.</p>
+                <div class="importante"><strong>¡Importante!</strong> No se recolectan evidencias formales para juicio
+                    evaluativo en esta etapa (solo diagnóstico y contextualización).</div>
+            </div>
+        </div>
+
+        <!-- 3.3 Actividades de apropiación (54 horas) - 17 ejercicios prácticos -->
+        <div class="subseccion">
+            <h3>3.3 Actividades de apropiación - Saber, saber hacer, ser (54 horas)</h3>
+            <div class="card-actividad">
+                <p><strong>Descripción general:</strong> El aprendiz interioriza los conocimientos y habilidades para
+                    documentar el proceso de implantación de software. Resultado de aprendizaje: <strong>"03. DOCUMENTAR
+                        EL PROCESO DE IMPLANTACIÓN DE SOFTWARE SIGUIENDO ESTÁNDARES DE CALIDAD"</strong>. A continuación
+                    se presentan <strong>17 ejercicios prácticos</strong> organizados por módulos temáticos.</p>
+
+                <h4 style="margin: 1rem 0 0.5rem 0; color: #1e4663;">📘 MÓDULO 1: Fundamentos de Documentación Técnica
+                    (8 horas)</h4>
+                <div class="lista-ejercicios">
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 1 (2h)</span> <strong>Estructura
+                            base de un documento técnico:</strong> Diseñe una plantilla profesional para la
+                        documentación de implantación que incluya: portada, tabla de contenido, lista de figuras y
+                        tablas, glosario, introducción, desarrollo, conclusiones, anexos y control de cambios. Aplique
+                        normas ICONTEC/APA.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 2 (3h)</span> <strong>Control de
+                            versiones de documentos:</strong> Elabore una política de versionamiento para documentos de
+                        implantación (ej. v1.0 borrador, v1.0 revisión, v1.0 aprobado, v2.0). Implemente una tabla de
+                        control de cambios con columnas: versión, fecha, autor, descripción del cambio, aprobado por.
+                    </div>
+                    <div class="codigo-ejemplo">
+                        | Versión | Fecha | Autor | Descripción del Cambio | Aprobado por |
+                        |---------|-------------|----------------------|----------------------------------|-------------------|
+                        | v0.1 | 15/04/2025 | Equipo de Implantación| Creación del borrador inicial | J. Estrada |
+                        | v0.2 | 20/04/2025 | Equipo de Implantación| Adición de diagrama de despliegue| J. Estrada |
+                        | v1.0 | 30/04/2025 | Equipo de Implantación| Versión aprobada para entrega | Cliente |
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 3 (3h)</span> <strong>Redacción
+                            clara y efectiva:</strong> Escriba instrucciones paso a paso para tareas cotidianas de
+                        implantación (ej. "Cómo crear un backup de base de datos" o "Cómo verificar que el servidor
+                        cumple requisitos mínimos"). Aplique principios de redacción técnica: oraciones cortas, voz
+                        activa, listas numeradas, lenguaje unívoco.</div>
+                </div>
+
+                <h4 style="margin: 1rem 0 0.5rem 0; color: #1e4663;">📋 MÓDULO 2: Manuales de Usuario y Guías Rápidas
+                    (10 horas)</h4>
+                <div class="lista-ejercicios">
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 4 (3h)</span>
+                        <strong>Elaboración de manual de usuario:</strong> Para el software de "Alimentos del Campo
+                        S.A.S.", redacte un manual de usuario completo que incluya: introducción al sistema, requisitos
+                        de hardware/software, acceso/login, pantalla principal (explicación de cada componente),
+                        funciones principales (agregar producto, crear pedido, generar reporte), preguntas frecuentes y
+                        solución de problemas básicos.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 5 (3h)</span> <strong>Creación
+                            de guías rápidas (Quick Start Guides):</strong> Diseñe una guía de una página (infografía)
+                        que explique en 5 pasos cómo realizar la tarea más común del sistema (ej. "Registrar un nuevo
+                        pedido en 5 minutos"). Utilice capturas de pantalla, íconos y lenguaje simple.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 6 (2h)</span> <strong>Captura de
+                            pantalla y anotación:</strong> Realice capturas de pantalla de al menos 8 pantallas del
+                        sistema. Anótelas con flechas, recuadros y textos explicativos indicando cada elemento de la
+                        interfaz. Utilice herramientas como Snagit, Greenshot o la anotación nativa de Windows/Mac.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 7 (2h)</span> <strong>Uso de
+                            simuladores interactivos:</strong> Investigue herramientas para crear tutoriales
+                        interactivos (WalkMe, Whatfix, o simplemente un PowerPoint navegable). Cree un prototipo de
+                        tutorial interactivo de 3 pantallas.</div>
+                </div>
+
+                <h4 style="margin: 1rem 0 0.5rem 0; color: #1e4663;">🛠️ MÓDULO 3: Manual Técnico y de Instalación (12
+                    horas)</h4>
+                <div class="lista-ejercicios">
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 8 (3h)</span> <strong>Manual
+                            técnico del software:</strong> Redacte un manual técnico que incluya: arquitectura del
+                        software (diagrama de componentes), descripción de módulos, tecnologías utilizadas (versiones
+                        específicas), dependencias, configuración de variables de entorno, requisitos de servidor, API
+                        endpoints principales, y estructura de base de datos (diagrama ER).</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 9 (3h)</span> <strong>Manual de
+                            instalación paso a paso:</strong> Elabore un manual de instalación detallado que incluya:
+                        requisitos previos, pasos para instalar dependencias (Node.js, Python, base de datos), clonado
+                        de repositorio, configuración de archivos .env, migración de base de datos, ejecución de la
+                        aplicación, verificación de instalación correcta y solución de problemas comunes de instalación.
+                    </div>
+                    <div class="codigo-ejemplo">
+                        # Ejemplo de paso en manual de instalación (Linux/Ubuntu)
+                        ## Paso 4: Instalar PostgreSQL
+                        1. sudo apt update
+                        2. sudo apt install postgresql postgresql-contrib
+                        3. sudo systemctl start postgresql
+                        4. sudo -u postgres psql -c "CREATE DATABASE alimentos_db;"
+                        5. sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD 'segura123';"
+                        6. sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE alimentos_db TO admin;"
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 10 (3h)</span>
+                        <strong>Documentación de scripts de despliegue:</strong> Documente un script de despliegue
+                        automatizado (Docker Compose, bash script o PowerShell). Explique cada comando, su propósito,
+                        las variables que deben personalizarse y los posibles errores.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 11 (3h)</span> <strong>Lista de
+                            verificación de pre-instalación:</strong> Elabore un checklist de verificación previa a la
+                        instalación: verificar requisitos de hardware (CPU, RAM, disco), sistema operativo compatible,
+                        puertos abiertos, permisos de firewall, disponibilidad de backups, y conectividad a internet.
+                    </div>
+                </div>
+
+                <h4 style="margin: 1rem 0 0.5rem 0; color: #1e4663;">💾 MÓDULO 4: Planes de Migración, Respaldo y
+                    Recuperación (10 horas)</h4>
+                <div class="lista-ejercicios">
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 12 (3h)</span> <strong>Plan de
+                            migración de datos:</strong> Documente el plan de migración de datos desde el sistema
+                        antiguo (archivos Excel) a la nueva base de datos PostgreSQL. Incluya: mapeo de datos (campo
+                        origen → campo destino), scripts de transformación, estrategia de migración (bulk insert),
+                        validación de integridad post-migración y plan de contingencia.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 13 (3h)</span> <strong>Plan de
+                            respaldo (backup) y restauración:</strong> Elabore un documento detallado que incluya:
+                        frecuencia de backups (diario, semanal), método de backup (pg_dump, rsync, S3), ubicación de
+                        almacenamiento (local y en la nube), procedimiento de restauración paso a paso, tiempo estimado
+                        de restauración, y prueba periódica de restaurar.</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 14 (2h)</span>
+                        <strong>Procedimiento de rollback ante fallos:</strong> Documente el procedimiento de reversión
+                        (rollback) a la versión anterior en caso de que el despliegue falle. Incluya pasos para
+                        restaurar la base de datos, revertir el código a versión anterior y notificar a los usuarios.
+                    </div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 15 (2h)</span> <strong>Matriz de
+                            tiempos de inactividad:</strong> Cree una tabla que estime los tiempos de inactividad para
+                        cada tarea del despliegue y el tiempo total estimado. Incluya ventanas de mantenimiento
+                        recomendadas (ej. madrugada, fines de semana).</div>
+                </div>
+
+                <h4 style="margin: 1rem 0 0.5rem 0; color: #1e4663;">📊 MÓDULO 5: Informes, Actas y Cierre de
+                    Implantación (8 horas)</h4>
+                <div class="lista-ejercicios">
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 16 (4h)</span> <strong>Informe
+                            final de implantación:</strong> Elabore un informe completo que incluya: resumen ejecutivo
+                        del proceso de implantación, cronograma real vs planificado, incidencias presentadas y
+                        soluciones aplicadas, resultados de pruebas de aceptación, lecciones aprendidas, recomendaciones
+                        para futuras implantaciones y anexos (evidencias de capacitación, actas).</div>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Ejercicio 17 (4h)</span> <strong>Acta de
+                            entrega y aceptación del software:</strong> Diseñe un acta formal de entrega que incluya:
+                        identificación de las partes, descripción de los entregables (documentos, código, manuales),
+                        condiciones de aceptación, pruebas de aceptación realizadas, garantías y soporte
+                        post-implantación, firma de aceptación del cliente, y fecha de entrada en producción.</div>
+                </div>
+
+                <p><strong>Ambiente requerido:</strong> Laboratorio de informática con herramientas ofimáticas (Word,
+                    Excel, PowerPoint), editores de diagramas (Draw.io), herramientas de captura de pantalla.</p>
+                <p><strong>Estrategias o técnicas didácticas activas:</strong> Aprendizaje basado en proyectos (ABP),
+                    simulación de casos reales, aprendizaje colaborativo, gamificación.</p>
+                <div class="importante"><strong>¡Importante!</strong> En apropiación se recolectan TODAS las evidencias
+                    descritas. Cada ejercicio genera una evidencia evaluable (manuales, informes, actas, planillas).
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.4 Actividades de Transferencia del Conocimiento (20 horas) -->
+        <div class="subseccion">
+            <h3>3.4 Actividades de Transferencia del Conocimiento (20 horas)</h3>
+            <div class="card-actividad">
+                <div class="lista-ejercicios">
+                    <p><strong>📌 PROYECTO INTEGRADOR DE TRANSFERENCIA (20 horas):</strong></p>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Proyecto Final (16h)</span>
+                        <strong>Documentación completa de implantación para el Proyecto Formativo:</strong> Con base en
+                        el proyecto "Desarrollo de un software integrador de tecnologías..." (código 2491579) y el
+                        software desarrollado por el equipo, elabore el paquete completo de documentación de
+                        implantación que incluya:
+                    </div>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>✅ Manual de usuario completo (con capturas de pantalla anotadas).</li>
+                        <li>✅ Guía rápida de inicio (1 página).</li>
+                        <li>✅ Manual técnico del software (arquitectura, tecnologías, API, base de datos).</li>
+                        <li>✅ Manual de instalación paso a paso (con scripts documentados).</li>
+                        <li>✅ Plan de migración de datos (mapeo, scripts, validación).</li>
+                        <li>✅ Plan de respaldo y restauración (backup/recovery).</li>
+                        <li>✅ Procedimiento de rollback y contingencia.</li>
+                        <li>✅ Informe final de implantación (con cronograma, incidencias, lecciones aprendidas).</li>
+                        <li>✅ Acta de entrega y aceptación del software.</li>
+                        <li>✅ Listas de verificación (pre-instalación, post-instalación, pruebas de aceptación).</li>
+                    </ul>
+                    <div class="ejercicio-item"><span class="badge-ejercicio">Sustentación (4h)</span>
+                        <strong>Presentación y defensa del paquete de documentación:</strong> Cada equipo presentará el
+                        paquete completo de documentación de implantación al instructor (simulando la entrega al cliente
+                        "Alimentos del Campo S.A.S."). Deberá demostrar la calidad, claridad y completitud de cada
+                        documento, justificar las decisiones de documentación y responder preguntas sobre el contenido y
+                        la aplicabilidad.
+                    </div>
+                </div>
+                <p><strong>Ambiente requerido:</strong> Laboratorio de informática, herramientas ofimáticas, plataforma
+                    de videoconferencias (Teams).</p>
+                <p><strong>Estrategias o técnicas didácticas activas:</strong> Aprendizaje basado en proyectos (ABP),
+                    simulación de entrega profesional, metodología de casos, role-playing (cliente-proveedor).</p>
+                <div class="importante"><strong>¡Importante!</strong> El paquete completo de documentación constituye la
+                    evidencia principal de transferencia. Debe ser entregado en formato PDF y sustentado ante el
+                    instructor.</div>
+            </div>
+        </div>
+
+        <!-- 4. PLANTEAMIENTO DE EVIDENCIAS DE APRENDIZAJE -->
+        <div class="seccion">
+            <h2>4. PLANTEAMIENTO DE EVIDENCIAS DE APRENDIZAJE PARA LA EVALUACIÓN EN EL PROCESO FORMATIVO</h2>
+        </div>
+        <p><em>Referencia: Técnicas e instrumentos de evaluación según GFPI-G-046 Versión 1.</em></p>
+
+        <h4 style="margin-top: 1rem; color: #1e4663;">Evidencias de la Fase de Apropiación (54 horas - 17 ejercicios)
+        </h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fase del proyecto</th>
+                    <th>Actividad del proyecto</th>
+                    <th>Evidencias de Aprendizaje</th>
+                    <th>Criterios de Evaluación</th>
+                    <th>Técnicas e Instrumentos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">Evaluación</td>
+                    <td rowspan="2">Desarrollar tareas de configuración y puesta en marcha del software</td>
+                    <td><strong>Evidencias de Conocimiento:</strong> Plantillas de documentos, políticas de
+                        versionamiento, checklist de pre-instalación, tablas de tiempos de inactividad.
+                    </td>
+                    <td>Demuestra comprensión de la estructura y componentes de la documentación de implantación. Aplica
+                        correctamente normas de redacción técnica y estándares de calidad. Los documentos son claros, organizados y
+                        profesionales.
+                    </td>
+                    <td><strong>Técnica:</strong> Análisis de producción, rúbrica analítica.<br><strong>Instrumento:</strong> Rúbrica
+                        para evaluar plantillas de documentos, lista de verificación de estructura técnica.</td>
+                </tr>
+                <tr>
+                    <td><strong>Evidencias de Desempeño/Producto:</strong> Manual de usuario, manual técnico, manual de
+                        instalación, plan de migración, plan de backup, informe final, acta de entrega.</td>
+                    <td>Los manuales son completos, claros y utilizan lenguaje apropiado para cada público objetivo. Los planes
+                        de migración y backup son técnicamente viables y están bien documentados. El informe final incluye
+                        análisis de incidencias y lecciones aprendidas. El acta cumple con los requisitos legales técnicos.
+                    </td>
+                    <td><strong>Técnica:</strong> Observación estructurada, análisis de
+                        producto.<br><strong>Instrumento:</strong> Rúbrica por tipo de documento, lista de verificación de
+                        contenidos mínimos.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 style="margin-top: 1rem; color: #1e4663;">Evidencias de la Fase de Transferencia (20 horas - Paquete de
+            Documentación)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fase del proyecto</th>
+                    <th>Actividad del proyecto</th>
+                    <th>Evidencias de Aprendizaje</th>
+                    <th>Criterios de Evaluación</th>
+                    <th>Técnicas e Instrumentos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">Evaluación</td>
+                    <td rowspan="2">Desarrollar tareas de configuración y puesta en marcha del software</td>
+                    <td><strong>Evidencia de Producto:</strong> Paquete completo de documentación de implantación (10
+                        documentos) para el proyecto formativo, entregado en formato PDF organizado en un archivo comprimido
+                        o repositorio.</td>
+                    <td>El paquete incluye todos los documentos requeridos. Cada documento cumple con estándares de calidad,
+                        redacción técnica y normativa. La documentación es coherente, aplicable al proyecto y lista para ser
+                        entregada al cliente. El formato es profesional y uniforme.</td>
+                    <td><strong>Técnica:</strong> Evaluación de proyecto, análisis de producción, revisión por
+                        pares.<br><strong>Instrumento:</strong> Rúbrica holística para paquete de documentación, lista de
+                        verificación de entregables.</td>
+                </tr>
+                <tr>
+                    <td><strong>Evidencia de Desempeño:</strong> Sustentación oral (15-20 minutos) con presentación del
+                        paquete de documentación, demostración de claridad y aplicabilidad, respuesta a preguntas del
+                        instructor (simulando cliente).</td>
+                    <td>Demuestra dominio completo del contenido documentado. Expone con claridad la estructura y propósito
+                        de cada documento. Responde preguntas con precisión y seguridad. Justifica las decisiones de
+                        documentación técnica. Mantiene comunicación profesional.</td>
+                    <td><strong>Técnica:</strong> Simulación (sustentación), observación
+                        estructurada.<br><strong>Instrumento:</strong> Rúbrica de presentación oral, lista de cotejo de
+                        habilidades comunicativas.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="importante">
+            <strong>Resumen de evidencias:</strong> Esta guía contempla la recolección de <strong>19 evidencias
+                evaluables</strong> (17 ejercicios de apropiación + 1 paquete documental + 1 sustentación). Cada
+            evidencia está alineada con el Resultado de Aprendizaje "Documentar el proceso de implantación de software
+            siguiendo estándares de calidad".
+        </div>
+
+        <!-- 5. GLOSARIO DE TÉRMINOS (ampliado para documentación) -->
+        <div class="seccion">
+            <h2>5. GLOSARIO DE TÉRMINOS</h2>
+        </div>
+        <div class="glosario">
+            <p><strong>Implantación de Software:</strong> Proceso de instalar, configurar y poner en producción una
+                aplicación de software en el entorno del cliente.</p>
+            <p><strong>Manual de Usuario:</strong> Documento que explica a los usuarios finales cómo utilizar el
+                software, sus funciones, pantallas y procedimientos.</p>
+            <p><strong>Manual Técnico:</strong> Documento dirigido a desarrolladores y administradores que describe la
+                arquitectura, componentes, tecnologías y configuraciones del software.</p>
+            <p><strong>Manual de Instalación:</strong> Documento que proporciona instrucciones paso a paso para instalar
+                el software en un entorno de producción.</p>
+            <p><strong>Migración de Datos:</strong> Proceso de transferir datos desde un sistema antiguo a uno nuevo,
+                garantizando integridad y consistencia.</p>
+            <p><strong>Plan de Respaldo (Backup):</strong> Estrategia documentada para realizar copias de seguridad de
+                datos y sistemas, y restaurarlos en caso de fallo.</p>
+            <p><strong>Rollback:</strong> Procedimiento para revertir un despliegue a una versión anterior funcional en
+                caso de fallos críticos.</p>
+            <p><strong>Acta de Entrega:</strong> Documento legal que formaliza la transferencia del software del
+                proveedor al cliente, con condiciones de aceptación.</p>
+            <p><strong>Lista de Verificación (Checklist):</strong> Herramienta de control que enumera condiciones o
+                tareas a cumplir antes/durante/después de la implantación.</p>
+            <p><strong>Lecciones Aprendidas:</strong> Documentación de experiencias positivas y negativas durante el
+                proyecto para mejorar futuros procesos.</p>
+            <p><strong>Normas ICONTEC:</strong> Reglas colombianas para la presentación de trabajos escritos, aplicables
+                a documentos técnicos y académicos.</p>
+            <p><strong>Estándar IEEE 829:</strong> Estándar internacional para la documentación de pruebas de software.
+            </p>
+            <p><strong>ISO/IEC 25000 (SQuaRE):</strong> Estándar para la evaluación de la calidad de productos de
+                software, incluyendo documentación asociada.</p>
+        </div>
+
+        <!-- 6. REFERENTES BIBLIOGRÁFICOS -->
+        <div class="seccion">
+            <h2>6. REFERENTES BIBLIOGRÁFICOS</h2>
+        </div>
+        <ul style="margin-left: 1.8rem; line-height: 1.6;">
+            <li>Pressman, R. S. (2010). <em>Ingeniería del software: un enfoque práctico</em> (7ª ed.). McGraw-Hill.
+                (Capítulo sobre documentación de software).</li>
+            <li>Sommerville, I. (2011). <em>Ingeniería de software</em> (9ª ed.). Pearson Educación. (Capítulo sobre
+                documentación y gestión de la configuración).</li>
+            <li>ISO/IEC 25000:2014. <em>Systems and software engineering — Systems and software Quality Requirements and
+                    Evaluation (SQuaRE)</em>.</li>
+            <li>IEEE Std 829-2008. <em>IEEE Standard for Software and System Test Documentation</em>.</li>
+            <li>ICONTEC. (2022). <em>NTC 1486: Documentación. Presentación de tesis, trabajos de grado y otros trabajos
+                    de investigación</em>. Instituto Colombiano de Normas Técnicas y Certificación.</li>
+            <li>Microsoft. (2024). <em>Writing Style Guide for Technical Documentation</em>. Recuperado de <a
+                    href="https://learn.microsoft.com/en-us/style-guide/"
+                    target="_blank">https://learn.microsoft.com/en-us/style-guide/</a></li>
+            <li>Google. (2024). <em>Technical Writing Courses</em>. Recuperado de <a
+                    href="https://developers.google.com/tech-writing"
+                    target="_blank">https://developers.google.com/tech-writing</a></li>
+            <li>Proyecto Formativo SENA: "Desarrollo de un software integrador de tecnologías..." (Código 2491579).</li>
+            <li>Biblioteca SENA: <a href="http://biblioteca.sena.edu.co/"
+                    target="_blank">http://biblioteca.sena.edu.co/</a></li>
+        </ul>
+
+        <!-- 7. CONTROL DEL DOCUMENTO -->
+        <div class="seccion">
+            <h2>7. CONTROL DEL DOCUMENTO</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cargo</th>
+                    <th>Dependencia</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>JOSÉ GERMÁN ESTRADA CLAVIJO</strong></td>
+                    <td>Instructor Técnico</td>
+                    <td>Centro de Procesos Industriales y de Construcción - Regional Caldas</td>
+                    <td>DD/MM/AAAA</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 8. CONTROL DE CAMBIOS -->
+        <div class="seccion">
+            <h2>8. CONTROL DE CAMBIOS</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cargo</th>
+                    <th>Dependencia</th>
+                    <th>Fecha</th>
+                    <th>Razón del Cambio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>JOSÉ GERMÁN ESTRADA CLAVIJO</td>
+                    <td>Instructor</td>
+                    <td>Centro de Procesos Industriales y de Construcción</td>
+                    <td>DD/MM/AAAA</td>
+                    <td>Versión completa de la guía "Documentación del proceso de implantación de software" para la
+                        competencia de implementación de software. Duración 96 horas, incluye 17 ejercicios de
+                        apropiación, 1 paquete documental integrador y actividades de reflexión/contextualización.
+                        Alineada con proyecto formativo 2491579 y estándares de calidad ISO/IEC 25000, IEEE 829 y normas
+                        ICONTEC.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer>
+            <p>Formato GFPI-F-135 Versión 4 – Guía de Aprendizaje de 96 horas para la competencia "IMPLEMENTAR LA
+                SOLUCIÓN DE SOFTWARE" (Resultado: Documentar el proceso de implantación de software siguiendo estándares
+                de calidad).</p>
+            <p>© Servicio Nacional de Aprendizaje (SENA) - Formación Profesional Integral | Centro de Procesos
+                Industriales y de Construcción - Regional Caldas</p>
+            <p class="firma-instructor">Instructor responsable: JOSÉ GERMÁN ESTRADA CLAVIJO</p>
+            <p><strong>Resumen de la guía:</strong> 96 horas | 17 ejercicios prácticos + 1 paquete documental integrador
+                | Temas: manuales de usuario, manuales técnicos, planes de migración, respaldo, recuperación, informes
+                de implantación, actas de entrega, estándares de calidad (ISO/IEC 25000, IEEE 829, ICONTEC).</p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+SERVICIO NACIONAL DE APRENDIZAJE
+SENA
+ESPECIFICACIÓN DE REQUISITOS DE SOFTWARE
+Estándar IEEE 830 / IEEE 29148
+SISTEMA DE GESTIÓN DE TAREAS TIPO KANBAN
+Para la Coordinación Interna SENA
+FICHA DEL DOCUMENTO
+DOCUMENTO VALIDADO POR LAS PARTES EN FECHA: ___________________________
+CONTENIDO
+1.  INTRODUCCIÓN
+    1.1 Objetivo General
+    1.2 Objetivos Específicos
+    1.3 Propósito
+    1.4 Alcance
+    1.5 Personal Involucrado
+    1.6 Definiciones, Acrónimos y Abreviaturas
+    1.7 Referencias
+    1.8 Resumen
+2.  DESCRIPCIÓN GENERAL
+    2.1 Perspectiva del Producto
+    2.2 Funcionalidades del Producto
+    2.3 Características de los Usuarios
+    2.4 Restricciones
+3.  REQUISITOS ESPECÍFICOS
+    3.1 Requisitos del Sistema
+    3.2 Requisitos Funcionales
+    3.3 Requisitos No Funcionales
+4.  VALIDACIÓN DE REQUISITOS
+    4.1 Construcción de Prototipos
+    4.2 Formatos de Casos de Prueba
+1. INTRODUCCIÓN
+La coordinación interna del SENA gestiona múltiples procesos académicos y administrativos que involucran instructores, aprendices y personal coordinador. Actualmente, el seguimiento de tareas, actividades y compromisos se realiza de forma manual o mediante herramientas no especializadas (correo electrónico, hojas de cálculo), lo que genera pérdida de información, duplicación de esfuerzos y baja trazabilidad del trabajo.
+El presente documento establece los requisitos de software para el desarrollo de un Sistema de Gestión de Tareas tipo Kanban adaptado a las necesidades particulares de la coordinación SENA, permitiendo visualizar, asignar y dar seguimiento al flujo de trabajo en tiempo real.
+1.1 Objetivo General
+Desarrollar un sistema web de gestión de tareas tipo Kanban para la coordinación interna del SENA, que permita organizar, asignar y dar seguimiento al flujo de trabajo de instructores, coordinadores y aprendices mediante tableros visuales interactivos, utilizando el framework Laravel sobre un entorno XAMPP con MySQL.
+1.2 Objetivos Específicos
+Diseñar e implementar un módulo de autenticación y gestión de usuarios con roles diferenciados (Administrador, Coordinador, Instructor, Aprendiz).
+Crear tableros Kanban personalizables con columnas configurables que representen los estados del flujo de trabajo.
+Permitir la creación, asignación, priorización y seguimiento de tareas dentro de los tableros.
+Implementar un sistema de notificaciones internas para alertar sobre cambios, asignaciones y fechas límite.
+Generar reportes básicos sobre el avance y carga de trabajo por usuario y por ficha de formación.
+Garantizar una interfaz responsiva y de fácil uso para usuarios con distintos niveles de conocimiento técnico.
+1.3 Propósito
+El software tiene como finalidad digitalizar y centralizar la gestión de tareas de la coordinación SENA, reemplazando los procesos manuales por un sistema visual e intuitivo que mejore la productividad, la comunicación interna y la trazabilidad de los procesos académicos y administrativos. El sistema permitirá a los coordinadores tener visibilidad total del estado de avance de las actividades de su equipo.
+1.4 Alcance
+El sistema abarcará las siguientes funcionalidades dentro del contexto de la coordinación SENA:
+Gestión completa de usuarios, roles y permisos.
+Creación y administración de proyectos y tableros Kanban.
+Ciclo de vida completo de tareas: creación, asignación, movimiento entre columnas, comentarios y cierre.
+Asociación de tareas a fichas de formación específicas.
+Módulo básico de reportes y métricas de productividad.
+Notificaciones en plataforma (sin integración con correo externo en la versión inicial).
+El sistema NO incluirá en su versión inicial:
+Integración con sistemas externos del SENA (Sofia Plus, etc.).
+Aplicación móvil nativa.
+Módulos de facturación o nómina.
+Videoconferencia o chat en tiempo real.
+1.5 Personal Involucrado
+Cliente / Patrocinador del proyecto:
+1.6 Definiciones, Acrónimos y Abreviaturas
+1.7 Referencias
+Jira Software – Atlassian. https://www.atlassian.com/software/jira
+Trello – Atlas Sian. https://trello.com
+Asana – https://asana.com
+Laravel Documentation v11. https://laravel.com/docs
+MySQL Documentation. https://dev.mysql.com/doc/
+IEEE Standard 830-1998 – Recommended Practice for Software Requirements Specifications
+IEEE Standard 29148-2018 – Systems and Software Engineering – Requirements Engineering
+1.8 Resumen
+El sistema Kanban SENA es una aplicación web desarrollada con el framework Laravel (PHP) y base de datos MySQL local (XAMPP), que permite a la coordinación del SENA gestionar tareas y proyectos mediante tableros visuales interactivos. Los usuarios pueden crear tableros, organizar tareas por estados, asignarlas a miembros del equipo y hacer seguimiento al avance de cada actividad, mejorando la comunicación y la productividad interna de la coordinación.
+2. DESCRIPCIÓN GENERAL
+El Sistema de Gestión de Tareas Kanban para el SENA es una aplicación web de arquitectura MVC (Modelo-Vista-Controlador), accesible desde cualquier navegador moderno en la red local del centro de formación. Facilita la organización visual del trabajo mediante tableros con columnas que representan etapas del proceso, y tarjetas que representan tareas individuales.
+2.1 Perspectiva del Producto
+El sistema es una solución web independiente, desarrollada a medida para la coordinación SENA. Funciona sobre un servidor local Apache (XAMPP), con base de datos MySQL, accesible mediante navegadores web en la red interna. La interfaz presenta:
+Un panel de inicio con resumen de tareas asignadas al usuario autenticado.
+Tableros visuales Kanban con columnas configurables y tarjetas arrastrables.
+Panel de administración para gestión de usuarios, roles y configuraciones.
+Módulo de reportes con métricas de avance por tablero, usuario y ficha.
+Usuarios del sistema y sus roles:
+2.2 Funcionalidades del Producto (Elicitación)
+Las funcionalidades principales identificadas en el levantamiento de requisitos son:
+Registro, inicio de sesión y recuperación de contraseña.
+Gestión de usuarios con asignación de roles y permisos.
+Creación y administración de proyectos agrupadores de tableros.
+Creación de tableros Kanban con columnas configurables.
+Creación de tareas/tickets con título, descripción, responsable, prioridad, etiquetas y fecha límite.
+Arrastrar y soltar tareas entre columnas (Drag & Drop).
+Sistema de comentarios por tarea.
+Adjuntar archivos a tareas (opcional en MVP).
+Filtros y búsqueda de tareas por estado, responsable, prioridad y etiqueta.
+Notificaciones internas sobre asignación y cambios en tareas.
+Reportes de avance por tablero, usuario y ficha de formación.
+Historial de cambios de estado de cada tarea.
+2.3 Características de los Usuarios
+2.4 Restricciones
+Restricciones técnicas:
+El sistema funcionará inicialmente en entorno local (XAMPP – localhost) sin acceso externo a internet.
+La base de datos será MySQL gestionada con phpMyAdmin.
+El backend estará construido exclusivamente en Laravel (PHP >= 8.1).
+El frontend utilizará Blade Templates de Laravel con librerías CSS/JS (Bootstrap 5 y SortableJS para Drag & Drop).
+Restricciones funcionales por rol:
+Solo el Administrador puede crear, editar y eliminar usuarios y roles.
+Solo el Coordinador y Administrador pueden crear o eliminar tableros y proyectos.
+Los Instructores no pueden eliminar tareas de otros usuarios, solo las propias.
+Los Aprendices no pueden mover tareas fuera de su columna asignada sin aprobación del Instructor.
+No se permite la eliminación permanente de tareas; solo el archivado (soft delete).
+3. REQUISITOS ESPECÍFICOS
+3.1 Requisitos del Sistema
+Requisitos de hardware y software del entorno de desarrollo y despliegue inicial:
+3.2 Requisitos Funcionales
+RF-001: Autenticación de Usuarios
+RF-002: Gestión de Usuarios y Roles
+RF-003: Gestión de Proyectos
+RF-004: Gestión de Tableros Kanban
+RF-005: Gestión de Tareas / Tickets
+RF-006: Drag & Drop de Tareas
+RF-007: Sistema de Comentarios
+RF-008: Notificaciones Internas
+RF-009: Filtros y Búsqueda
+RF-010: Reportes y Métricas
+RF-011: Asociación con Fichas de Formación SENA
+3.3 Requisitos No Funcionales
+RNF-001: Disponibilidad
+RNF-002: Seguridad
+RNF-003: Rendimiento
+RNF-004: Usabilidad
+RNF-005: Mantenibilidad
+RNF-006: Escalabilidad
+4. VALIDACIÓN DE REQUISITOS
+4.1 Construcción de Prototipos
+Para la validación de los requisitos funcionales, se construirán prototipos en las siguientes fases:
+Fase 1 – Wireframes (Baja Fidelidad):
+Pantalla de Login y Registro de usuario.
+Dashboard principal con resumen de tareas.
+Vista de tablero Kanban con columnas y tarjetas.
+Formulario de creación/edición de tarea.
+Panel de administración de usuarios.
+Herramientas sugeridas: Figma (gratuito) o Balsamiq para wireframes. Los prototipos serán validados con el Coordinador SENA antes del inicio del desarrollo.
+Fase 2 – Prototipo Funcional (MVP):
+Autenticación funcional (RF-001).
+Tablero Kanban básico con columnas y tarjetas (RF-004, RF-005).
+Arrastrar y soltar tareas entre columnas (RF-006).
+Creación y asignación de tareas (RF-005).
+Fase 3 – Sistema Completo:
+Todos los requisitos funcionales implementados.
+Módulo de reportes (RF-010).
+Notificaciones (RF-008).
+Pruebas de usuario con el equipo de coordinación.
+4.2 Formatos de Casos de Prueba
+APÉNDICE A: ARQUITECTURA Y STACK TÉCNICO
+Esta sección describe la arquitectura técnica propuesta para el desarrollo del sistema Kanban SENA utilizando Laravel y MySQL con XAMPP.
+Arquitectura MVC con Laravel
+El sistema seguirá el patrón Modelo-Vista-Controlador (MVC) implementado por el framework Laravel:
+Modelos (Model): Representan las entidades de la base de datos (User, Board, Column, Task, Comment, Notification). Usarán Eloquent ORM para las relaciones y consultas.
+Vistas (View): Plantillas Blade de Laravel con HTML, Bootstrap 5 y JavaScript. El Drag & Drop se implementará con SortableJS integrado en las vistas.
+Controladores (Controller): Procesarán las solicitudes HTTP, validarán datos con Form Requests de Laravel y responderán con vistas o JSON para peticiones AJAX.
+Estructura de Base de Datos – Entidades Principales
+Ruta de Desarrollo Sugerida (Hitos)

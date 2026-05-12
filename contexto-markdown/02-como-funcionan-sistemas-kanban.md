@@ -1,0 +1,150 @@
+# Cómo Funcionan los Sistemas Kanban
+
+**Cómo funcionan los sistemas Kanban/Jira**
+
+Estos sistemas se basan en varios conceptos clave:
+
+**1. Tableros (Boards):** Visualizan el flujo de trabajo con columnas
+que representan estados (Por Hacer, En Progreso, En Revisión,
+Completado)
+
+**2. Tareas/Tickets:** Elementos de trabajo que se mueven entre
+columnas. Cada tarea contiene:
+
+-   Título y descripción
+
+-   Asignado a (usuario responsable)
+
+-   Prioridad (alta, media, baja)
+
+-   Etiquetas/categorías
+
+-   Fechas límite
+
+-   Comentarios y adjuntos
+
+-   Historial de cambios
+
+**3. Funcionalidades principales:**
+
+-   Gestión de usuarios y permisos
+
+-   Filtros y búsqueda avanzada
+
+-   Notificaciones
+
+-   Reportes y métricas
+
+-   Flujos de trabajo personalizables
+
+**Arquitectura Recomendada**
+
+Para un sistema robusto y escalable, te sugiero:
+
+**Arquitectura de 3 capas:**
+
+**Frontend (Cliente):**
+
+-   React o Vue.js para interfaces interactivas
+
+-   Drag & Drop para mover tareas
+
+-   Estado global (Redux, Zustand, Pinia)
+
+**Backend (Servidor):**
+
+-   Node.js con Express o NestJS
+
+-   API RESTful o GraphQL
+
+-   Autenticación JWT
+
+-   WebSockets para actualizaciones en tiempo real
+
+**Base de Datos:**
+
+-   PostgreSQL (relacional, robusto)
+
+-   MongoDB (flexible para datos no estructurados)
+
+-   Redis para caché y sesiones
+
+**Stack Tecnológico Recomendado**
+
+**Opción 1 - Stack Moderno JavaScript:**
+
+Frontend: React + TypeScript + TailwindCSS
+
+Backend: Node.js + NestJS
+
+Base de Datos: PostgreSQL
+
+ORM: Prisma o TypeORM
+
+Tiempo Real: Socket.io
+
+**Opción 2 - Full Stack Framework:**
+
+Next.js (Full Stack React)
+
+Base de Datos: PostgreSQL
+
+ORM: Prisma
+
+Autenticación: NextAuth.js
+
+**Opción 3 - Separación clara:**
+
+Frontend: Vue.js + Vuetify
+
+Backend: Django (Python) o Laravel (PHP)
+
+Base de Datos: PostgreSQL
+
+API: Django REST Framework o Laravel API
+
+**Estructura del Proyecto**
+
+**Entidades principales:**
+
+1.  **Usuarios:** roles (admin, coordinador, instructor, aprendiz)
+
+2.  **Proyectos/Programas:** agrupación de tableros
+
+3.  **Tableros:** visualización del flujo
+
+4.  **Columnas:** estados del flujo
+
+5.  **Tareas:** items de trabajo
+
+6.  **Comentarios:** discusiones en tareas
+
+7.  **Adjuntos:** archivos relacionados
+
+8.  **Notificaciones:** alertas del sistema
+
+**Funcionalidades esenciales para SENA:**
+
+-   **Gestión de fichas:** asociar tareas a fichas de formación
+
+-   **Seguimiento de instructores:** ver carga de trabajo
+
+-   **Calendario académico:** integración con fechas importantes
+
+-   **Reportes institucionales:** métricas específicas del SENA
+
+-   **Permisos por rol:** coordinador, instructor, administrativo
+
+**Recomendaciones específicas:**
+
+1.  **Empieza con un MVP:** tablero básico, crear/editar/mover tareas,
+    asignar usuarios
+
+2.  **Prioriza la usabilidad:** muchos usuarios del SENA pueden no ser
+    técnicos
+
+3.  **Considera la escalabilidad:** el SENA tiene múltiples sedes
+
+4.  **Seguridad:** datos educativos son sensibles
+
+5.  **Responsive design:** acceso desde cualquier dispositivo

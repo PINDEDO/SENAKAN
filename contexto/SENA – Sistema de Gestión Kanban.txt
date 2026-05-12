@@ -1,0 +1,596 @@
+SENA – Sistema de Gestión Kanban Coordinación | IEEE** SRS v1.0**
+
+**SERVICIO NACIONAL DE APRENDIZAJE**
+
+**SENA**
+
+**ESPECIFICACIÓN DE REQUISITOS DE SOFTWARE**
+
+*Estándar IEEE 830 / IEEE 29148*
+
+**SISTEMA DE GESTIÓN DE TAREAS TIPO KANBAN**
+
+*Para la Coordinación Interna SENA*
+
+| **Nombre de la Evidencia:** | Especificación de Requisitos de Software – Sistema Kanban SENA |
+| --- | --- |
+| **Institución:** | Servicio Nacional de Aprendizaje (SENA) |
+| **Centro:** | Centro de Procesos Industriales y Construcción |
+| **Técnico / Tecnología:** | Tecnología en Análisis y Desarrollo de software |
+| **Fase:** | Análisis y Diseño |
+| **Tipo de Formación:** | MIXTA |
+| **Fecha de Entrega:** | 10 de abril del 2026 |
+| **Versión del Documento:** | 1.0 |
+| **Estado:** | Borrador |
+
+FICHA DEL DOCUMENTO
+
+| **FECHA** | **REVISIÓN(ES)** | **AUTOR(ES)** |
+| --- | --- | --- |
+| 04 de febrero del 2026 | Versión inicial – creación del documento | Miguel Ángel Pineda López |
+| [Fecha revisión] | Revisión de requisitos funcionales | [Revisor – completar] |
+|  |  |  |
+
+**DOCUMENTO VALIDADO POR LAS PARTES EN FECHA: ___________________________**
+
+| **POR CLIENTE** | **DESARROLLADOR** |
+| --- | --- |
+| Fecha: ___________ | Fecha: ___________ |
+| Nombre del Encargado: José German Estrada Clavijo | Nombre del Encargado: Miguel Ángel Pineda López |
+
+**CONTENIDO**
+
+**1.  INTRODUCCIÓN**
+
+    1.1 Objetivo General
+
+    1.2 Objetivos Específicos
+
+    1.3 Propósito
+
+    1.4 Alcance
+
+    1.5 Personal Involucrado
+
+    1.6 Definiciones, Acrónimos y Abreviaturas
+
+    1.7 Referencias
+
+    1.8 Resumen
+
+**2.  DESCRIPCIÓN GENERAL**
+
+    2.1 Perspectiva del Producto
+
+    2.2 Funcionalidades del Producto
+
+    2.3 Características de los Usuarios
+
+    2.4 Restricciones
+
+**3.  REQUISITOS ESPECÍFICOS**
+
+    3.1 Requisitos del Sistema
+
+    3.2 Requisitos Funcionales
+
+    3.3 Requisitos No Funcionales
+
+**4.  VALIDACIÓN DE REQUISITOS**
+
+    4.1 Construcción de Prototipos
+
+    4.2 Formatos de Casos de Prueba
+
+**1. INTRODUCCIÓN**
+
+La coordinación interna del SENA gestiona múltiples procesos académicos y administrativos que involucran instructores, aprendices y personal coordinador. Actualmente, el seguimiento de tareas, actividades y compromisos se realiza de forma manual o mediante herramientas no especializadas (correo electrónico, hojas de cálculo), lo que genera pérdida de información, duplicación de esfuerzos y baja trazabilidad del trabajo.
+
+El presente documento establece los requisitos de software para el desarrollo de un Sistema de Gestión de Tareas tipo Kanban adaptado a las necesidades particulares de la coordinación SENA, permitiendo visualizar, asignar y dar seguimiento al flujo de trabajo en tiempo real.
+
+**1.1 Objetivo General**
+
+Desarrollar un sistema web de gestión de tareas tipo Kanban para la coordinación interna del SENA, que permita organizar, asignar y dar seguimiento al flujo de trabajo de instructores, coordinadores y aprendices mediante tableros visuales interactivos, utilizando el framework Laravel sobre un entorno XAMPP con MySQL.
+
+**1.2 Objetivos Específicos**
+
+- Diseñar e implementar un módulo de autenticación y gestión de usuarios con roles diferenciados (Administrador, Coordinador, Instructor, Aprendiz).
+
+- Crear tableros Kanban personalizables con columnas configurables que representen los estados del flujo de trabajo.
+
+- Permitir la creación, asignación, priorización y seguimiento de tareas dentro de los tableros.
+
+- Implementar un sistema de notificaciones internas para alertar sobre cambios, asignaciones y fechas límite.
+
+- Generar reportes básicos sobre el avance y carga de trabajo por usuario y por ficha de formación.
+
+- Garantizar una interfaz responsiva y de fácil uso para usuarios con distintos niveles de conocimiento técnico.
+
+**1.3 Propósito**
+
+El software tiene como finalidad digitalizar y centralizar la gestión de tareas de la coordinación SENA, reemplazando los procesos manuales por un sistema visual e intuitivo que mejore la productividad, la comunicación interna y la trazabilidad de los procesos académicos y administrativos. El sistema permitirá a los coordinadores tener visibilidad total del estado de avance de las actividades de su equipo.
+
+**1.4 Alcance**
+
+El sistema abarcará las siguientes funcionalidades dentro del contexto de la coordinación SENA:
+
+- Gestión completa de usuarios, roles y permisos.
+
+- Creación y administración de proyectos y tableros Kanban.
+
+- Ciclo de vida completo de tareas: creación, asignación, movimiento entre columnas, comentarios y cierre.
+
+- Asociación de tareas a fichas de formación específicas.
+
+- Módulo básico de reportes y métricas de productividad.
+
+- Notificaciones en plataforma (sin integración con correo externo en la versión inicial).
+
+El sistema NO incluirá en su versión inicial:
+
+- Integración con sistemas externos del SENA (Sofia Plus, etc.).
+
+- Aplicación móvil nativa.
+
+- Módulos de facturación o nómina.
+
+- Videoconferencia o chat en tiempo real.
+
+**1.5 Personal Involucrado**
+
+| **CAMPO** | **DESCRIPCIÓN** |
+| --- | --- |
+| NOMBRE | Miguel Ángel Pineda López |
+| ROL | Desarrollador Full Stack / Analista de Requisitos |
+| PROFESIÓN | Tecnólogo en Análisis y Desarrollo de Software (ADSO) – SENA |
+| RESPONSABILIDADES | Análisis, diseño, desarrollo, pruebas e implementación del sistema |
+| INFORMACIÓN DE CONTACTO | [Pinedo7u7@gmail.com](mailto:Pinedo7u7@gmail.com) / 3137466621 |
+| APRUEBA | SI – Entrevista y seguimiento con el Coordinador SENA |
+
+Cliente / Patrocinador del proyecto:
+
+| **CAMPO** | **DESCRIPCIÓN** |
+| --- | --- |
+| NOMBRE | [Nombre del Coordinador SENA – completar] |
+| ROL | Coordinador Académico / Cliente del sistema |
+| RESPONSABILIDADES | Validar requisitos, aprobar entregables y proveer información del proceso |
+| INFORMACIÓN DE CONTACTO | [Datos del Coordinador – completar] |
+
+**1.6 Definiciones, Acrónimos y Abreviaturas**
+
+| **TÉRMINO** | **DEFINICIÓN** |
+| --- | --- |
+| Kanban | Método visual de gestión de flujo de trabajo que usa tarjetas en columnas |
+| Tablero (Board) | Espacio visual dividido en columnas que representa el flujo de un proyecto |
+| Tarea / Ticket | Unidad mínima de trabajo dentro de un tablero Kanban |
+| Columna | Estado del flujo de trabajo (ej: Por Hacer, En Progreso, Completado) |
+| Laravel | Framework PHP de código abierto para desarrollo de aplicaciones web (MVC) |
+| MySQL | Sistema de gestión de bases de datos relacional open source |
+| XAMPP | Paquete de software local que incluye Apache, MySQL, PHP y Perl |
+| MVC | Modelo-Vista-Controlador: patrón de arquitectura de software |
+| API REST | Interfaz de programación de aplicaciones basada en el protocolo HTTP |
+| JWT | JSON Web Token: estándar para autenticación mediante tokens |
+| SENA | Servicio Nacional de Aprendizaje |
+| ADSO | Análisis y Desarrollo de Software (nombre del programa de formación) |
+| Ficha | Número identificador único de un grupo de aprendices en el SENA |
+| SRS | Software Requirements Specification (Especificación de Requisitos de Software) |
+| CRUD | Operaciones básicas: Crear, Leer, Actualizar, Eliminar |
+| MVP | Producto Mínimo Viable (funcionalidad básica para primera entrega) |
+
+**1.7 Referencias**
+
+- Jira Software – Atlassian. https://www.atlassian.com/software/jira
+
+- Trello – Atlas Sian. https://trello.com
+
+- Asana – https://asana.com
+
+- Laravel Documentation v11. https://laravel.com/docs
+
+- MySQL Documentation. https://dev.mysql.com/doc/
+
+- IEEE Standard 830-1998 – Recommended Practice for Software Requirements Specifications
+
+- IEEE Standard 29148-2018 – Systems and Software Engineering – Requirements Engineering
+
+**1.8 Resumen**
+
+El sistema Kanban SENA es una aplicación web desarrollada con el framework Laravel (PHP) y base de datos MySQL local (XAMPP), que permite a la coordinación del SENA gestionar tareas y proyectos mediante tableros visuales interactivos. Los usuarios pueden crear tableros, organizar tareas por estados, asignarlas a miembros del equipo y hacer seguimiento al avance de cada actividad, mejorando la comunicación y la productividad interna de la coordinación.
+
+**2. DESCRIPCIÓN GENERAL**
+
+El Sistema de Gestión de Tareas Kanban para el SENA es una aplicación web de arquitectura MVC (Modelo-Vista-Controlador), accesible desde cualquier navegador moderno en la red local del centro de formación. Facilita la organización visual del trabajo mediante tableros con columnas que representan etapas del proceso, y tarjetas que representan tareas individuales.
+
+**2.1 Perspectiva del Producto**
+
+El sistema es una solución web independiente, desarrollada a medida para la coordinación SENA. Funciona sobre un servidor local Apache (XAMPP), con base de datos MySQL, accesible mediante navegadores web en la red interna. La interfaz presenta:
+
+- Un panel de inicio con resumen de tareas asignadas al usuario autenticado.
+
+- Tableros visuales Kanban con columnas configurables y tarjetas arrastrables.
+
+- Panel de administración para gestión de usuarios, roles y configuraciones.
+
+- Módulo de reportes con métricas de avance por tablero, usuario y ficha.
+
+Usuarios del sistema y sus roles:
+
+| **ROL** | **DESCRIPCIÓN** | **ACCESO PRINCIPAL** |
+| --- | --- | --- |
+| Administrador | Control total del sistema, gestión de usuarios y configuración global | Panel admin, todos los módulos |
+| Coordinador | Gestiona proyectos, tableros y asigna tareas al equipo | Tableros, reportes, usuarios del proyecto |
+| Instructor | Ve y actualiza el estado de sus tareas asignadas, agrega comentarios | Sus tableros y tareas asignadas |
+| Aprendiz | Visualiza tareas del proyecto y actualiza estado de sus actividades | Tableros del proyecto al que pertenece |
+
+**2.2 Funcionalidades del Producto (Elicitación)**
+
+Las funcionalidades principales identificadas en el levantamiento de requisitos son:
+
+- Registro, inicio de sesión y recuperación de contraseña.
+
+- Gestión de usuarios con asignación de roles y permisos.
+
+- Creación y administración de proyectos agrupadores de tableros.
+
+- Creación de tableros Kanban con columnas configurables.
+
+- Creación de tareas/tickets con título, descripción, responsable, prioridad, etiquetas y fecha límite.
+
+- Arrastrar y soltar tareas entre columnas (Drag & Drop).
+
+- Sistema de comentarios por tarea.
+
+- Adjuntar archivos a tareas (opcional en MVP).
+
+- Filtros y búsqueda de tareas por estado, responsable, prioridad y etiqueta.
+
+- Notificaciones internas sobre asignación y cambios en tareas.
+
+- Reportes de avance por tablero, usuario y ficha de formación.
+
+- Historial de cambios de estado de cada tarea.
+
+**2.3 Características de los Usuarios**
+
+| **ROL** | **FUNCIÓN EN EL PROCESO** | **FRECUENCIA DE USO** | **NIVEL TÉCNICO** |
+| --- | --- | --- | --- |
+| Administrador | Configurar sistema, gestionar usuarios y roles globalmente | Esporádica | Alto |
+| Coordinador | Planificar proyectos, crear tableros, asignar y supervisar tareas | Diaria | Medio |
+| Instructor | Consultar y actualizar estado de tareas asignadas, comentar | Diaria | Bajo-Medio |
+| Aprendiz | Consultar tareas del proyecto y actualizar actividades propias | Frecuente | Bajo |
+
+**2.4 Restricciones**
+
+Restricciones técnicas:
+
+- El sistema funcionará inicialmente en entorno local (XAMPP – localhost) sin acceso externo a internet.
+
+- La base de datos será MySQL gestionada con phpMyAdmin.
+
+- El backend estará construido exclusivamente en Laravel (PHP >= 8.1).
+
+- El frontend utilizará Blade Templates de Laravel con librerías CSS/JS (Bootstrap 5 y SortableJS para Drag & Drop).
+
+Restricciones funcionales por rol:
+
+- Solo el Administrador puede crear, editar y eliminar usuarios y roles.
+
+- Solo el Coordinador y Administrador pueden crear o eliminar tableros y proyectos.
+
+- Los Instructores no pueden eliminar tareas de otros usuarios, solo las propias.
+
+- Los Aprendices no pueden mover tareas fuera de su columna asignada sin aprobación del Instructor.
+
+- No se permite la eliminación permanente de tareas; solo el archivado (soft delete).
+
+**3. REQUISITOS ESPECÍFICOS**
+
+**3.1 Requisitos del Sistema**
+
+Requisitos de hardware y software del entorno de desarrollo y despliegue inicial:
+
+| **COMPONENTE** | **ESPECIFICACIÓN MÍNIMA** |
+| --- | --- |
+| Sistema Operativo | Windows 10/11 o Ubuntu 20.04+ |
+| Procesador | Intel Core i5 o equivalente (2.0 GHz) |
+| Memoria RAM | 4 GB mínimo (8 GB recomendado) |
+| Almacenamiento | 20 GB libres en disco |
+| Servidor Web | Apache 2.4 (incluido en XAMPP) |
+| PHP | Versión 8.1 o superior |
+| Base de Datos | MySQL 8.0 (incluido en XAMPP) |
+| Gestor BD | phpMyAdmin (incluido en XAMPP) |
+| Framework Backend | Laravel 10 o 11 |
+| Gestor de paquetes | Composer 2.x (PHP) / npm (Node.js para assets) |
+| Navegador cliente | Chrome 90+, Firefox 88+, Edge 90+ |
+| Red | Red local LAN para acceso multi-usuario |
+
+**3.2 Requisitos Funcionales**
+
+**RF-001: Autenticación de Usuarios**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-001 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Autenticación de Usuarios |
+| **CARACTERÍSTICAS** | El sistema debe permitir a los usuarios iniciar sesión con credenciales únicas (correo y contraseña) |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El sistema proveerá un formulario de login seguro. Las contraseñas se almacenarán encriptadas con bcrypt. Laravel Breeze o Jetstream gestionará la autenticación. Se incluirá protección CSRF. Se permitirá recuperación de contraseña por correo (configuración posterior). |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-002 (Seguridad) – RNF-003 (Rendimiento) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RF-002: Gestión de Usuarios y Roles**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-002 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Gestión de Usuarios y Roles |
+| **CARACTERÍSTICAS** | CRUD completo de usuarios con asignación de roles diferenciados |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El Administrador podrá crear, editar, activar/desactivar y eliminar usuarios. Cada usuario tendrá un rol: Administrador, Coordinador, Instructor o Aprendiz. El sistema usará Laravel Spatie Permission o gates/policies nativas para controlar el acceso por rol. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-002 (Seguridad) – RNF-004 (Usabilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RF-003: Gestión de Proyectos**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-003 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Gestión de Proyectos |
+| **CARACTERÍSTICAS** | Crear y administrar proyectos como contenedores de tableros relacionados |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El Coordinador y Administrador pueden crear proyectos con nombre, descripción, fecha de inicio y fin, y asociarlos a una ficha de formación SENA. Un proyecto puede contener uno o más tableros Kanban. Se pueden agregar miembros al proyecto con roles específicos. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-001 (Disponibilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RF-004: Gestión de Tableros Kanban**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-004 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Gestión de Tableros Kanban |
+| **CARACTERÍSTICAS** | Creación y configuración de tableros con columnas personalizadas |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Los tableros tendrán mínimo 3 columnas por defecto: 'Por Hacer', 'En Progreso' y 'Completado'. El Coordinador puede agregar, renombrar, reordenar y eliminar columnas. Cada tablero pertenece a un proyecto. La interfaz mostrará las tarjetas de tareas dentro de cada columna con información resumida. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-004 (Usabilidad) – RNF-003 (Rendimiento) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RF-005: Gestión de Tareas / ****Tickets**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-005 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Gestión de Tareas / Tickets |
+| **CARACTERÍSTICAS** | CRUD completo de tareas con campos de información detallada |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Una tarea contendrá: título, descripción enriquecida, usuario asignado, prioridad (Alta/Media/Baja), etiquetas, fecha límite y columna de estado. Al hacer clic en una tarjeta se abrirá un panel lateral o modal con el detalle completo. Se registrará el historial de cambios de estado de cada tarea. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-004 (Usabilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RF-006: Drag ****&**** Drop de Tareas**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-006 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Arrastrar y Soltar Tareas (Drag & Drop) |
+| **CARACTERÍSTICAS** | Mover tareas entre columnas arrastrándolas con el mouse o dedo (touch) |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Se implementará con la librería SortableJS o similar, integrada en las vistas Blade. Al soltar una tarea en una columna nueva, el sistema actualizará el estado vía petición AJAX/Fetch a la API REST de Laravel y registrará el cambio en el historial. Se validarán los permisos del usuario antes de guardar. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-003 (Rendimiento) – RNF-004 (Usabilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RF-007: Sistema de Comentarios**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-007 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Sistema de Comentarios en Tareas |
+| **CARACTERÍSTICAS** | Permitir que los usuarios agreguen comentarios dentro de cada tarea |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Dentro del detalle de una tarea, los miembros del proyecto podrán agregar comentarios de texto. Se mostrará el nombre del autor, fecha y hora del comentario. Los comentarios se guardarán en la tabla 'comments' relacionada con la tarea. El autor puede editar o eliminar su propio comentario. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-004 (Usabilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | MEDIA |
+
+**RF-008: Notificaciones Internas**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-008 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Notificaciones Internas del Sistema |
+| **CARACTERÍSTICAS** | Alertar a los usuarios sobre eventos relevantes dentro de la plataforma |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Se generarán notificaciones en plataforma cuando: se asigne una tarea a un usuario, una tarea cambie de estado, se agregue un comentario a una tarea del usuario, o se aproxime la fecha límite de una tarea. Se usará el sistema de notificaciones de Laravel (database channel). Se mostrará un indicador de notificaciones no leídas en la barra de navegación. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-001 (Disponibilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | MEDIA |
+
+**RF-009: Filtros y Búsqueda**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-009 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Filtros y Búsqueda Avanzada de Tareas |
+| **CARACTERÍSTICAS** | Filtrar y buscar tareas según múltiples criterios |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El tablero dispondrá de filtros por: usuario asignado, prioridad, etiqueta/categoría, estado (columna) y rango de fechas. También incluirá una barra de búsqueda por texto en título o descripción. Los filtros se aplicarán en tiempo real vía AJAX sin recargar la página. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-003 (Rendimiento) |
+| **PRIORIDAD DEL REQUERIMIENTO** | MEDIA |
+
+**RF-010: Reportes y Métricas**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-010 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Módulo de Reportes y Métricas |
+| **CARACTERÍSTICAS** | Generar reportes de avance y productividad por tablero, usuario y ficha |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El Coordinador y Administrador podrán consultar: número de tareas por estado, carga de trabajo por instructor, tareas vencidas, tareas completadas en un rango de fechas y avance por ficha de formación. Los reportes se mostrarán con gráficas básicas (Chart.js) y podrán exportarse a PDF (usando la librería DomPDF de Laravel). |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-001 (Disponibilidad) – RNF-003 (Rendimiento) |
+| **PRIORIDAD DEL REQUERIMIENTO** | MEDIA |
+
+**RF-011: Asociación con Fichas de Formación SENA**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RF-011 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Asociación de Proyectos con Fichas SENA |
+| **CARACTERÍSTICAS** | Relacionar proyectos y tareas con fichas de formación del SENA |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El sistema permitirá registrar las fichas de formación (número de ficha, nombre del programa, instructor titular) y asociarlas a proyectos y tableros. En los reportes se podrá filtrar por ficha. Esta relación facilita el seguimiento académico específico del contexto SENA. |
+| **REQUERIMIENTO NO FUNCIONAL** | RNF-001 (Disponibilidad) |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**3.3 Requisitos No Funcionales**
+
+**RNF-001: Disponibilidad**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RNF-001 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Disponibilidad del Sistema |
+| **CARACTERÍSTICAS** | El sistema debe estar disponible durante el horario de actividades del SENA |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El sistema deberá operar sin interrupciones durante el horario laboral (7:00 AM – 9:00 PM). El tiempo de inactividad planificado para mantenimiento no debe superar 2 horas semanales y se realizará fuera del horario de mayor uso. En entorno local XAMPP, el servidor Apache debe estar en ejecución constante. |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RNF-002: Seguridad**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RNF-002 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Seguridad del Sistema |
+| **CARACTERÍSTICAS** | Proteger datos e impedir accesos no autorizados |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Las contraseñas se almacenarán con hash bcrypt. Se implementará protección CSRF en todos los formularios (ya incluida en Laravel). Se usará el sistema de autenticación de Laravel con sesiones seguras. Las rutas estarán protegidas con middleware de autenticación y autorización por rol. Se validarán todas las entradas del usuario para prevenir inyección SQL y XSS (validación Laravel + Eloquent ORM). |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RNF-003: Rendimiento**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RNF-003 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Rendimiento y Tiempos de Respuesta |
+| **CARACTERÍSTICAS** | Garantizar respuestas rápidas para una experiencia de usuario fluida |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | Las páginas principales del tablero Kanban deben cargar en menos de 2 segundos en condiciones normales de red local. Las operaciones AJAX (mover tarea, agregar comentario) deben responder en menos de 1 segundo. Se usará eager loading en Eloquent para evitar el problema N+1 de consultas. Se implementará paginación en listados extensos. |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RNF-004: Usabilidad**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RNF-004 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Usabilidad e Interfaz de Usuario |
+| **CARACTERÍSTICAS** | Interfaz intuitiva, responsiva y accesible para usuarios no técnicos |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | La interfaz usará Bootstrap 5 para garantizar diseño responsivo en dispositivos de escritorio y tablets. Los colores indicadores de prioridad (rojo=alta, amarillo=media, verde=baja) deben ser visibles e intuitivos. El tablero Kanban debe ser la vista principal con acceso en máximo 2 clics desde el login. Se incluirán tooltips y mensajes de ayuda contextual. |
+| **PRIORIDAD DEL REQUERIMIENTO** | ALTA |
+
+**RNF-005: Mantenibilidad**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RNF-005 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Mantenibilidad del Código |
+| **CARACTERÍSTICAS** | Código limpio, documentado y estructurado para facilitar mantenimiento futuro |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | El código seguirá las convenciones PSR-12 de PHP y las buenas prácticas de Laravel (uso de migraciones, seeders, factories, eloquent relationships). Se documentarán los métodos principales con PHPDoc. Las rutas se organizarán en grupos por módulo en el archivo routes/web.php y routes/api.php. Se usará el patrón Repository para desacoplar la lógica de negocio de los controladores. |
+| **PRIORIDAD DEL REQUERIMIENTO** | MEDIA |
+
+**RNF-006: Escalabilidad**
+
+| **IDENTIFICACIÓN DEL REQUERIMIENTO** | RNF-006 |
+| --- | --- |
+| **NOMBRE DEL REQUERIMIENTO** | Escalabilidad |
+| **CARACTERÍSTICAS** | El sistema debe poder escalar a múltiples sedes y usuarios en el futuro |
+| **DESCRIPCIÓN DEL REQUERIMIENTO** | La arquitectura MVC de Laravel facilita la migración a un servidor en producción (hosting compartido o VPS). El diseño de base de datos soportará múltiples centros de formación mediante el campo 'center_id' en las tablas principales. La estructura de la aplicación permite agregar nuevos módulos sin afectar los existentes. |
+| **PRIORIDAD DEL REQUERIMIENTO** | BAJA |
+
+**4. VALIDACIÓN DE REQUISITOS**
+
+**4.1 Construcción de Prototipos**
+
+Para la validación de los requisitos funcionales, se construirán prototipos en las siguientes fases:
+
+**Fase 1 – ****Wireframes**** (Baja Fidelidad):**
+
+- Pantalla de Login y Registro de usuario.
+
+- Dashboard principal con resumen de tareas.
+
+- Vista de tablero Kanban con columnas y tarjetas.
+
+- Formulario de creación/edición de tarea.
+
+- Panel de administración de usuarios.
+
+Herramientas sugeridas: Figma (gratuito) o Balsamiq para wireframes. Los prototipos serán validados con el Coordinador SENA antes del inicio del desarrollo.
+
+**Fase 2 – Prototipo Funcional (MVP):**
+
+- Autenticación funcional (RF-001).
+
+- Tablero Kanban básico con columnas y tarjetas (RF-004, RF-005).
+
+- Arrastrar y soltar tareas entre columnas (RF-006).
+
+- Creación y asignación de tareas (RF-005).
+
+**Fase 3 – Sistema Completo:**
+
+- Todos los requisitos funcionales implementados.
+
+- Módulo de reportes (RF-010).
+
+- Notificaciones (RF-008).
+
+- Pruebas de usuario con el equipo de coordinación.
+
+**4.2 Formatos de Casos de Prueba**
+
+| **FORMATO DE CASO DE PRUEBA** |
+| --- |
+| **OBJETIVO DEL CASO DE PRUEBA: **Verificar que un usuario registrado pueda iniciar sesión correctamente con credenciales válidas |
+| **IDENTIFICADOR: **CP-001 |
+| **NOMBRE DEL REQUERIMIENTO: **RF-001 – Autenticación de Usuarios |
+| **PRECONDICIONES: **El usuario debe estar registrado en la base de datos con estado activo. El servidor XAMPP debe estar en ejecución. |
+| **PASOS                                                                                 RESULTADOS ESPERADOS** |
+| 1. Abrir el navegador y acceder a http://localhost/kanban-sena | 1. El formulario de login se muestra correctamente con campos de correo y contraseña |
+| 2. En el formulario de login, ingresar correo válido registrado | 2. El campo acepta el correo sin errores de validación |
+| 3. Ingresar la contraseña correcta del usuario | 3. El campo de contraseña muestra asteriscos y acepta la entrada |
+| 4. Hacer clic en el botón 'Iniciar Sesión' | 4. El sistema procesa la solicitud de autenticación |
+| 5. Verificar redirección al Dashboard del sistema | 5. El sistema redirige al dashboard con el nombre del usuario visible en la barra de navegación |
+
+| **FORMATO DE CASO DE PRUEBA** |
+| --- |
+| **OBJETIVO DEL CASO DE PRUEBA: **Verificar que las tareas puedan moverse entre columnas mediante Drag & Drop y que el estado se actualice en la base de datos |
+| **IDENTIFICADOR: **CP-002 |
+| **NOMBRE DEL REQUERIMIENTO: **RF-006 – Arrastrar y Soltar Tareas (Drag & Drop) |
+| **PRECONDICIONES: **El usuario Coordinador o Instructor debe estar autenticado. Debe existir al menos un tablero con tareas en la columna 'Por Hacer'. |
+| **PASOS                                                                                 RESULTADOS ESPERADOS** |
+| 1. Iniciar sesión con usuario Coordinador | 1. El dashboard y la lista de tableros se muestran correctamente |
+| 2. Acceder al tablero Kanban del proyecto | 2. El tablero muestra las columnas con las tareas correspondientes |
+| 3. Hacer clic y mantener presionado sobre una tarjeta en la columna 'Por Hacer' | 3. La tarjeta se resalta visualmente indicando que está siendo arrastrada |
+| 4. Arrastrar la tarjeta hasta la columna 'En Progreso' y soltar | 4. La tarjeta se ubica visualmente dentro de la columna 'En Progreso' |
+| 5. Verificar en la base de datos que el campo 'column_id' de la tarea cambió | 5. El estado de la tarea cambió a 'En Progreso' en BD y el historial registra el cambio |
+
+| **FORMATO DE CASO DE PRUEBA** |
+| --- |
+| **OBJETIVO DEL CASO DE PRUEBA: **Verificar que un usuario sin permisos no pueda acceder a las rutas de administración del sistema |
+| **IDENTIFICADOR: **CP-003 |
+| **NOMBRE DEL REQUERIMIENTO: **RF-002 – Gestión de Usuarios y Roles (Restricción de acceso) |
+| **PRECONDICIONES: **Debe existir un usuario con rol 'Aprendiz' registrado en el sistema. |
+| **PASOS                                                                                 RESULTADOS ESPERADOS** |
+| 1. Iniciar sesión con un usuario de rol 'Aprendiz' | 1. El sistema autentica al usuario Aprendiz y muestra su dashboard |
+| 2. Intentar acceder manualmente a la URL http://localhost/kanban-sena/admin/users | 2. El middleware de autorización intercepta la solicitud |
+| 3. Verificar la respuesta del sistema | 3. El sistema muestra error 403 (Acceso denegado) o redirige al dashboard con mensaje de error |
+| 4. Intentar acceder a http://localhost/kanban-sena/admin/settings | 4. El sistema repite la restricción de acceso con mensaje apropiado |
+| 5. Cerrar sesión y verificar que la ruta protegida tampoco es accesible sin autenticación | 5. El sistema redirige al formulario de login para usuarios no autenticados |
+
+**APÉNDICE A: ARQUITECTURA Y STACK TÉCNICO**
+
+Esta sección describe la arquitectura técnica propuesta para el desarrollo del sistema Kanban SENA utilizando Laravel y MySQL con XAMPP.
+
+**Arquitectura MVC con Laravel**
+
+El sistema seguirá el patrón Modelo-Vista-Controlador (MVC) implementado por el framework Laravel:
+
+- Modelos (Model): Representan las entidades de la base de datos (User, Board, Column, Task, Comment, Notification). Usarán Eloquent ORM para las relaciones y consultas.
+
+- Vistas (View): Plantillas Blade de Laravel con HTML, Bootstrap 5 y JavaScript. El Drag & Drop se implementará con SortableJS integrado en las vistas.
+
+- Controladores (Controller): Procesarán las solicitudes HTTP, validarán datos con Form Requests de Laravel y responderán con vistas o JSON para peticiones AJAX.
+
+**Estructura de Base de Datos – Entidades Principales**
+
+| **TABLA** | **CAMPOS PRINCIPALES** | **RELACIONES** |
+| --- | --- | --- |
+| users | id, name, email, password, role_id, center_id, active | hasMany: tasks, comments, notifications |
+| roles | id, name, slug (admin/coordinator/instructor/learner) | belongsToMany: users |
+| fichas | id, numero_ficha, nombre_programa, instructor_id, fecha_inicio | hasMany: projects |
+| projects | id, name, description, ficha_id, owner_id, start_date, end_date | hasMany: boards, belongsTo: ficha |
+| boards | id, name, project_id, description, created_by | hasMany: columns, belongsTo: project |
+| columns | id, name, board_id, order, color | hasMany: tasks, belongsTo: board |
+| tasks | id, title, description, column_id, assigned_to, priority, due_date, created_by | hasMany: comments, belongsTo: column, user |
+| comments | id, task_id, user_id, body, created_at | belongsTo: task, user |
+| task_history | id, task_id, user_id, from_column, to_column, changed_at | belongsTo: task, user |
+| notifications | id, user_id, type, data (JSON), read_at | belongsTo: user |
+
+**Ruta de Desarrollo Sugerida (Hitos)**
+
+| **SPRINT / FASE** | **ACTIVIDADES** | **ENTREGABLE** |
+| --- | --- | --- |
+| Sprint 1 (Semana 1-2) | Configuración XAMPP, Laravel, migraciones BD, autenticación con Laravel Breeze, gestión básica de usuarios | Login funcional + CRUD usuarios |
+| Sprint 2 (Semana 3-4) | Módulo de Proyectos, Fichas SENA, Tableros y Columnas Kanban | Tableros con columnas configurables |
+| Sprint 3 (Semana 5-6) | CRUD de Tareas, Drag & Drop con SortableJS + AJAX, historial de cambios | Tablero Kanban funcional completo |
+| Sprint 4 (Semana 7-8) | Sistema de comentarios, notificaciones internas, filtros y búsqueda | Colaboración en tareas funcional |
+| Sprint 5 (Semana 9-10) | Módulo de reportes, exportación PDF, ajustes de UI/UX con Bootstrap 5 | Reportes y dashboard de métricas |
+| Sprint 6 (Semana 11-12) | Pruebas integrales, corrección de bugs, documentación técnica final y despliegue | Sistema entregable y documentado |
+
+Página 1

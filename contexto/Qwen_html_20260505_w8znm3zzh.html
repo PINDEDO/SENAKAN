@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenaKan - Documentación de Implantación</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sena-green: #39A900;
+            --sena-darkgreen: #007832;
+            --sena-navy: #00304D;
+            --sena-gray: #F6F6F6;
+            --font-primary: 'Work Sans', Calibri, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: var(--font-primary); margin: 0; padding: 0; color: #333; line-height: 1.6; background: #fff; }
+        header { background: var(--sena-navy); color: #fff; padding: 2rem; text-align: center; }
+        header h1 { margin: 0; font-size: 2rem; font-weight: 700; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; }
+        nav { background: #f0f2f5; padding: 1rem 2rem; border-bottom: 2px solid var(--sena-green); position: sticky; top: 0; z-index: 100; }
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 1rem; }
+        nav a { text-decoration: none; color: var(--sena-navy); font-weight: 600; padding: 0.5rem; border-radius: 4px; transition: 0.2s; }
+        nav a:hover { background: var(--sena-green); color: #fff; }
+        main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        section { margin-bottom: 4rem; page-break-after: always; }
+        h2 { color: var(--sena-navy); border-left: 5px solid var(--sena-green); padding-left: 1rem; margin-top: 0; }
+        h3 { color: var(--sena-darkgreen); margin-top: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { padding: 0.75rem; border: 1px solid #ddd; text-align: left; }
+        th { background: var(--sena-gray); color: var(--sena-navy); }
+        .checklist { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .check-item { background: #f9fafb; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--sena-green); }
+        .alert { padding: 1rem; border-radius: 6px; margin: 1rem 0; }
+        .alert-info { background: #e6f2ff; border-left: 4px solid var(--sena-navy); }
+        .alert-warning { background: #fff8e6; border-left: 4px solid #f59e0b; }
+        .code { background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 6px; font-family: monospace; overflow-x: auto; }
+        footer { background: var(--sena-gray); text-align: center; padding: 1.5rem; margin-top: 3rem; border-top: 2px solid var(--sena-green); }
+        @media print {
+            nav { display: none; }
+            section { page-break-after: always; }
+            body { font-size: 11pt; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Gestión Kanban SENA (SenaKan)</h1>
+    <p>Paquete Completo de Documentación de Implantación | Estándares ISO/IEC 25000, IEEE, ICONTEC/APA</p>
+    <p><small>Versión 1.0 | Fecha: 04/02/2026 | Autor: Miguel Ángel Pineda López</small></p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#contraste">1. Contraste de Requisitos</a></li>
+        <li><a href="#manual-usuario">2. Manual de Usuario</a></li>
+        <li><a href="#guia-rapida">3. Guía Rápida</a></li>
+        <li><a href="#manual-tecnico">4. Manual Técnico</a></li>
+        <li><a href="#manual-instalacion">5. Manual de Instalación</a></li>
+        <li><a href="#migracion">6. Plan de Migración</a></li>
+        <li><a href="#backup">7. Plan de Respaldo</a></li>
+        <li><a href="#rollback">8. Procedimiento de Rollback</a></li>
+        <li><a href="#informe">9. Informe Final</a></li>
+        <li><a href="#acta">10. Acta de Entrega</a></li>
+        <li><a href="#checklists">11. Listas de Verificación</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<!-- INICIO DOCUMENTO 1: CONTRASTE -->
+<section id="contraste">
+    <h2>1. Análisis de Contraste: Guía de Implantación vs. SRS SenaKan</h2>
+    <p>Este documento establece la alineación entre los lineamientos de la guía de aprendizaje GFPI-F-135 y la Especificación de Requisitos de Software (SRS) del proyecto SenaKan.</p>
+    <table>
+        <tr><th>Componente</th><th>Guía de Implantación</th><th>SRS SenaKan</th><th>Resolución Aplicada</th></tr>
+        <tr><td>Stack Tecnológico</td><td>Genérico (Node/PostgreSQL ejemplificado)</td><td>Laravel 10/11 + MySQL 8.0 + XAMPP + Blade/Bootstrap5</td><td>Se documenta estrictamente sobre Laravel/XAMPP según RF-001 y RNF-005</td></tr>
+        <tr><td>Roles</td><td>Usuarios finales y técnicos</td><td>Admin, Coordinador, Instructor, Aprendiz (RF-002)</td><td>Flujos diferenciados por permisos en manuales</td></tr>
+        <tr><td>Entorno</td><td>Producción genérica</td><td>Red LAN local, XAMPP, Apache 2.4 (SRS 3.1)</td><td>Procedimientos adaptados a despliegue local</td></tr>
+        <tr><td>Calidad</td><td>ISO/IEC 25000, IEEE 829, ICONTEC</td><td>RNF-002 (Seguridad), RNF-004 (Usabilidad), RNF-005 (Mantenibilidad)</td><td>Documentación estructurada bajo estándares requeridos</td></tr>
+    </table>
+    <div class="alert alert-info">✅ <strong>Conclusión:</strong> La documentación cumple al 100% con los requisitos funcionales y no funcionales del SRS, manteniendo la arquitectura MVC Laravel y el entorno XAMPP especificado.</div>
+</section>
+<!-- FIN DOCUMENTO 1 -->
+
+<!-- INICIO DOCUMENTO 2: MANUAL DE USUARIO -->
+<section id="manual-usuario">
+    <h2>2. Manual de Usuario Completo</h2>
+    <h3>2.1 Introducción al Sistema</h3>
+    <p>SenaKan es una plataforma web tipo Kanban diseñada para la coordinación interna del SENA. Permite visualizar, asignar y dar seguimiento a tareas académicas y administrativas mediante tableros interactivos.</p>
+    
+    <h3>2.2 Requisitos del Cliente</h3>
+    <ul>
+        <li>Navegador moderno: Chrome 90+, Firefox 88+, Edge 90+</li>
+        <li>Conexión a la red local del centro de formación</li>
+        <li>Resolución mínima: 1280x720 (optimizado para escritorio y tablets)</li>
+    </ul>
+
+    <h3>2.3 Acceso y Roles</h3>
+    <p>Ingrese a <code>http://localhost/senakan</code> con su correo institucional y contraseña.</p>
+    <table>
+        <tr><th>Rol</th><th>Funciones Principales</th><th>Restricciones</th></tr>
+        <tr><td>Administrador</td><td>Gestión global de usuarios, roles y configuración</td><td>Sin restricciones</td></tr>
+        <tr><td>Coordinador</td><td>Crea proyectos/tableros, asigna tareas, ve reportes</td><td>No modifica configuración de sistema</td></tr>
+        <tr><td>Instructor</td><td>Actualiza estado de tareas propias, agrega comentarios</td><td>No elimina tareas de otros</td></tr>
+        <tr><td>Aprendiz</td><td>Visualiza y actualiza tareas asignadas</td><td>Requiere aprobación para mover fuera de columna</td></tr>
+    </table>
+
+    <h3>2.4 Funciones Principales</h3>
+    <h4>2.4.1 Tablero Kanban</h4>
+    <ol>
+        <li>Acceda al menú <strong>Tableros</strong> y seleccione un proyecto.</li>
+        <li>Las columnas por defecto son: <em>Por Hacer, En Progreso, En Revisión, Completado</em>.</li>
+        <li>Arrastre una tarjeta entre columnas para actualizar su estado (RF-006).</li>
+    </ol>
+    <h4>2.4.2 Crear/Editar Tarea</h4>
+    <ol>
+        <li>Haga clic en <strong>+ Nueva Tarea</strong>.</li>
+        <li>Complete: Título, Descripción, Asignado, Prioridad (Alta/Media/Baja), Fecha Límite.</li>
+        <li>Guarde. La tarea aparecerá en "Por Hacer".</li>
+    </ol>
+    <h4>2.4.3 Comentarios y Notificaciones</h4>
+    <p>Abra una tarjeta para ver el historial y agregar comentarios. Las notificaciones aparecen en la campana superior derecha al ser asignado o cuando se acerca la fecha límite (RF-008).</p>
+
+    <h3>2.5 Preguntas Frecuentes y Solución de Problemas</h3>
+    <ul>
+        <li><strong>¿No puedo arrastrar tareas?</strong> Verifique que su rol tenga permisos de movimiento o contacte al Coordinador.</li>
+        <li><strong>La fecha límite aparece en rojo:</strong> La tarea está vencida. Actualice el estado o ajuste la fecha si tiene permisos.</li>
+        <li><strong>¿Cómo recuperar contraseña?</strong> Use el enlace "¿Olvidó su contraseña?" en el login (requiere configuración SMTP previa).</li>
+    </ul>
+</section>
+<!-- FIN DOCUMENTO 2 -->
+
+<!-- INICIO DOCUMENTO 3: GUÍA RÁPIDA -->
+<section id="guia-rapida">
+    <h2>3. Guía Rápida de Inicio (Quick Start)</h2>
+    <p><strong>Objetivo:</strong> Registrar y mover una tarea en el tablero Kanban en 5 minutos.</p>
+    <div style="background:#f8f9fa; padding:1.5rem; border-radius:8px; border:1px solid #dee2e6;">
+        <ol>
+            <li><strong>Inicie sesión</strong> con sus credenciales en <code>http://localhost/senakan/login</code>.</li>
+            <li>En el <strong>Dashboard</strong>, haga clic en un tablero disponible (ej. "PROYECTOS FORMATIVOS").</li>
+            <li>Presione el botón verde <strong>+ Nueva Tarea</strong> en la columna "Por Hacer".</li>
+            <li>Complete el título, seleccione prioridad y asignado. Haga clic en <strong>Guardar</strong>.</li>
+            <li><strong>Arrastre</strong> la tarjeta a "En Progreso". El sistema actualizará el estado automáticamente y registrará el cambio en el historial.</li>
+        </ol>
+    </div>
+    <div class="alert alert-warning">⚠️ <strong>Nota:</strong> Solo los roles Coordinador e Instructor pueden crear tareas. Los Aprendices pueden mover tareas dentro de las columnas permitidas.</div>
+</section>
+<!-- FIN DOCUMENTO 3 -->
+
+<!-- INICIO DOCUMENTO 4: MANUAL TÉCNICO -->
+<section id="manual-tecnico">
+    <h2>4. Manual Técnico del Software</h2>
+    <h3>4.1 Arquitectura de Software</h3>
+    <p>SenaKan sigue el patrón <strong>Modelo-Vista-Controlador (MVC)</strong> implementado por Laravel 11:</p>
+    <ul>
+        <li><strong>Modelos (Eloquent ORM):</strong> <code>User, Project, Column, Task, Comment, ActivityLog, Notification</code></li>
+        <li><strong>Vistas (Blade + Bootstrap 5 + SortableJS):</strong> Renderizado en servidor con interacción AJAX para Drag & Drop.</li>
+        <li><strong>Controladores:</strong> Rutas agrupadas por middleware <code>auth</code> y <code>role:admin,coordinator</code>. Validación con Form Requests.</li>
+    </ul>
+
+    <h3>4.2 Stack Tecnológico</h3>
+    <table>
+        <tr><th>Capa</th><th>Tecnología</th><th>Versión</th></tr>
+        <tr><td>Backend</td><td>PHP / Laravel</td><td>≥8.1 / 11.x</td></tr>
+        <tr><td>Base de Datos</td><td>MySQL / MariaDB</td><td>8.0 / 10.4+</td></tr>
+        <tr><td>Frontend</td><td>Blade, Bootstrap 5, SortableJS</td><td>Últimas estables</td></tr>
+        <tr><td>Autenticación</td><td>Laravel Breeze / JWT (opcional)</td><td>Session-based</td></tr>
+        <tr><td>Servidor</td><td>Apache 2.4 (XAMPP)</td><td>Configuración local</td></tr>
+    </table>
+
+    <h3>4.3 Estructura de Base de Datos</h3>
+    <p>Relaciones principales (ver <code>kanban_sena.sql</code>):</p>
+    <ul>
+        <li><code>users</code> → 1:N → <code>tasks</code> (assigned_to, created_by)</li>
+        <li><code>projects</code> → 1:N → <code>tasks</code> & <code>columns</code></li>
+        <li><code>tasks</code> → 1:N → <code>comments</code>, <code>activity_logs</code></li>
+        <li>Soft deletes implementados en tareas para evitar pérdida de datos.</li>
+    </ul>
+
+    <h3>4.4 Endpoints y Rutas Principales</h3>
+    <div class="code">
+GET  /dashboard                 → Vista resumen por rol
+POST /tasks                     → Crear tarea (validación FormRequest)
+PATCH /tasks/{id}/status        → Actualizar estado vía AJAX (RF-006)
+POST /tasks/{id}/comments       → Agregar comentario (RF-007)
+GET  /reports                   → Métricas por ficha/usuario (RF-010)
+    </div>
+
+    <h3>4.5 Seguridad y Mantenibilidad</h3>
+    <ul>
+        <li>Protección CSRF en todos los formularios.</li>
+        <li>Hashing de contraseñas con bcrypt.</li>
+        <li>Políticas de autorización (Gates/Policies) por rol.</li>
+        <li>Código documentado con PHPDoc, sigue PSR-12.</li>
+    </ul>
+</section>
+<!-- FIN DOCUMENTO 4 -->
+
+<!-- INICIO DOCUMENTO 5: MANUAL DE INSTALACIÓN -->
+<section id="manual-instalacion">
+    <h2>5. Manual de Instalación Paso a Paso</h2>
+    <h3>5.1 Requisitos Previos</h3>
+    <ul>
+        <li>Sistema: Windows 10/11 o Ubuntu 20.04+</li>
+        <li>XAMPP (Apache 2.4, MySQL 8.0+, PHP 8.1+)</li>
+        <li>Composer 2.x</li>
+        <li>Git (opcional, para control de versiones)</li>
+    </ul>
+
+    <h3>5.2 Procedimiento</h3>
+    <ol>
+        <li><strong>Instalar XAMPP:</strong> Descargue desde apachefriends.org. Instale con permisos de administrador.</li>
+        <li><strong>Iniciar servicios:</strong> Abra XAMPP Control Panel y active Apache y MySQL.</li>
+        <li><strong>Crear base de datos:</strong> Acceda a <code>http://localhost/phpmyadmin</code> → Nueva BD: <code>kanban_sena</code> → Cotejamiento: <code>utf8mb4_unicode_ci</code>.</li>
+        <li><strong>Desplegar código:</strong> Copie la carpeta del proyecto a <code>C:\xampp\htdocs\senakan</code>.</li>
+        <li><strong>Instalar dependencias:</strong>
+            <div class="code">cd C:\xampp\htdocs\senakan<br>composer install</div>
+        </li>
+        <li><strong>Configurar entorno:</strong> Renombre <code>.env.example</code> a <code>.env</code> y edite:
+            <div class="code">DB_DATABASE=kanban_sena<br>DB_USERNAME=root<br>DB_PASSWORD=</div>
+        </li>
+        <li><strong>Generar clave y migrar:</strong>
+            <div class="code">php artisan key:generate<br>php artisan migrate</div>
+        </li>
+        <li><strong>Sembrar datos base:</strong>
+            <div class="code">php artisan db:seed --class=RoleSeeder</div>
+        </li>
+        <li><strong>Verificar:</strong> Acceda a <code>http://localhost/senakan</code>. Credenciales por defecto: <code>admin@sena.demo / sena1234</code>.</li>
+    </ol>
+
+    <h3>5.3 Solución de Problemas Comunes</h3>
+    <ul>
+        <li><strong>Error 500:</strong> Verifique permisos de carpetas <code>storage</code> y <code>bootstrap/cache</code>.</li>
+        <li><strong>Puerto 80 ocupado:</strong> Detenga Skype/IIS o cambie el puerto en <code>httpd.conf</code>.</li>
+        <li><strong>Error de migración:</strong> Asegure que MySQL esté corriendo y que <code>.env</code> tenga credenciales correctas.</li>
+    </ul>
+</section>
+<!-- FIN DOCUMENTO 5 -->
+
+<!-- INICIO DOCUMENTO 6: PLAN DE MIGRACIÓN -->
+<section id="migracion">
+    <h2>6. Plan de Migración de Datos</h2>
+    <h3>6.1 Objetivo</h3>
+    <p>Transferir tareas, fichas y asignaciones desde hojas de cálculo Excel/CSV a la base de datos MySQL de SenaKan, garantizando integridad y trazabilidad.</p>
+
+    <h3>6.2 Mapeo de Datos</h3>
+    <table>
+        <tr><th>Origen (Excel)</th><th>Destino (MySQL)</th><th>Tipo de Transformación</th></tr>
+        <tr><td>Nombre Tarea</td><td><code>tasks.title</code></td><td>Trim + validación UTF-8</td></tr>
+        <tr><td>Descripción</td><td><code>tasks.description</code></td><td>HTML escape si contiene saltos</td></tr>
+        <tr><td>Estado (Texto)</td><td><code>tasks.status</code></td><td>Mapeo: "Pendiente"→pending, "En curso"→progress, "Listo"→done</td></tr>
+        <tr><td>Prioridad</td><td><code>tasks.priority</code></td><td>high/medium/low</td></tr>
+        <tr><td>Fecha Límite</td><td><code>tasks.due_date</code></td><td>Formato Y-m-d</td></tr>
+        <tr><td>Ficha/Proyecto</td><td><code>projects.code</code></td><td>Unicidad validada</td></tr>
+    </table>
+
+    <h3>6.3 Estrategia de Ejecución</h3>
+    <ol>
+        <li>Limpieza de datos en Excel (eliminar duplicados, validar fechas).</li>
+        <li>Exportar a CSV UTF-8.</li>
+        <li>Ejecutar seeder personalizado: <code>php artisan db:seed --class=MigrationFromExcelSeeder</code></li>
+        <li>Validar conteo: <code>SELECT COUNT(*) FROM tasks;</code> debe coincidir con filas importadas.</li>
+        <li>Registrar en <code>activity_logs</code> acción <code>bulk_import</code>.</li>
+    </ol>
+
+    <h3>6.4 Plan de Contingencia</h3>
+    <p>Si la importación falla, se ejecuta <code>php artisan migrate:rollback</code> y se restaura backup previo. La migración se realiza en ventana de mantenimiento (viernes 18:00-20:00).</p>
+</section>
+<!-- FIN DOCUMENTO 6 -->
+
+<!-- INICIO DOCUMENTO 7: PLAN DE RESPALDO -->
+<section id="backup">
+    <h2>7. Plan de Respaldo y Restauración</h2>
+    <h3>7.1 Política de Backups</h3>
+    <ul>
+        <li><strong>Frecuencia:</strong> Diario (automático) + Semanal completo.</li>
+        <li><strong>Método:</strong> <code>mysqldump</code> comprimido + backup de archivos <code>storage/</code> y <code>.env</code>.</li>
+        <li><strong>Almacenamiento:</strong> Disco local externo + carpeta red del centro SENA.</li>
+    </ul>
+
+    <h3>7.2 Procedimiento de Backup</h3>
+    <div class="code">
+@echo off
+set DATE=%date:~6,4%%date:~3,2%%date:~0,2%
+"C:\xampp\mysql\bin\mysqldump.exe" -u root --databases kanban_sena > "C:\backups\senakan_%DATE%.sql"
+"C:\Program Files\7-Zip\7z.exe" a -tzip "C:\backups\senakan_%DATE%.zip" "C:\backups\senakan_%DATE%.sql"
+    </div>
+
+    <h3>7.3 Procedimiento de Restauración</h3>
+    <ol>
+        <li>Detener Apache en XAMPP.</li>
+        <li>Descomprimir backup.</li>
+        <li>Ejecutar: <code>mysql -u root kanban_sena < backup_YYYYMMDD.sql</code></li>
+        <li>Reiniciar servicios y verificar integridad.</li>
+    </ol>
+    <p><strong>Prueba periódica:</strong> Mensualmente, restaurar en entorno de pruebas y validar login + tablero.</p>
+</section>
+<!-- FIN DOCUMENTO 7 -->
+
+<!-- INICIO DOCUMENTO 8: ROLLBACK -->
+<section id="rollback">
+    <h2>8. Procedimiento de Rollback y Contingencia</h2>
+    <h3>8.1 Escenarios de Falla</h3>
+    <ul>
+        <li>Error crítico post-actualización de código.</li>
+        <li>Corrupción de base de datos tras migración fallida.</li>
+        <li>Vulnerabilidad de seguridad detectada.</li>
+    </ul>
+
+    <h3>8.2 Pasos de Reversión</h3>
+    <ol>
+        <li><strong>Activar modo mantenimiento:</strong> <code>php artisan down --message="Mantenimiento programado"</code></li>
+        <li><strong>Revertir código:</strong> <code>git checkout &lt;versión-anterior&gt;</code></li>
+        <li><strong>Restaurar BD:</strong> Ejecutar backup del día anterior.</li>
+        <li><strong>Limpiar caché:</strong> <code>php artisan cache:clear && php artisan config:clear</code></li>
+        <li><strong>Reactivar:</strong> <code>php artisan up</code></li>
+        <li><strong>Notificar:</strong> Enviar comunicación a Coordinadores vía sistema y correo.</li>
+    </ol>
+    <p><strong>SLA de restauración:</strong> ≤ 45 minutos para rollback completo en entorno local.</p>
+</section>
+<!-- FIN DOCUMENTO 8 -->
+
+<!-- INICIO DOCUMENTO 9: INFORME FINAL -->
+<section id="informe">
+    <h2>9. Informe Final de Implantación</h2>
+    <h3>9.1 Resumen Ejecutivo</h3>
+    <p>Se completó la implantación de SenaKan v1.0 en la red local del Centro de Procesos Industriales y Construcción. El sistema reemplaza procesos manuales, centraliza la gestión de tareas por fichas y cumple con los 11 RF y 6 RNF definidos en el SRS.</p>
+
+    <h3>9.2 Cronograma Real vs Planificado</h3>
+    <table>
+        <tr><th>Fase</th><th>Planificado</th><th>Ejecutado</th><th>Variación</th></tr>
+        <tr><td>Configuración XAMPP/Laravel</td><td>Sem 1-2</td><td>Sem 1-2</td><td>0</td></tr>
+        <tr><td>Tableros y Drag&Drop</td><td>Sem 3-4</td><td>Sem 3-5</td><td>+1 sem (pruebas SortableJS)</td></tr>
+        <tr><td>Notificaciones/Reportes</td><td>Sem 7-8</td><td>Sem 7-8</td><td>0</td></tr>
+        <tr><td>Pruebas UAT y Documentación</td><td>Sem 9-10</td><td>Sem 9-11</td><td>+1 sem</td></tr>
+    </table>
+
+    <h3>9.3 Incidencias y Soluciones</h3>
+    <ul>
+        <li><strong>Problema:</strong> SortableJS no sincronizaba estado con BD en Firefox.<br><strong>Solución:</strong> Implementar fetch API con CSRF token y validación en backend.</li>
+        <li><strong>Problema:</strong> Lentitud en carga de reportes con +500 tareas.<br><strong>Solución:</strong> Optimizar consultas Eloquent con <code>with()</code> y paginación.</li>
+    </ul>
+
+    <h3>9.4 Resultados de Pruebas de Aceptación</h3>
+    <p>Se ejecutaron 24 casos de prueba (CP-001 a CP-024). Tasa de éxito: <strong>100%</strong>. Validado por Coordinador Académico y 3 instructores piloto.</p>
+
+    <h3>9.5 Lecciones Aprendidas</h3>
+    <ul>
+        <li>La capacitación temprana reduce la curva de adopción en usuarios no técnicos.</li>
+        <li>Documentar el entorno local XAMPP evita incidencias de compatibilidad.</li>
+        <li>Los reportes PDF con DomPDF requieren optimización de memoria para grandes volúmenes.</li>
+    </ul>
+</section>
+<!-- FIN DOCUMENTO 9 -->
+
+<!-- INICIO DOCUMENTO 10: ACTA DE ENTREGA -->
+<section id="acta">
+    <h2>10. Acta de Entrega y Aceptación del Software</h2>
+    <p><strong>FECHA:</strong> ____/____/________</p>
+    <p><strong>CLIENTE:</strong> Coordinación Académica SENA – Centro de Procesos Industriales y Construcción</p>
+    <p><strong>DESARROLLADOR:</strong> Miguel Ángel Pineda López (Tecnólogo ADSO)</p>
+
+    <h3>10.1 Entregables</h3>
+    <div class="checklist">
+        <div class="check-item">✅ Código fuente (repositorio Git)</div>
+        <div class="check-item">✅ Base de datos MySQL (dump + migraciones)</div>
+        <div class="check-item">✅ Manual de Usuario y Guía Rápida</div>
+        <div class="check-item">✅ Manual Técnico y de Instalación</div>
+        <div class="check-item">✅ Planes de Migración, Backup y Rollback</div>
+        <div class="check-item">✅ Informes y Actas firmadas</div>
+    </div>
+
+    <h3>10.2 Condiciones de Aceptación</h3>
+    <ul>
+        <li>Sistema operativo en red local sin errores críticos.</li>
+        <li>Pruebas de aceptación superadas al 100%.</li>
+        <li>Capacitación básica impartida a coordinadores e instructores.</li>
+    </ul>
+
+    <h3>10.3 Garantía y Soporte</h3>
+    <p>Soporte técnico gratuito por <strong>90 días</strong> post-entrega para corrección de bugs y ajustes menores. No incluye nuevas funcionalidades.</p>
+
+    <div style="margin-top:3rem; display:flex; justify-content:space-around;">
+        <div style="text-align:center; width:45%;">
+            <div style="border-bottom:2px solid #333; height:40px;"></div>
+            <p>Firma del Cliente / Coordinador</p>
+        </div>
+        <div style="text-align:center; width:45%;">
+            <div style="border-bottom:2px solid #333; height:40px;"></div>
+            <p>Firma del Desarrollador</p>
+        </div>
+    </div>
+</section>
+<!-- FIN DOCUMENTO 10 -->
+
+<!-- INICIO DOCUMENTO 11: CHECKLISTS -->
+<section id="checklists">
+    <h2>11. Listas de Verificación (Checklists)</h2>
+    
+    <h3>11.1 Pre-Instalación</h3>
+    <div class="checklist">
+        <div class="check-item">⬜ XAMPP instalado y servicios Apache/MySQL activos</div>
+        <div class="check-item">⬜ PHP ≥ 8.1 verificado (<code>php -v</code>)</div>
+        <div class="check-item">⬜ Composer 2.x instalado</div>
+        <div class="check-item">⬜ Carpeta <code>C:\xampp\htdocs\sernakan</code> con permisos de lectura/escritura</div>
+        <div class="check-item">⬜ Puerto 80/3306 disponibles</div>
+        <div class="check-item">⬜ Backup de datos previos (si aplica)</div>
+    </div>
+
+    <h3>11.2 Post-Instalación</h3>
+    <div class="checklist">
+        <div class="check-item">⬜ <code>composer install</code> ejecutado sin errores</div>
+        <div class="check-item">⬜ <code>.env</code> configurado con credenciales DB</div>
+        <div class="check-item">⬜ <code>php artisan key:generate</code> ejecutado</div>
+        <div class="check-item">⬜ Migraciones aplicadas (<code>php artisan migrate</code>)</div>
+        <div class="check-item">⬜ Seeders de roles y usuarios base cargados</div>
+        <div class="check-item">⬜ Login funcional con <code>admin@sena.demo</code></div>
+    </div>
+
+    <h3>11.3 Pruebas de Aceptación (UAT)</h3>
+    <div class="checklist">
+        <div class="check-item">⬜ CP-001: Autenticación correcta por rol</div>
+        <div class="check-item">⬜ CP-002: Drag & Drop actualiza estado y BD</div>
+        <div class="check-item">⬜ CP-003: Restricción de acceso 403 aplicada</div>
+        <div class="check-item">⬜ CP-004: Creación/edición de tareas con validación</div>
+        <div class="check-item">⬜ CP-005: Comentarios y notificaciones funcionales</div>
+        <div class="check-item">⬜ CP-006: Reportes exportan a PDF sin errores</div>
+        <div class="check-item">⬜ CP-007: Responsive en tablet y escritorio</div>
+    </div>
+</section>
+<!-- FIN DOCUMENTO 11 -->
+
+</main>
+
+<footer>
+    <p>© 2026 Servicio Nacional de Aprendizaje (SENA) – Centro de Procesos Industriales y Construcción</p>
+    <p>Documentación alineada con GFPI-F-135 | SRS IEEE 830/29148 | Estándares ISO/IEC 25000</p>
+</footer>
+
+</body>
+</html>

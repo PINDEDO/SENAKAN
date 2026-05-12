@@ -1,0 +1,130 @@
+SERVICIO NACIONAL DE APRENDIZAJE
+SENA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ESPECIFICACION DE REQUISITOS DE SOFTWARE
+Sistema de Gestion de Tareas Kanban
+Basado en el estandar IEEE 830
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FICHA DEL DOCUMENTO
+DOCUMENTO VALIDADO POR LAS PARTES EN FECHA: ____________________
+CONTENIDO
+1. INTRODUCCION
+    1.1. Objetivo General
+    1.2. Objetivos Especificos
+    1.3. Proposito
+    1.4. Alcance
+    1.5. Personal Involucrado
+    1.6. Definiciones, Acronimos y Abreviaturas
+    1.7. Referencias
+    1.8. Resumen
+2. DESCRIPCION GENERAL
+    2.1. Perspectiva del Producto
+    2.2. Funcionalidades del Producto
+    2.3. Caracteristicas de los Usuarios
+    2.4. Restricciones
+3. REQUISITOS ESPECIFICOS
+    3.1. Requisitos del Sistema
+    3.2. Requisitos Funcionales
+    3.3. Requisitos No Funcionales
+4. VALIDACION DE REQUISITOS
+    4.1. Construccion de Prototipos
+    4.2. Formato de Casos de Prueba
+1. INTRODUCCION
+El SENA requiere una herramienta digital que permita gestionar de manera eficiente el flujo de tareas academicas y administrativas dentro de sus programas de formacion. Actualmente, el seguimiento de actividades de instructores y aprendices se realiza de forma manual o mediante herramientas dispersas, generando dificultades en la visibilidad del estado de los proyectos y en la asignacion de responsabilidades.
+Este documento especifica los requisitos del Sistema de Gestion de Tareas Kanban para el SENA, siguiendo el estandar IEEE 830, con el objetivo de guiar el desarrollo de un software robusto, escalable y alineado con la identidad institucional.
+1.1. Objetivo General
+Desarrollar un sistema de gestion de tareas tipo Kanban para el SENA que permita a coordinadores, instructores y aprendices visualizar, asignar y hacer seguimiento del estado de las actividades de formacion en tiempo real, mejorando la eficiencia operativa del centro educativo.
+1.2. Objetivos Especificos
+Implementar un tablero Kanban con flujo de estados configurable: Por Hacer, En Progreso, En Revision y Completado.
+Gestionar multiples roles de usuario: Administrador, Coordinador, Instructor y Aprendiz, con permisos diferenciados.
+Asociar tareas a fichas de formacion SENA para garantizar el seguimiento institucional.
+Proveer reportes y metricas de desempeno accesibles para coordinadores y administradores.
+Construir una arquitectura escalable que permita incorporar funcionalidades adicionales en versiones futuras.
+1.3. Proposito
+El sistema Kanban SENA tiene como finalidad digitalizar y centralizar la gestion de actividades formativas, eliminando el uso de herramientas dispersas y proporcionando una plataforma unificada que respete los lineamientos institucionales del SENA en cuanto a roles, fichas de formacion y calendarios academicos.
+1.4. Alcance
+El sistema cubrira las siguientes funciones dentro del centro de formacion:
+Autenticacion y gestion de usuarios por roles institucionales.
+Creacion y administracion de proyectos asociados a fichas de formacion.
+Tableros Kanban con columnas personalizables y arrastre de tareas (drag & drop).
+Asignacion de tareas a usuarios con prioridad, fecha limite y etiquetas.
+Sistema de comentarios por tarea para comunicacion contextual.
+Reportes basicos de avance por proyecto, instructor y aprendiz.
+Fuera del alcance del MVP: carga de archivos adjuntos, integracion con calendario academico SENA, notificaciones en tiempo real, recuperacion de contrasena y soporte multitenancy por sede.
+1.5. Personal Involucrado
+1.6. Definiciones, Acronimos y Abreviaturas
+1.7. Referencias
+IEEE Std 830-1998 — Recommended Practice for Software Requirements Specifications.
+Documentacion oficial de React 18: https://react.dev
+Documentacion de Prisma ORM: https://prisma.io/docs
+Atlassian Jira — referencia de sistema Kanban empresarial: https://atlassian.com/software/jira
+Manual de Identidad Visual SENA 2024.
+Documento: Como funcionan los sistemas Kanban — contexto tecnico del proyecto.
+Documento tecnico: Prompt MVP Sistema Kanban SENA v1.0.
+1.8. Resumen
+Este documento contiene la especificacion completa de requisitos del Sistema Kanban SENA, organizado en cuatro secciones: Introduccion (contexto y alcance), Descripcion General (arquitectura y usuarios), Requisitos Especificos (funcionales y no funcionales) y Validacion de Requisitos (casos de prueba).
+2. DESCRIPCION GENERAL
+2.1. Perspectiva del Producto
+El Sistema Kanban SENA es una aplicacion web de tres capas (frontend React, backend Node.js/Express, base de datos SQLite/PostgreSQL) que opera de manera independiente sobre infraestructura local o en la nube. Se integra con el modelo institucional del SENA mediante la gestion de fichas de formacion y roles jerarquicos. No depende de sistemas externos en su version MVP.
+La interfaz sigue la identidad visual institucional del SENA: color verde (#39A900) y azul navy (#003770), tipografia Arial, logotipo institucional en el panel lateral y pantalla de inicio. El sistema es responsive y accesible desde dispositivos moviles con pantalla mayor a 360px.
+2.2. Funcionalidades del Producto
+Autenticacion segura con JWT y control de sesion diferenciado por rol.
+Dashboard con metricas: tareas totales, en progreso, vencidas y completadas.
+Gestion de proyectos asociados a fichas de formacion SENA.
+Tableros Kanban con drag & drop entre columnas configurables.
+Creacion, edicion y eliminacion de tareas con prioridad, asignacion y fecha limite.
+Sistema de comentarios por tarea para comunicacion contextual.
+Gestion de usuarios con activacion/desactivacion por rol.
+Reportes basicos de avance con visualizacion grafica mediante Recharts.
+2.3. Caracteristicas de los Usuarios
+ADMINISTRADOR
+Acceso total al sistema. Gestiona usuarios, proyectos, tableros y reportes globales. Es el responsable de la configuracion inicial y de la administracion de cuentas de usuario. Puede realizar cualquier operacion en el sistema.
+COORDINADOR
+Crea proyectos y los asocia a fichas de formacion. Asigna instructores y supervisa el avance de todos los tableros del centro. Accede a reportes institucionales. No puede eliminar usuarios del sistema.
+INSTRUCTOR
+Gestiona los tableros de sus proyectos asignados. Crea, edita y mueve tareas. Visualiza unicamente a sus aprendices asociados. No accede a las vistas de Usuarios ni a Reportes globales del centro.
+APRENDIZ
+Visualiza los tableros de su ficha de formacion. Puede mover sus propias tareas entre columnas y agregar comentarios. No puede crear, editar ni eliminar tareas de otros usuarios.
+2.4. Restricciones
+El sistema debe funcionar en navegadores modernos: Chrome 110+, Firefox 115+, Edge 110+, Safari 16+.
+El MVP utilizara SQLite como base de datos local; la migracion a PostgreSQL es transparente (solo requiere cambio de variable de entorno DATABASE_URL).
+No se permiten archivos adjuntos en tareas en la version MVP.
+No habra integracion con sistemas externos del SENA (SOFIA Plus) en el MVP.
+Los aprendices no pueden visualizar informacion de otras fichas de formacion.
+Solo los Administradores pueden eliminar y cambiar roles de usuarios.
+La recuperacion de contrasenias estara disponible a partir de la version 2.0.
+3. REQUISITOS ESPECIFICOS
+3.1. Requisitos del Sistema
+3.2. Requisitos Funcionales
+RF-001 — Autenticacion de Usuarios
+RF-002 — Gestion de Proyectos
+RF-003 — Tablero Kanban
+RF-004 — Gestion de Tareas
+RF-005 — Sistema de Comentarios
+RF-006 — Gestion de Usuarios
+RF-007 — Dashboard de Metricas
+RF-008 — Reportes de Avance
+RF-009 — Control de Acceso por Rol
+3.3. Requisitos No Funcionales
+RNF-001 — Seguridad
+RNF-002 — Integridad de Datos
+RNF-003 — Rendimiento
+RNF-004 — Usabilidad
+RNF-005 — Escalabilidad
+4. VALIDACION DE REQUISITOS
+4.1. Construccion de Prototipos
+Se construira un prototipo funcional del MVP con las siguientes vistas implementadas en orden de prioridad:
+Pantalla de Login con autenticacion JWT real contra base de datos.
+Dashboard con metricas calculadas dinamicamente desde la API.
+Tablero Kanban con drag & drop funcional y persistencia de cambios.
+Modal de tarea con creacion, edicion y sistema de comentarios.
+Vista de Gestion de Usuarios (solo rol ADMINISTRADOR).
+Reportes basicos con grafico de barras (Recharts).
+El prototipo utilizara datos de seed que incluyen un usuario de prueba por cada rol, un proyecto con ficha asignada y tareas en distintos estados del tablero.
+4.2. Formato de Casos de Prueba
+CP-001 — Login con credenciales validas
+CP-002 — Mover tarea entre columnas (Drag & Drop)
+CP-003 — Control de acceso por rol (Aprendiz intenta acceder a Usuarios)
+CP-004 — Crear tarea nueva en tablero
+FIN DEL DOCUMENTO
+Especificacion de Requisitos de Software — Sistema Kanban SENA — v1.0 — Marzo 2026
